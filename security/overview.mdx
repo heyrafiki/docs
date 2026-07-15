@@ -1,33 +1,26 @@
 ---
-title: "Security and Privacy model"
-description: "Review the controls required for clinical, identity and financial data."
+title: "Security and Privacy"
+description: "Understand the principles that shape access, Consent and information sharing."
 ---
 
-Heyrafiki is Privacy-first Mental Healthcare Infrastructure. Production readiness requires technical controls, operating evidence and clear Consent boundaries.
+Heyrafiki is Privacy-first Mental Healthcare Infrastructure. Access follows a person's role, the purpose of the request and the Consent attached to it.
 
-## Required controls
+## Core principles
 
-- TLS in transit and encryption at rest
-- strict role-based access control
-- separation between identity data and clinical data
-- Consent-scoped sharing
-- immutable audit evidence for sensitive actions
-- data minimization and defined retention
-- reviewed secrets management and key rotation
-- restoration tests and incident runbooks
+- Collect only what a workflow needs.
+- Separate identity information from clinical information.
+- Keep sensitive access scoped and reviewable.
+- Let People control optional sharing.
+- Keep private Care content out of product analytics.
 
 ## Clinical boundaries
 
-Iris may draft Clinical Notes, but a Practitioner must review and approve them before they become part of the approved record. Clinical content must not enter product analytics or model training pipelines.
+Iris may draft Clinical Notes, but a Practitioner must review and approve them before they become part of the approved record.
 
-## Organization and Employer access
+## Organization access
 
-Organizations may receive reviewed aggregate reporting for funded Programs. They must not receive a Person's identity, diagnosis, Session content or private Conversation through those reports.
+Organizations may receive reviewed aggregate reporting for funded Programs. Those reports do not include a Person's diagnosis, Session content or private Conversation.
 
-## Financial boundaries
+## Product intelligence
 
-Claims, ledger entries, settlement evidence and reconciliation records require a relational authority, unique source references and balanced postings. A timeout never authorizes a replacement transaction.
-
-## Current stage
-
-The frontend currently demonstrates these boundaries with typed services and preview states. Backend controls must be implemented and independently reviewed before production data is accepted. Advanced cryptographic Privacy work remains outside the current scope.
+Iris supports product guidance and Practitioner-reviewed drafts. Private Session content is not used to train product models.

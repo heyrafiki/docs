@@ -54,36 +54,12 @@
   "navigation": {
     "groups": [
       {
-        "group": "Get started",
-        "pages": ["index", "quickstart", "builders/overview"]
+        "group": "Overview",
+        "pages": ["index", "concepts/platform"]
       },
       {
-        "group": "Architecture",
-        "pages": [
-          "concepts/platform",
-          "concepts/data-ownership",
-          "builders/integration-model",
-          "concepts/operating-principles"
-        ]
-      },
-      {
-        "group": "Reliability",
-        "pages": [
-          "reliability/idempotency",
-          "reliability/webhooks"
-        ]
-      },
-      {
-        "group": "Security",
+        "group": "Trust",
         "pages": ["security/overview"]
-      },
-      {
-        "group": "Open source",
-        "pages": [
-          "open-source/overview",
-          "reference/versioning",
-          "contributing/documentation"
-        ]
       },
       {
         "group": "Updates",

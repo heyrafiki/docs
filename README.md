@@ -13,6 +13,6 @@ mint a11y
 mint dev --no-open --port 3333
 ```
 
-The live site deploys from the private `heyrafiki/docs` repository after that repository is connected in the Mintlify dashboard.
+The live site deploys from the private `heyrafiki/docs` repository.
 
-Do not add API, SDK, Webhook endpoint or MCP reference pages until the corresponding specification is authoritative and reviewed.
+Keep the public site concise. Do not publish internal architecture, provider choices, preview routes or unreleased interfaces. API, SDK, Webhook and MCP reference pages wait for reviewed public specifications.

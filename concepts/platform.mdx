@@ -1,9 +1,9 @@
 ---
-title: "Platform model"
-description: "Understand how Heyrafiki connects Care, operations and financial workflows."
+title: "Platform overview"
+description: "Understand how Heyrafiki connects the people and systems around Mental Healthcare."
 ---
 
-Heyrafiki is an Infrastructure layer for Mental Healthcare. Therapy discovery, Practice tools, Sessions, Claims, Benefits and Payments are connected parts of that system.
+Heyrafiki is Mental Healthcare Infrastructure. Finding Care, running a Practice, managing Benefits and handling Payments are connected parts of one Platform.
 
 ## Product surfaces
 
@@ -13,16 +13,12 @@ Heyrafiki is an Infrastructure layer for Mental Healthcare. Therapy discovery, P
 | Practitioners | Run a Practice, communicate with Clients and manage revenue |
 | Organizations | Fund Programs and review aggregate participation |
 | Insurers | Operate Claims and Practitioner Networks |
-| Developers | Integrate through versioned APIs, Webhooks and tools |
+| Developers | Extend approved Heyrafiki capabilities as access becomes available |
 
 ## Human-First intelligence
 
-Iris supports Matchmaking, scheduling, Scribe drafts and product guidance. Clinical Notes remain drafts until a Practitioner approves them. People can inspect and remove non-clinical memory facts when that backend capability ships.
+Iris supports Matchmaking, scheduling, Scribe drafts and product guidance. Clinical Notes remain drafts until a Practitioner approves them.
 
-## Integration boundary
+## One connected experience
 
-Components do not call external vendors directly. Typed services own Payments, identity, video, messaging, storage and model access. A provider can change without rewriting the product surface that uses it.
-
-## Current implementation
-
-The frontend uses seed data shaped like the planned service contracts. Backend integrations must replace data sources without changing established workflows unless evidence supports a product change.
+People control their Care choices. Practitioners manage their Practice. Organizations and Insurers work with reviewed aggregate or operational information that matches their role. Private Session content stays outside those reporting views.
