@@ -1,0 +1,45 @@
+---
+title: "Write and review documentation"
+description: "Create concise, maintainable documentation for people and software agents."
+---
+
+Each page serves one audience and one job. Choose a content type before writing:
+
+- Tutorial: help a new reader learn through a complete sequence.
+- How-to guide: help a reader complete one task.
+- Reference: provide precise, scannable facts.
+- Explanation: clarify a concept, decision or trade-off.
+
+## Writing rules
+
+- Use descriptive titles and headings.
+- State prerequisites before steps.
+- Use one term for each concept.
+- Prefer active voice and direct instructions.
+- Keep examples complete and runnable.
+- Document errors and recovery behavior.
+- Use media only when it improves understanding, and provide accessible alternatives.
+- Link to authoritative schemas and source files instead of copying contracts.
+
+## Local checks
+
+Install the current Mintlify CLI with a supported LTS Node release:
+
+```bash
+npm install -g mint@latest
+```
+
+From `developer-docs/`, run:
+
+```bash
+mint validate
+mint broken-links --check-anchors --check-redirects
+mint a11y
+mint dev --no-open --port 3333
+```
+
+The local preview and validation commands do not require an Admin API key.
+
+## Review ownership
+
+Clinical and Consent pages require clinical and Privacy review. Payments, Claims and ledger pages require financial and Platform review. Public API and SDK pages require Developer Platform review. User-facing Copy requires Product and Design review.

@@ -1,0 +1,89 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Heyrafiki Docs",
+  "description": "Technical documentation for Heyrafiki Open Infrastructure for Mental Healthcare.",
+  "logo": {
+    "light": "/images/logo-black.png",
+    "dark": "/images/logo-white.png",
+    "href": "/"
+  },
+  "favicon": {
+    "light": "/images/mark-black.png",
+    "dark": "/images/mark-white.png"
+  },
+  "colors": {
+    "primary": "#184A34",
+    "light": "#2F9E68",
+    "dark": "#3D7B5C"
+  },
+  "appearance": {
+    "default": "system",
+    "strict": false
+  },
+  "fonts": {
+    "heading": {
+      "family": "Instrument Sans"
+    },
+    "body": {
+      "family": "Instrument Sans"
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Website",
+        "href": "https://www.heyrafiki.com"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Open Heyrafiki",
+      "href": "https://www.heyrafiki.com"
+    }
+  },
+  "search": {
+    "prompt": "Search Heyrafiki Docs"
+  },
+  "seo": {
+    "indexing": "navigable"
+  },
+  "metadata": {
+    "timestamp": true
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get started",
+        "pages": ["index", "quickstart"]
+      },
+      {
+        "group": "Core concepts",
+        "pages": [
+          "concepts/platform",
+          "concepts/data-ownership",
+          "concepts/operating-principles"
+        ]
+      },
+      {
+        "group": "Reliability",
+        "pages": [
+          "reliability/idempotency",
+          "reliability/webhooks"
+        ]
+      },
+      {
+        "group": "Security",
+        "pages": ["security/overview"]
+      },
+      {
+        "group": "Updates",
+        "pages": ["changelog"]
+      },
+      {
+        "group": "Contributing",
+        "pages": ["contributing/documentation"]
+      }
+    ]
+  }
+}

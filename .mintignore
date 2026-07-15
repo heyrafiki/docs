@@ -1,0 +1,5 @@
+.scratch/
+drafts/
+internal/
+*.draft.mdx
+node_modules/

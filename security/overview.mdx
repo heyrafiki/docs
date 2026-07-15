@@ -1,0 +1,33 @@
+---
+title: "Security and Privacy model"
+description: "Review the controls required for clinical, identity and financial data."
+---
+
+Heyrafiki is Privacy-first Mental Healthcare Infrastructure. Production readiness requires technical controls, operating evidence and clear Consent boundaries.
+
+## Required controls
+
+- TLS in transit and encryption at rest
+- strict role-based access control
+- separation between identity data and clinical data
+- Consent-scoped sharing
+- immutable audit evidence for sensitive actions
+- data minimization and defined retention
+- reviewed secrets management and key rotation
+- restoration tests and incident runbooks
+
+## Clinical boundaries
+
+Iris may draft Clinical Notes, but a Practitioner must review and approve them before they become part of the approved record. Clinical content must not enter product analytics or model training pipelines.
+
+## Organization and Employer access
+
+Organizations may receive reviewed aggregate reporting for funded Programs. They must not receive a Person's identity, diagnosis, Session content or private Conversation through those reports.
+
+## Financial boundaries
+
+Claims, ledger entries, settlement evidence and reconciliation records require a relational authority, unique source references and balanced postings. A timeout never authorizes a replacement transaction.
+
+## Current stage
+
+The frontend currently demonstrates these boundaries with typed services and preview states. Backend controls must be implemented and independently reviewed before production data is accepted. Advanced cryptographic Privacy work remains outside the current scope.

@@ -1,0 +1,34 @@
+---
+title: "Heyrafiki Open Infrastructure"
+description: "Start with the current platform model, data boundaries and reliability guarantees."
+---
+
+Heyrafiki connects People, Practitioners, Insurers and Organizations through shared Infrastructure for Care, Benefits and Payments.
+
+These docs describe the architecture and engineering contracts that are ready for review today. The public API, SDKs, Webhooks and MCP tools will be documented when their authoritative specifications exist.
+
+<CardGroup cols={2}>
+  <Card title="Platform model" icon="layer-group" href="/concepts/platform">
+    See how Care, operations and Payments meet without collapsing into one product surface.
+  </Card>
+  <Card title="Data ownership" icon="database" href="/concepts/data-ownership">
+    Give every fact one authority and move projections through reviewed events.
+  </Card>
+  <Card title="Reliable operations" icon="rotate" href="/reliability/idempotency">
+    Handle retries and uncertain outcomes without duplicating a Payment or Claim.
+  </Card>
+  <Card title="Security model" icon="shield-halved" href="/security/overview">
+    Review the Privacy, Consent and access boundaries required before production.
+  </Card>
+</CardGroup>
+
+## Start here
+
+- [Preview the frontend locally](/quickstart)
+- [Read the operating principles](/concepts/operating-principles)
+- [Design Webhook consumers](/reliability/webhooks)
+- [Review product updates](/changelog)
+
+## Current stage
+
+The repository contains broad frontend surfaces, seed data and typed service boundaries. It does not yet contain a deployed Convex or Postgres backend. Pages in these docs distinguish current behavior from planned integration work.

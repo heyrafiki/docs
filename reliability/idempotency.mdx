@@ -1,0 +1,40 @@
+---
+title: "Idempotency and uncertain outcomes"
+description: "Retry critical operations without creating duplicate financial or clinical effects."
+---
+
+Never create a second financial transaction because the first request has an unknown result.
+
+## Stable operation identity
+
+Assign every Payment, Payout, Claim, Booking and other critical operation:
+
+- a stable operation ID;
+- an idempotency key;
+- an explicit state machine;
+- a correlation ID for evidence;
+- a unique provider or ledger source reference where applicable.
+
+A retry resumes or verifies the original operation. It does not create a replacement.
+
+## Unknown is a state
+
+If a provider accepts a request and the response is lost, mark the operation as `confirming`. Query the provider with the original reference, accept delayed Webhooks idempotently and reconcile the result before reporting success or failure.
+
+## Webhook handling
+
+Webhook handlers must tolerate delayed, duplicate and out-of-order delivery. Persist the event identity before applying it, validate each state transition and guard each financial posting with a unique source reference.
+
+## Required failure tests
+
+Test these cases in staging for every critical provider adapter:
+
+- connectivity fails before the request leaves;
+- the provider accepts the request and the response is lost;
+- a Webhook is delayed, duplicated, reordered or absent;
+- the process restarts during handling;
+- two devices retry at the same time;
+- connectivity returns hours later;
+- reconciliation runs after each case.
+
+Every test must prove that the operation resolves once and that financial records remain balanced.
