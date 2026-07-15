@@ -1,0 +1,43 @@
+---
+title: "Integration model"
+description: "Connect to Heyrafiki through versioned contracts and explicit authority boundaries."
+---
+
+Heyrafiki integrations will use versioned APIs, signed events and reviewed adapter boundaries. Product components do not call external providers directly.
+
+## Contract layers
+
+| Layer | Authority |
+| --- | --- |
+| HTTP endpoints | Canonical OpenAPI document |
+| Webhook names and payloads | Versioned event catalogue |
+| SDK behavior | Package source, tests and release tag |
+| MCP tools | Tool schema, permission model and audit policy |
+| Architecture decisions | Numbered architecture decision records |
+
+Explanatory MDX pages link to these sources. They do not duplicate request schemas or Package behavior.
+
+## One fact, one authority
+
+An integration may receive a projection of a business fact. That projection does not become a second source of truth. Approved clinical records, Claims, ledger entries and settlements resolve against their authoritative records before Heyrafiki reports a final outcome.
+
+## Asynchronous work
+
+External work may be delayed or repeated. Integrations must preserve stable operation and event identities, accept duplicate delivery idempotently and reconcile unknown outcomes.
+
+```text
+authoritative change
+  -> transactional outbox
+  -> versioned event
+  -> consumer inbox
+  -> idempotent projection
+  -> reconciliation
+```
+
+## Provider adapters
+
+Payments, identity, video, messaging, storage and model access sit behind typed services. A provider can change without changing the supported Heyrafiki contract. Provider-specific identifiers remain attached as execution evidence and never replace Heyrafiki's authoritative record.
+
+## Current status
+
+This page records the integration shape. It does not expose production endpoints or credentials. Use the [builder status](/builders/overview) to see which external interfaces are available.

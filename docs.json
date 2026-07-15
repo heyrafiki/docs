@@ -55,13 +55,14 @@
     "groups": [
       {
         "group": "Get started",
-        "pages": ["index", "quickstart"]
+        "pages": ["index", "quickstart", "builders/overview"]
       },
       {
-        "group": "Core concepts",
+        "group": "Architecture",
         "pages": [
           "concepts/platform",
           "concepts/data-ownership",
+          "builders/integration-model",
           "concepts/operating-principles"
         ]
       },
@@ -77,12 +78,16 @@
         "pages": ["security/overview"]
       },
       {
-        "group": "Updates",
-        "pages": ["changelog"]
+        "group": "Open source",
+        "pages": [
+          "open-source/overview",
+          "reference/versioning",
+          "contributing/documentation"
+        ]
       },
       {
-        "group": "Contributing",
-        "pages": ["contributing/documentation"]
+        "group": "Updates",
+        "pages": ["changelog"]
       }
     ]
   }

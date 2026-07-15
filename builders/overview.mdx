@@ -1,0 +1,35 @@
+---
+title: "Build on Heyrafiki"
+description: "Understand the current builder surface and the contracts that will be published next."
+---
+
+Heyrafiki is being built as Open Infrastructure for Mental Healthcare. Builders should be able to connect Care, Benefits, Claims and Payments without adopting every Heyrafiki product surface.
+
+## Available now
+
+| Resource | Status | Use it for |
+| --- | --- | --- |
+| Architecture concepts | Published | Understand data authority, service boundaries and system responsibilities |
+| Reliability contracts | Published | Design idempotent operations and resilient Webhook consumers |
+| Frontend preview | Repository access required | Inspect current product workflows and typed service boundaries |
+| Changelog | Published | Track documentation and compatibility-relevant changes |
+
+## Not yet published
+
+The public API, OpenAPI document, SDK Packages, Webhook catalogue, MCP tools and self-hosting guide are not authoritative yet. Heyrafiki will publish each interface when its implementation, access model, failure behavior and versioning policy are ready for external use.
+
+<Warning>
+  Do not build against routes, seed data or TypeScript shapes found in the frontend unless a published contract names them as supported interfaces.
+</Warning>
+
+## Planned builder surfaces
+
+- Versioned APIs for approved platform capabilities
+- Signed Webhooks with replay and reconciliation guidance
+- SDK and Package documentation generated from tested releases
+- MCP tools with explicit permissions and audit requirements
+- Self-hosting guidance for components that can be operated safely outside Heyrafiki Cloud
+
+## Start with the system model
+
+Read the [platform model](/concepts/platform), [data ownership rules](/concepts/data-ownership) and [integration model](/builders/integration-model) before evaluating a future integration.
