@@ -33,13 +33,13 @@
     "links": [
       {
         "label": "Website",
-        "href": "https://www.heyrafiki.com"
+        "href": "https://heyrafiki.space"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Open Heyrafiki",
-      "href": "https://www.heyrafiki.com"
+      "href": "https://heyrafiki.space"
     }
   },
   "search": {
