@@ -4,6 +4,22 @@ description: "Updates to Heyrafiki products and documentation."
 rss: true
 ---
 
+<Update label="25 July 2026" description="Platform model, Session flow and Iris" tags={["Platform", "Clinical", "Payments"]}>
+  The Platform model is now public. Heyrafiki is built from six objects — Person, Practitioner, Session, Note, Claim and Ledger entry — with a defined Session flow from Match to Settle. See the [Platform overview](/concepts/platform).
+
+  **New**
+  - **Iris matching.** Iris filters verified Practitioners by language, focus, budget, schedule and Cover, then ranks and explains her picks so the Person chooses.
+  - **Hey Video Sessions.** Sessions run in a Room created with the booking, in Hey Video or in person. If Iris joins as Scribe, the Client is notified in the Room.
+  - **SOAP Notes with Practitioner approval.** Iris drafts Notes in SOAP structure; nothing enters the record until a Practitioner approves.
+  - **Escrowed self-pay.** Self-paying Clients pay at booking. Heyrafiki holds funds and releases to the Practitioner the moment the Session ends.
+  - **Coded Claims from approved Notes.** Covered Sessions generate a Claim from the approved Note, checked before submission to the Payer.
+  - **FHIR and ICD-10, DHIS2-aligned exports.** Clinical records follow FHIR shapes with ICD-10 coding; aggregate exports align with national reporting including DHIS2.
+
+  **Updates**
+  - **Role boundaries enforced in the data model.** Organizations and Funders see aggregate reporting only. Insurers see Claim evidence, not Note content. Identity data is stored apart from clinical data. Details in [Security and Privacy](/security/overview).
+  - **API and SDK scope confirmed.** The API and SDKs open with the Platform. Sandbox keys go to the [Waitlist](https://heyrafiki.space/waitlist) first.
+</Update>
+
 <Update label="24 July 2026" description="Vision, and hardening underneath" tags={["Platform"]}>
   Heyrafiki published its Vision: why Mental Healthcare is being rebuilt as Infrastructure. Every response now carries security headers that force HTTPS, block framing and lock down browser permissions.
 </Update>
