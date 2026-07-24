@@ -1,24 +1,44 @@
 ---
 title: "Platform overview"
-description: "How Heyrafiki connects People, Practitioners, Insurers and Organizations through one Platform for Care, Benefits, Payments and Practice tools."
+description: "The objects Heyrafiki is built from, how a Session moves through them, and who can see what."
 ---
 
-Heyrafiki is Mental Healthcare Infrastructure. Finding Care, running a Practice, managing Benefits and handling Payments are connected parts of one Platform.
+Heyrafiki is one Rail beneath Mental Healthcare. Finding Care, delivering it, recording it, covering it and paying for it are the same system rather than five that email each other.
 
-## Product surfaces
+## The objects
 
-| Surface | Primary responsibility |
+Everything on the Platform is built from six.
+
+| Object | What it is |
 | --- | --- |
-| People | Find and fund Care, manage Sessions and control sharing |
-| Practitioners | Run a Practice, communicate with Clients and manage revenue |
-| Organizations | Fund Programs and review aggregate participation |
-| Insurers | Operate Claims and Practitioner Networks |
-| Developers | Extend approved Heyrafiki capabilities as access becomes available |
+| **Person** | Someone seeking or receiving Care. Owns their identity, their Consent and their sharing choices. |
+| **Practitioner** | A licensed Clinician, verified against the Official Records of the Board they practise under. |
+| **Session** | One appointment. Carries format, time, Room and the money attached to it. |
+| **Note** | The clinical record of a Session. Drafts until a Practitioner approves it. |
+| **Claim** | A request for a Payer to cover a Session, coded from the approved Note. |
+| **Ledger entry** | Double-entry money movement. The Ledger, not the payment provider, is the source of truth. |
 
-## Human-First intelligence
+## How a Session moves
 
-Iris supports Matchmaking, scheduling, Scribe drafts and product guidance. Clinical Notes remain drafts until a Practitioner approves them.
+1. **Match.** A Person describes what they need. Iris filters to verified Practitioners who fit on language, focus, budget, schedule and Cover, then ranks and explains. The Person chooses.
+2. **Book.** The booking creates the Session and the Room together. Self-paying Clients pay now, and Heyrafiki holds the money until the Session is delivered.
+3. **Meet.** The Session runs in Hey Video or in person. If the Practitioner brings Iris in as Scribe, the Client is notified in the Room.
+4. **Approve.** Iris drafts the Note in SOAP structure. Nothing enters the record until the Practitioner approves it.
+5. **Settle.** Self-pay releases to the Practitioner the moment the Session ends. Covered Sessions generate a coded Claim from the approved Note, checked before approval.
 
-## One connected experience
+## Boundaries
 
-People control their Care choices. Practitioners manage their Practice. Organizations and Insurers work with reviewed aggregate or operational information that matches their role. Private Session content stays outside those reporting views.
+Roles do not see more than their job requires, and this is enforced in the data model rather than in policy text.
+
+- **Organizations and Funders** receive aggregate reporting only. Never an identity, a diagnosis, Session content or a Conversation.
+- **Insurers** receive the Claim and the evidence behind it: licence, Cover, codes, attendance. Not the Note's clinical content.
+- **Practitioners** hold their own clinical Notes. Clients receive a Session summary once the Practitioner approves.
+- **Identity data is stored apart from clinical data**, so a breach of one is not a breach of the other.
+
+## Standards
+
+Clinical records follow FHIR resource shapes and ICD-10 coding, so Claims, referrals and records exchange with systems that already exist. Aggregate exports are built to align with national health reporting, DHIS2 included.
+
+## Status
+
+Heyrafiki is pre-launch. The API and SDKs open with the Platform, and sandbox keys go to the Waitlist first. This page describes the model they will expose, so an integration can be planned before the endpoints are public.
