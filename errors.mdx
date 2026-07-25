@@ -55,7 +55,7 @@ WWW-Authenticate: Bearer realm="Heyrafiki API", error="invalid_request"
 
 ## Retries
 
-Retry `429` and `5xx` only. Back off exponentially and cap attempts. Write requests accept an `Idempotency-Key` header, so a retry never creates a second Session, Claim or Payment.
+Retry `429` and `5xx` only. Back off exponentially and cap attempts; `429` responses carry `Retry-After` and the rate-limit headers described in [Versioning](/versioning). Write requests accept an `Idempotency-Key` header, so a retry never creates a second Session, Claim or Payment.
 
 ```bash
 curl https://api.heyrafiki.space/v1/sessions \

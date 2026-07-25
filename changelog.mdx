@@ -6,7 +6,7 @@ rss: true
 
 Changes to the API, its resources and its webhooks. Product and website changes are on the [Heyrafiki changelog](https://heyrafiki.space/changelog).
 
-Breaking changes ship behind a new version. Additive changes, new fields, new event types and new endpoints, ship without one, so build clients that ignore unknown fields.
+Breaking changes ship behind a new version. Additive changes, new fields, new event types and new endpoints, ship without one, so build clients that ignore unknown fields. See [Versioning](/versioning) for what counts as which, and how long a deprecated version lives.
 
 <Update label="24 July 2026" description="Webhooks and idempotency" tags={["Added"]}>
   **Added** the webhook event catalogue: `session.*`, `note.approved`, `claim.*`, `payout.settled` and `practitioner.verified`, with HMAC-SHA256 signing over the raw body and at-least-once delivery.

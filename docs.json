@@ -63,7 +63,7 @@
       },
       {
         "group": "API reference",
-        "pages": ["resources", "webhooks"]
+        "pages": ["resources", "webhooks", "versioning"]
       },
       {
         "group": "Platform",
