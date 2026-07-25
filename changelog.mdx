@@ -13,7 +13,7 @@ Breaking changes ship behind a new version. Additive changes, new fields, new ev
 
   **Added** key authentication over `Authorization: Bearer`, with `x-api-key` accepted as an alternative. Keys are environment-scoped by prefix, `sk_test_` and `sk_live_`.
 
-  **Added** the error envelope, with a stable `error.code`, a human `error.message` and a `error.docs` link. `401` responses carry `WWW-Authenticate` distinguishing a missing key from a rejected one.
+  **Added** the error envelope, with a stable `error.code`, a human `error.message` and an `error.docs` link. `401` responses carry `WWW-Authenticate` distinguishing a missing key from a rejected one.
 
   **Added** the six core resources, Person, Practitioner, Session, Note, Claim and Ledger entry, and the Session lifecycle they move through.
 
