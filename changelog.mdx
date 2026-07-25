@@ -8,6 +8,14 @@ Changes to the API, its resources and its webhooks. Product and website changes 
 
 Breaking changes ship behind a new version. Additive changes, new fields, new event types and new endpoints, ship without one, so build clients that ignore unknown fields. See [Versioning](/versioning) for what counts as which, and how long a deprecated version lives.
 
+<Update label="25 July 2026" description="Versioning, deprecation and rate limits" tags={["Added"]}>
+  **Added** the [versioning policy](/versioning), pinning behaviour to the `v1` path and setting out what ships additively versus what requires a new version.
+
+  **Added** deprecation signalling on responses. When an endpoint or version is going away, responses carry `Deprecation`, `Sunset` and `Link` headers, with at least 12 months between announcement and removal. See [Deprecation](/versioning#deprecation).
+
+  **Added** rate limit headers on every response, `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`. Exceeding a limit returns `429` with `error.code` of `rate_limited` and a `Retry-After` header. See [Rate limits](/versioning#rate-limits).
+</Update>
+
 <Update label="24 July 2026" description="Webhooks and idempotency" tags={["Added"]}>
   **Added** the webhook event catalogue: `session.*`, `note.approved`, `claim.*`, `payout.settled` and `practitioner.verified`, with HMAC-SHA256 signing over the raw body and at-least-once delivery.
 
