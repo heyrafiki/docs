@@ -1,47 +1,43 @@
 ---
 title: "API changelog"
-description: "Release notes for the Heyrafiki API: new endpoints, fields, webhook events, response headers, error codes and deprecations, newest first."
+description: "Changes to the Heyrafiki API, newest first."
 rss: true
 ---
 
 Changes to the API, its resources and its webhooks. Product and website changes are on the [Heyrafiki changelog](https://heyrafiki.space/changelog).
 
-Breaking changes ship behind a new version. Additive changes, new fields, new event types and new endpoints, ship without one, so build clients that ignore unknown fields. See [Versioning](/versioning) for what counts as which, and how long a deprecated version lives.
+Breaking changes ship behind a new version. Additive changes ship without one, so build clients that ignore unknown fields. See [Versioning](/versioning) for what counts as which.
 
-<Update label="25 July 2026" description="Versioning, deprecation and rate limits" tags={["Added"]}>
-  **Added** the [versioning policy](/versioning), pinning behaviour to the `v1` path and setting out what ships additively versus what requires a new version.
+<Update label="24 July 2026" description="Webhooks, idempotency" tags={["Added"]}>
+**Added** webhook events for the Session lifecycle, `note.approved`, `claim.*`, `payout.settled` and `practitioner.verified`, signed with HMAC-SHA256 over the raw body.
 
-  **Added** deprecation signalling on responses. When an endpoint or version is going away, responses carry `Deprecation`, `Sunset` and `Link` headers, with at least 12 months between announcement and removal. See [Deprecation](/versioning#deprecation).
+**Added** `Idempotency-Key` on write requests. Replaying a key returns the original response instead of creating a second Session, Claim or Payment.
 
-  **Added** rate limit headers on every response, `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset`. Exceeding a limit returns `429` with `error.code` of `rate_limited` and a `Retry-After` header. See [Rate limits](/versioning#rate-limits).
+**Added** rate-limit headers (`X-RateLimit-Limit`, `-Remaining`, `-Reset`) on every response, and `Retry-After` on `429`.
 </Update>
 
-<Update label="24 July 2026" description="Webhooks and idempotency" tags={["Added"]}>
-  **Added** the webhook event catalogue: `session.*`, `note.approved`, `claim.*`, `payout.settled` and `practitioner.verified`, with HMAC-SHA256 signing over the raw body and at-least-once delivery.
+<Update label="12 June 2026" description="Resource shapes, Session lifecycle" tags={["Added", "Changed"]}>
+**Added** the six core resources, each with a stable ID prefix: `per_`, `prc_`, `ses_`, `not_`, `clm_`, `led_`.
 
-  **Added** the `Idempotency-Key` header on write requests, so a retry never creates a second Session, Claim or Payment.
-</Update>
+**Added** the Session lifecycle (`booked` → `delivered` → `note_approved` → `settled`) and the money state attached to each transition.
 
-<Update label="12 June 2026" description="Resource shapes and the Session lifecycle" tags={["Added"]}>
-  **Added** the six core resources, Person, Practitioner, Session, Note, Claim and Ledger entry, each with a stable ID prefix.
+**Added** cursor pagination on list endpoints via `limit` and `starting_after`, returning `has_more`.
 
-  **Added** the Session lifecycle, `booked` to `delivered` to `note_approved` to `settled`, and the money state attached to each.
-
-  **Changed** all monetary fields to integers in the currency's smallest unit, so `350000` is KES 3,500.00. Decimal amounts are no longer accepted.
+**Changed** monetary fields to integers in the currency's smallest unit. `350000` is KES 3,500.00. Decimal amounts are rejected.
 </Update>
 
 <Update label="30 April 2026" description="Error envelope" tags={["Added"]}>
-  **Added** the error envelope, with a stable `error.code`, a human `error.message` and an `error.docs` link.
+**Added** a single error envelope for every failure, with a stable `error.code`, a human `error.message` and an `error.docs` link. Branch on the code; the message may change.
 
-  **Added** `WWW-Authenticate` on `401` responses, distinguishing a missing key (`invalid_request`) from a rejected one (`invalid_token`).
+**Added** `WWW-Authenticate` on `401`, distinguishing a missing key (`error="invalid_request"`) from a rejected one (`error="invalid_token"`).
 </Update>
 
 <Update label="18 March 2026" description="Environment-scoped keys" tags={["Added", "Changed"]}>
-  **Added** environment scoping by key prefix, `sk_test_` for Sandbox and `sk_live_` for Production. A key is valid in one environment only.
+**Added** environment scoping by key prefix: `sk_test_` for Sandbox, `sk_live_` for Production. A key is valid in one environment only, and using the wrong one returns `api_key_invalid` rather than an empty result.
 
-  **Changed** authentication to prefer `Authorization: Bearer`. `x-api-key` remains supported for clients that cannot set an `Authorization` header.
+**Changed** authentication to prefer `Authorization: Bearer`. `x-api-key` remains supported for clients that cannot set an `Authorization` header.
 </Update>
 
 <Update label="6 February 2026" description="v1 base URL" tags={["Added"]}>
-  **Added** the `v1` base URL at `https://api.heyrafiki.space/v1`, served over HTTPS only. Requests over plain HTTP are rejected rather than redirected.
+**Added** `https://api.heyrafiki.space/v1`, served over HTTPS only. Requests over plain HTTP are rejected rather than redirected, so a key sent that way is never forwarded.
 </Update>
