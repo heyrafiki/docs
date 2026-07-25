@@ -1,0 +1,89 @@
+---
+title: "Resources"
+description: "The objects the Heyrafiki API exposes and how they relate."
+---
+
+Six objects. Everything else is a view over them.
+
+| Object | Prefix | Description |
+| --- | --- | --- |
+| Person | `per_` | Someone seeking or receiving Care. Owns Consent. |
+| Practitioner | `prc_` | A Clinician, verified against their Board's records. |
+| Session | `ses_` | One appointment, with its Room and its money. |
+| Note | `not_` | The clinical record of a Session. |
+| Claim | `clm_` | A request for a Payer to cover a Session. |
+| Ledger entry | `led_` | Double-entry money movement. |
+
+## Lifecycle
+
+A Session moves through five states. Each transition emits a webhook.
+
+```
+match  →  booked  →  delivered  →  note.approved  →  settled
+```
+
+| State | Set by | Money |
+| --- | --- | --- |
+| `booked` | Person or Practitioner | Self-pay captured and held |
+| `delivered` | Attendance in the Room | Held |
+| `note_approved` | Practitioner approves the Note | Claim generated if covered |
+| `settled` | Ledger | Released to the Practitioner |
+| `cancelled` | Either party | Refunded per policy |
+
+## Practitioner
+
+```json
+{
+  "id": "prc_9a1c4e7b",
+  "object": "practitioner",
+  "name": "Aisha Abdullahi",
+  "profession": "Clinical Psychologist",
+  "verification": {
+    "status": "verified",
+    "board": "KCPA",
+    "last_checked_at": "2026-07-01T00:00:00Z"
+  },
+  "languages": ["en", "sw"],
+  "focus_areas": ["anxiety", "trauma"],
+  "formats": ["online", "in_person"],
+  "city": "Nairobi",
+  "country": "KE",
+  "rate": { "amount": 350000, "currency": "KES" },
+  "payers": ["jubilee", "britam", "aar"]
+}
+```
+
+Amounts are integers in the currency's smallest unit. `350000` is KES 3,500.00.
+
+## Session
+
+```json
+{
+  "id": "ses_2f8b10d4",
+  "object": "session",
+  "state": "booked",
+  "person_id": "per_c41a7e90",
+  "practitioner_id": "prc_9a1c4e7b",
+  "starts_at": "2026-08-04T10:00:00Z",
+  "duration_minutes": 50,
+  "format": "online",
+  "room_url": "https://rooms.heyrafiki.space/ses_2f8b10d4",
+  "coverage": { "type": "payer", "payer": "jubilee", "claim_id": "clm_77c0" },
+  "amount": { "amount": 350000, "currency": "KES" }
+}
+```
+
+## What the API never returns
+
+Scope is enforced in the data model, not by filtering on the way out.
+
+- Clinical content of a Note. Approved Notes stay with the Practitioner. Partner keys see that a Note exists and is approved, never what it says.
+- Anything identifying under an Organization or Funder key. Those keys read aggregates only.
+- Message, Journal or Check content, under any key.
+
+## Conventions
+
+- Times are RFC 3339 in UTC.
+- IDs are opaque strings. Never parse them.
+- Lists are cursor-paginated with `limit` and `starting_after`, and return `has_more`.
+- Unknown fields may be added at any time. Ignore fields you do not recognise.

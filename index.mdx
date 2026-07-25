@@ -1,23 +1,53 @@
 ---
-title: "Heyrafiki Docs"
-description: "Start here for Heyrafiki: the Platform model behind Care, Benefits and Payments, the security and privacy boundaries, and what shipped recently."
+title: "Introduction"
+description: "The Heyrafiki API: base URL, authentication, errors and resources."
 ---
 
-Heyrafiki connects People, Practitioners, Insurers and Organizations through one Rail for Care, Benefits and Payments.
+The Heyrafiki API is a REST API over Mental Healthcare infrastructure: Practitioner verification, Matching, Sessions, clinical Notes, Claims and Payments.
 
-Start with the Platform overview: the objects the system is built from, how a Session moves through them, and who can see what. The API and SDKs open with the Platform, so the model is documented before the endpoints are.
+It uses standard HTTP verbs, returns JSON, and authenticates with a secret key sent as a Bearer token.
+
+```
+https://api.heyrafiki.space/v1
+```
+
+<Note>
+The API is in private beta. The endpoints below are not yet live. Authentication, the error envelope and the base URL are final and respond today. Sandbox keys go to Waitlist members first.
+</Note>
+
+## Try it now
+
+Every request to the API today returns a structured error. This is the real response, not an example.
+
+<CodeGroup>
+```bash cURL
+curl https://api.heyrafiki.space/v1/practitioners
+```
+
+```json Response
+{
+  "error": {
+    "code": "api_key_missing",
+    "message": "The Heyrafiki API requires a key. Send it as an Authorization: Bearer header, or as x-api-key.",
+    "docs": "https://heyrafiki.space/solutions/developers"
+  }
+}
+```
+</CodeGroup>
+
+## Next
 
 <CardGroup cols={2}>
-  <Card title="Platform overview" icon="layer-group" href="/concepts/platform">
-    The objects, the Session flow, and the boundaries between roles.
+  <Card title="Authentication" icon="key" href="/authentication">
+    Keys, headers and environments.
   </Card>
-  <Card title="Security and Privacy" icon="shield-halved" href="/security/overview">
-    How access, Consent and sharing are controlled.
+  <Card title="Errors" icon="triangle-exclamation" href="/errors">
+    Status codes and the error envelope.
   </Card>
-  <Card title="Changelog" icon="clock-rotate-left" href="/changelog">
-    What shipped, and when.
+  <Card title="Resources" icon="cube" href="/resources">
+    The objects the API exposes.
   </Card>
-  <Card title="Join the Waitlist" icon="key" href="https://heyrafiki.space/waitlist">
-    Sandbox keys go to the Waitlist first.
+  <Card title="Webhooks" icon="bolt" href="/webhooks">
+    Events, delivery and signatures.
   </Card>
 </CardGroup>

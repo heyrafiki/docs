@@ -38,8 +38,8 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Open Heyrafiki",
-      "href": "https://heyrafiki.space"
+      "label": "Get API keys",
+      "href": "https://heyrafiki.space/waitlist"
     }
   },
   "search": {
@@ -54,15 +54,19 @@
   "navigation": {
     "groups": [
       {
-        "group": "Overview",
-        "pages": ["index", "concepts/platform"]
+        "group": "Get started",
+        "pages": ["index", "authentication", "errors"]
       },
       {
-        "group": "Trust",
-        "pages": ["security/overview"]
+        "group": "API reference",
+        "pages": ["resources", "webhooks"]
       },
       {
-        "group": "Updates",
+        "group": "Platform",
+        "pages": ["concepts/platform", "security/overview"]
+      },
+      {
+        "group": "Changelog",
         "pages": ["changelog"]
       }
     ]

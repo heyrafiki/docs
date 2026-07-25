@@ -1,13 +1,21 @@
 ---
-title: "Changelog"
-description: "Release notes for the Heyrafiki platform, API, SDKs and documentation, including security hardening, new endpoints and content updates."
+title: "API Changelog"
+description: "Changes to the Heyrafiki API, newest first."
 rss: true
 ---
 
-<Update label="24 July 2026" description="Vision, and hardening underneath" tags={["Platform"]}>
-  Heyrafiki published its Vision: why Mental Healthcare is being rebuilt as Infrastructure. Every response now carries security headers that force HTTPS, block framing and lock down browser permissions.
-</Update>
+Changes to the API, its resources and its webhooks. Product and website changes are on the [Heyrafiki changelog](https://heyrafiki.space/changelog).
 
-<Update label="15 July 2026" description="Heyrafiki Docs foundation" tags={["Documentation"]}>
-  These Docs launched with a Platform overview and the Security and Privacy principles. Light and dark modes follow your system preference.
+Breaking changes ship behind a new version. Additive changes, new fields, new event types and new endpoints, ship without one, so build clients that ignore unknown fields.
+
+<Update label="24 July 2026" description="v1 contract published" tags={["Added"]}>
+  **Added** the `v1` base URL at `https://api.heyrafiki.space/v1`.
+
+  **Added** key authentication over `Authorization: Bearer`, with `x-api-key` accepted as an alternative. Keys are environment-scoped by prefix, `sk_test_` and `sk_live_`.
+
+  **Added** the error envelope, with a stable `error.code`, a human `error.message` and a `error.docs` link. `401` responses carry `WWW-Authenticate` distinguishing a missing key from a rejected one.
+
+  **Added** the six core resources, Person, Practitioner, Session, Note, Claim and Ledger entry, and the Session lifecycle they move through.
+
+  **Added** the webhook event catalogue and HMAC-SHA256 signing over the raw body.
 </Update>

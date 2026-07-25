@@ -1,0 +1,38 @@
+---
+title: "Authentication"
+description: "Authenticate Heyrafiki API requests with a secret key."
+---
+
+Authenticate with a secret key sent as a Bearer token.
+
+```bash
+curl https://api.heyrafiki.space/v1/practitioners \
+  -H "Authorization: Bearer sk_test_xxxxxxxxxxxxxxxx"
+```
+
+`x-api-key` is accepted as an alternative for clients that cannot set an `Authorization` header.
+
+```bash
+curl https://api.heyrafiki.space/v1/practitioners \
+  -H "x-api-key: sk_test_xxxxxxxxxxxxxxxx"
+```
+
+## Environments
+
+| Prefix | Environment | Money moves | Data |
+| --- | --- | --- | --- |
+| `sk_test_` | Sandbox | No | Synthetic |
+| `sk_live_` | Production | Yes | Real |
+
+A key is valid in one environment only. Using a sandbox key against production returns `api_key_invalid`.
+
+## Keeping keys safe
+
+<Warning>
+Secret keys carry access to clinical and financial data. Never ship one to a browser, a mobile app or a public repository.
+</Warning>
+
+- Call the API from your server. Public clients get scoped tokens, never a secret key.
+- Store keys in your secret manager or environment, never in source control.
+- Rotate on a schedule and immediately on suspected exposure. Rotation is instant and the old key stops working.
+- Requests over plain HTTP are rejected, not redirected. Any key sent that way is compromised, so rotate it.
