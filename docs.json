@@ -2,7 +2,11 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Heyrafiki Docs",
-  "description": "Technical documentation for Heyrafiki Open Infrastructure for Mental Healthcare.",
+  "description": "The Heyrafiki API: authentication, errors, resources and webhooks.",
+  "styling": {
+    "eyebrows": "breadcrumbs",
+    "codeblocks": "dark"
+  },
   "logo": {
     "light": "/images/logo-black.png",
     "dark": "/images/logo-white.png",
