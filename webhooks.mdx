@@ -1,6 +1,6 @@
 ---
-title: "Webhooks"
-description: "Subscribe to Heyrafiki events, verify signatures and handle retries."
+title: "Webhook events, signatures and retries"
+description: "Subscribe to Heyrafiki webhook events, verify HMAC-SHA256 signatures over the raw body, handle at-least-once delivery and 24-hour retries idempotently."
 ---
 
 Heyrafiki POSTs a JSON event to your endpoint when something happens. Respond `200` within 10 seconds.
