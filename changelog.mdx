@@ -8,14 +8,32 @@ Changes to the API, its resources and its webhooks. Product and website changes 
 
 Breaking changes ship behind a new version. Additive changes, new fields, new event types and new endpoints, ship without one, so build clients that ignore unknown fields.
 
-<Update label="24 July 2026" description="v1 contract published" tags={["Added"]}>
-  **Added** the `v1` base URL at `https://api.heyrafiki.space/v1`.
+<Update label="24 July 2026" description="Webhooks and idempotency" tags={["Added"]}>
+  **Added** the webhook event catalogue: `session.*`, `note.approved`, `claim.*`, `payout.settled` and `practitioner.verified`, with HMAC-SHA256 signing over the raw body and at-least-once delivery.
 
-  **Added** key authentication over `Authorization: Bearer`, with `x-api-key` accepted as an alternative. Keys are environment-scoped by prefix, `sk_test_` and `sk_live_`.
+  **Added** the `Idempotency-Key` header on write requests, so a retry never creates a second Session, Claim or Payment.
+</Update>
 
-  **Added** the error envelope, with a stable `error.code`, a human `error.message` and an `error.docs` link. `401` responses carry `WWW-Authenticate` distinguishing a missing key from a rejected one.
+<Update label="12 June 2026" description="Resource shapes and the Session lifecycle" tags={["Added"]}>
+  **Added** the six core resources, Person, Practitioner, Session, Note, Claim and Ledger entry, each with a stable ID prefix.
 
-  **Added** the six core resources, Person, Practitioner, Session, Note, Claim and Ledger entry, and the Session lifecycle they move through.
+  **Added** the Session lifecycle, `booked` to `delivered` to `note_approved` to `settled`, and the money state attached to each.
 
-  **Added** the webhook event catalogue and HMAC-SHA256 signing over the raw body.
+  **Changed** all monetary fields to integers in the currency's smallest unit, so `350000` is KES 3,500.00. Decimal amounts are no longer accepted.
+</Update>
+
+<Update label="30 April 2026" description="Error envelope" tags={["Added"]}>
+  **Added** the error envelope, with a stable `error.code`, a human `error.message` and an `error.docs` link.
+
+  **Added** `WWW-Authenticate` on `401` responses, distinguishing a missing key (`invalid_request`) from a rejected one (`invalid_token`).
+</Update>
+
+<Update label="18 March 2026" description="Environment-scoped keys" tags={["Added", "Changed"]}>
+  **Added** environment scoping by key prefix, `sk_test_` for Sandbox and `sk_live_` for Production. A key is valid in one environment only.
+
+  **Changed** authentication to prefer `Authorization: Bearer`. `x-api-key` remains supported for clients that cannot set an `Authorization` header.
+</Update>
+
+<Update label="6 February 2026" description="v1 base URL" tags={["Added"]}>
+  **Added** the `v1` base URL at `https://api.heyrafiki.space/v1`, served over HTTPS only. Requests over plain HTTP are rejected rather than redirected.
 </Update>
