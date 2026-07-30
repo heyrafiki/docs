@@ -1,0 +1,17 @@
+---
+title: "Scopes"
+description: "Grant each key only the capabilities its integration needs."
+---
+
+Scopes are attached to a key when it is issued.
+
+| Scope | Access |
+| --- | --- |
+| `practitioners:read` | List and retrieve synthetic Practitioner profiles |
+| `availability:read` | Read recurring Practitioner availability |
+| `sessions:read` | List and retrieve synthetic Sessions |
+| `claims:read` | List and retrieve tenant-scoped synthetic Claim status |
+
+An authenticated request without the required scope returns `403 permission_denied`.
+
+Use separate keys when systems need different access. Avoid the wildcard scope outside controlled sandbox testing.

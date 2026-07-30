@@ -1,0 +1,18 @@
+---
+title: "MCP"
+description: "A governed read-only surface for approved external agents."
+---
+
+The MCP surface is read-only and sandbox-only. It maps to the same capabilities as REST.
+
+| Tool | Purpose | Required scope |
+| --- | --- | --- |
+| `list_practitioners` | List synthetic Practitioner profiles | `practitioners:read` |
+| `get_practitioner` | Retrieve one synthetic Practitioner | `practitioners:read` |
+| `get_practitioner_availability` | Read recurring weekly hours | `availability:read` |
+| `list_sessions` | List synthetic Sessions | `sessions:read` |
+| `get_session` | Retrieve one synthetic Session | `sessions:read` |
+| `list_claims` | List tenant-scoped synthetic Claims | `claims:read` |
+| `get_claim` | Retrieve one tenant-scoped synthetic Claim | `claims:read` |
+
+MCP tools require the same scopes as their REST operations. They do not provide database access or bypass capability policy.

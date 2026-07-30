@@ -1,0 +1,46 @@
+---
+title: "Quickstart"
+description: "Make the first authenticated request to the Heyrafiki sandbox."
+---
+
+## 1. Request sandbox access
+
+Sandbox keys are issued during private beta. [Request access](https://heyrafiki.space/waitlist) and keep the key on your server.
+
+<Tip>
+Keep the key out of screenshots. Screenshots are unusually good at finding public channels.
+</Tip>
+
+## 2. Inspect the API
+
+```bash
+curl https://api.heyrafiki.space/v1 \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY"
+```
+
+```json
+{
+  "object": "api",
+  "version": "v1",
+  "environment": "sandbox",
+  "resources": ["practitioners", "availability", "sessions", "claims"]
+}
+```
+
+## 3. Discover a Practitioner
+
+```bash
+curl "https://api.heyrafiki.space/v1/practitioners?limit=10" \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY"
+```
+
+Use the returned `prc_` identifier to retrieve recurring availability.
+
+```bash
+curl "https://api.heyrafiki.space/v1/practitioners/prc_2481/availability" \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY"
+```
+
+<Note>
+Private beta data is synthetic. Do not send names, contacts, clinical content or payment credentials in test requests.
+</Note>

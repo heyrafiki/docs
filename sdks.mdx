@@ -1,0 +1,22 @@
+---
+title: "SDKs"
+description: "Typed clients generated from the same public contract."
+---
+
+SDKs follow the canonical OpenAPI contract and shared conformance fixtures. JavaScript and TypeScript come first. Python and Rust will use the same resource and error models.
+
+## JavaScript
+
+The JavaScript client covers API discovery, Practitioner discovery, availability, Sessions and Claims.
+
+```ts
+import { Heyrafiki } from "@heyrafiki/heyrafiki-js";
+
+const heyrafiki = new Heyrafiki({
+  apiKey: process.env.HEYRAFIKI_API_KEY!,
+});
+
+const practitioners = await heyrafiki.practitioners.list({ limit: 10 });
+```
+
+The REST reference owns behavior. Client packages retain its resource names, scopes and error envelope.

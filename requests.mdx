@@ -1,0 +1,55 @@
+---
+title: "Requests"
+description: "Headers, identifiers, timestamps and money."
+---
+
+Send and receive JSON over HTTPS.
+
+```http
+Accept: application/json
+Authorization: Bearer sk_test_xxxxxxxxxxxxxxxx
+```
+
+## Request identifiers
+
+Every API response includes `X-Request-Id`. Keep it with your logs and include it when contacting support.
+
+```http
+X-Request-Id: 7c1d6b76-2f1d-43c2-b82c-7a936ff9d2aa
+```
+
+## Identifiers
+
+Resource identifiers are opaque strings. Store the complete value and do not infer meaning from its prefix.
+
+| Prefix | Resource |
+| --- | --- |
+| `prc_` | Practitioner |
+| `ses_` | Session |
+| `clm_` | Claim |
+
+## Timestamps
+
+API timestamps use RFC 3339 in UTC unless a field documents a timezone.
+
+```json
+{
+  "starts_at": "2026-08-03T08:00:00.000Z",
+  "timezone": "Africa/Nairobi"
+}
+```
+
+## Money
+
+Amounts are integers in the currency's minor unit.
+
+```json
+{
+  "amount": 350000,
+  "currency": "KES"
+}
+```
+
+## Null and omitted fields
+
+`null` means the field has no current value. An omitted field is outside that response shape. Do not treat the two as equivalent.

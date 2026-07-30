@@ -1,0 +1,629 @@
+openapi: 3.1.0
+info:
+  title: Heyrafiki API
+  version: 1.0.0
+  description: Build Care, Cover and Payment workflows on Heyrafiki.
+  contact:
+    name: Heyrafiki
+    url: https://heyrafiki.space
+    email: developers@heyrafiki.space
+  license:
+    name: All rights reserved
+    identifier: LicenseRef-Heyrafiki-Proprietary
+servers:
+  - url: https://api.heyrafiki.space/v1
+security:
+  - bearerAuth: []
+  - apiKeyAuth: []
+paths:
+  /:
+    get:
+      operationId: getApi
+      summary: Inspect the API version and environment
+      description: Returns API metadata for the authenticated project.
+      responses:
+        "200":
+          description: API information
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiInformation"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /practitioners:
+    get:
+      operationId: listPractitioners
+      summary: List Practitioners
+      description: Returns synthetic Practitioner profiles. Requires `practitioners:read`.
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of Practitioners to return.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: A Practitioner list
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PractitionerList"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /practitioners/{practitioner_id}:
+    get:
+      operationId: getPractitioner
+      summary: Retrieve a Practitioner
+      description: Returns one synthetic Practitioner profile. Requires `practitioners:read`.
+      parameters:
+        - $ref: "#/components/parameters/PractitionerId"
+      responses:
+        "200":
+          description: A Practitioner
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Practitioner"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /practitioners/{practitioner_id}/availability:
+    get:
+      operationId: getPractitionerAvailability
+      summary: Retrieve Practitioner availability
+      description: Returns recurring synthetic weekly hours. Requires `availability:read`.
+      parameters:
+        - $ref: "#/components/parameters/PractitionerId"
+      responses:
+        "200":
+          description: Practitioner availability
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PractitionerAvailability"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /sessions:
+    get:
+      operationId: listSessions
+      summary: List Sessions
+      description: Returns synthetic Sessions without Person or clinical identifiers. Requires `sessions:read`.
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of Sessions to return.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: A Session list
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionList"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /sessions/{session_id}:
+    get:
+      operationId: getSession
+      summary: Retrieve a Session
+      description: Returns one synthetic Session without Person or clinical identifiers. Requires `sessions:read`.
+      parameters:
+        - $ref: "#/components/parameters/SessionId"
+      responses:
+        "200":
+          description: A Session
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /claims:
+    get:
+      operationId: listClaims
+      summary: List Claims
+      description: Returns synthetic Claim status without Person, payer or clinical identifiers. Requires `claims:read`.
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of Claims to return.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: A Claim list
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClaimList"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /claims/{claim_id}:
+    get:
+      operationId: getClaim
+      summary: Retrieve a Claim
+      description: Returns one synthetic Claim without Person, payer or clinical identifiers. Requires `claims:read`.
+      parameters:
+        - $ref: "#/components/parameters/ClaimId"
+      responses:
+        "200":
+          description: A Claim
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Claim"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+components:
+  parameters:
+    PractitionerId:
+      name: practitioner_id
+      in: path
+      required: true
+      description: A public Practitioner identifier.
+      schema:
+        type: string
+        maxLength: 100
+        pattern: ^prc_[A-Za-z0-9_-]+$
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      description: A public Session identifier.
+      schema:
+        type: string
+        maxLength: 100
+        pattern: ^ses_[A-Za-z0-9_-]+$
+    ClaimId:
+      name: claim_id
+      in: path
+      required: true
+      description: A public Claim identifier.
+      schema:
+        type: string
+        maxLength: 100
+        pattern: ^clm_[A-Za-z0-9_-]+$
+  headers:
+    RateLimitLimit:
+      description: Maximum requests allowed in the current minute.
+      schema:
+        type: integer
+    RateLimitRemaining:
+      description: Requests remaining in the current minute.
+      schema:
+        type: integer
+    RateLimitReset:
+      description: Unix timestamp when the current limit resets.
+      schema:
+        type: integer
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: A sandbox or production secret key.
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: An alternative for clients that cannot set Authorization.
+  responses:
+    BadRequest:
+      description: The request failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Unauthorized:
+      description: The API key is missing or invalid.
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Forbidden:
+      description: The API key does not permit this operation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    NotFound:
+      description: The requested resource does not exist or is not visible to this project.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    TooManyRequests:
+      description: The project exceeded its request limit.
+      headers:
+        Retry-After:
+          description: Seconds until another request should be attempted.
+          schema:
+            type: integer
+        X-RateLimit-Limit:
+          $ref: "#/components/headers/RateLimitLimit"
+        X-RateLimit-Remaining:
+          $ref: "#/components/headers/RateLimitRemaining"
+        X-RateLimit-Reset:
+          $ref: "#/components/headers/RateLimitReset"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    ServiceUnavailable:
+      description: The service is temporarily unavailable.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+            example: 5
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+  schemas:
+    ApiInformation:
+      type: object
+      additionalProperties: false
+      required: [object, version, environment, resources]
+      properties:
+        object:
+          type: string
+          const: api
+        version:
+          type: string
+          const: v1
+        environment:
+          type: string
+          enum: [sandbox, production]
+        resources:
+          type: array
+          items:
+            type: string
+    PractitionerList:
+      type: object
+      additionalProperties: false
+      required: [object, data, has_more]
+      properties:
+        object:
+          type: string
+          const: list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Practitioner"
+        has_more:
+          type: boolean
+    Practitioner:
+      type: object
+      additionalProperties: false
+      required: [id, object, name, profession, location, session_fee]
+      properties:
+        id:
+          type: string
+          maxLength: 100
+          pattern: ^prc_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: practitioner
+        name:
+          type: string
+        profession:
+          type: string
+        location:
+          type: object
+          additionalProperties: false
+          required: [city, country]
+          properties:
+            city:
+              type: string
+            country:
+              type: string
+        session_fee:
+          type: object
+          additionalProperties: false
+          required: [amount, currency]
+          properties:
+            amount:
+              type: integer
+              minimum: 0
+              description: Amount in the currency's minor unit.
+            currency:
+              type: string
+              pattern: ^[A-Z]{3}$
+    PractitionerAvailability:
+      type: object
+      additionalProperties: false
+      required: [object, practitioner_id, timezone, weekly_hours]
+      properties:
+        object:
+          type: string
+          const: availability
+        practitioner_id:
+          type: string
+          maxLength: 100
+          pattern: ^prc_[A-Za-z0-9_-]+$
+        timezone:
+          type: string
+          example: Africa/Nairobi
+        weekly_hours:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [weekday, start, end, formats]
+            properties:
+              weekday:
+                type: integer
+                minimum: 0
+                maximum: 6
+                description: Day of week, where Sunday is 0.
+              start:
+                type: string
+                pattern: ^(?:[01][0-9]|2[0-3]):[0-5][0-9]$
+              end:
+                type: string
+                pattern: ^(?:[01][0-9]|2[0-3]):[0-5][0-9]$
+              formats:
+                type: array
+                items:
+                  type: string
+                  enum: [online, in_person, phone]
+    SessionList:
+      type: object
+      additionalProperties: false
+      required: [object, data, has_more]
+      properties:
+        object:
+          type: string
+          const: list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Session"
+        has_more:
+          type: boolean
+    Session:
+      type: object
+      additionalProperties: false
+      required:
+        [id, object, practitioner_id, starts_at, ends_at, timezone, format, status, payment_source]
+      properties:
+        id:
+          type: string
+          maxLength: 100
+          pattern: ^ses_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: session
+        practitioner_id:
+          type: string
+          maxLength: 100
+          pattern: ^prc_[A-Za-z0-9_-]+$
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+        timezone:
+          type: string
+          example: Africa/Nairobi
+        format:
+          type: string
+          enum: [online, in_person, phone]
+        status:
+          type: string
+          enum: [reserved, confirmed, in_progress, delivered, cancelled]
+        payment_source:
+          type: string
+          enum: [self_pay, covered]
+    ClaimList:
+      type: object
+      additionalProperties: false
+      required: [object, data, has_more]
+      properties:
+        object:
+          type: string
+          const: list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Claim"
+        has_more:
+          type: boolean
+    Claim:
+      type: object
+      additionalProperties: false
+      required: [id, object, status, amount, service_period]
+      properties:
+        id:
+          type: string
+          maxLength: 100
+          pattern: ^clm_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: claim
+        status:
+          type: string
+          enum: [draft, submitted, approved, settled, queried, denied]
+        amount:
+          type: object
+          additionalProperties: false
+          required: [currency, billed, approved, settled]
+          properties:
+            currency:
+              type: string
+              pattern: ^[A-Z]{3}$
+            billed:
+              type: integer
+              minimum: 0
+            approved:
+              type: [integer, "null"]
+              minimum: 0
+            settled:
+              type: [integer, "null"]
+              minimum: 0
+        service_period:
+          type: object
+          additionalProperties: false
+          required: [starts_at, ends_at]
+          properties:
+            starts_at:
+              type: string
+              format: date-time
+            ends_at:
+              type: string
+              format: date-time
+    ErrorEnvelope:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required: [code, message, docs]
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            docs:
+              type: string
+              format: uri

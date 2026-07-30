@@ -1,0 +1,20 @@
+---
+title: "Testing"
+description: "Build integrations against deterministic sandbox data."
+---
+
+Use sandbox keys for development, CI and acceptance tests. Sandbox responses contain synthetic data and use the same identifiers, scopes, errors and rate-limit headers as the API contract.
+
+## Test safely
+
+- Keep the key in CI secrets.
+- Use only synthetic names, contacts and records.
+- Assert on identifiers and status, not display copy.
+- Exercise `400`, `401`, `403`, `404`, `429` and `503` handling.
+- Retry only when the response permits it.
+
+## Contract changes
+
+Additive fields may appear without a new API version. Ignore fields your integration does not use and keep a default branch for enum values.
+
+The [Changelog](/changelog) records contract changes. The [Versioning guide](/versioning) defines compatibility.

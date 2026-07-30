@@ -1,0 +1,23 @@
+---
+title: "Environments"
+description: "Separate sandbox development from regulated production use."
+---
+
+Heyrafiki keys are bound to one environment.
+
+| Environment | Key prefix | Purpose |
+| --- | --- | --- |
+| Sandbox | `sk_test_` | Synthetic data, integration development and conformance testing |
+| Production | `sk_live_` | Approved live workloads |
+
+Sandbox and production do not share keys or data. A key for one environment is rejected in the other.
+
+## Safe development
+
+- Keep keys in server-side secret storage.
+- Use one project per integration and environment.
+- Request only the scopes the integration needs.
+- Revoke a key when it is exposed or no longer used.
+- Never copy live health data into the sandbox.
+
+Production access is staged. A documented production resource may still require project-specific approval.

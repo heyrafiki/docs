@@ -1,63 +1,15 @@
 ---
 title: "Webhooks"
-description: "Subscribe to Heyrafiki events, verify signatures and handle retries."
+description: "Verify and process outbound Heyrafiki events."
 ---
 
-Heyrafiki POSTs a JSON event to your endpoint when something happens. Respond `200` within 10 seconds.
+Webhook delivery uses:
 
-```json
-{
-  "id": "evt_5c2a9f13",
-  "object": "event",
-  "type": "session.settled",
-  "created_at": "2026-08-04T10:52:11Z",
-  "data": {
-    "id": "ses_2f8b10d4",
-    "object": "session",
-    "state": "settled"
-  }
-}
-```
+- a versioned event catalogue;
+- a stable event identifier and schema version;
+- signatures over the exact serialized body;
+- replay-window verification;
+- bounded retry for transient failures;
+- an explicit endpoint authorization and egress policy before delivery.
 
-## Events
-
-| Type | Fires when |
-| --- | --- |
-| `session.booked` | A Session is created and payment is held |
-| `session.delivered` | Both parties attended |
-| `session.cancelled` | Either party cancels |
-| `note.approved` | A Practitioner approves a Note |
-| `claim.submitted` | A Claim goes to a Payer |
-| `claim.approved` | A Payer approves a Claim |
-| `claim.rejected` | A Payer rejects a Claim, with a reason |
-| `payout.settled` | Money reaches a Practitioner |
-| `practitioner.verified` | A verification check completes |
-
-## Verifying signatures
-
-Every request carries `X-Heyrafiki-Signature`, an HMAC-SHA256 of the raw body keyed with your webhook secret.
-
-```js
-import crypto from "node:crypto";
-
-export function verify(rawBody, signature, secret) {
-  const expected = crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
-}
-```
-
-<Warning>
-Compute the HMAC over the raw request body, before any JSON parsing. Re-serialised JSON produces a different signature. Always compare in constant time.
-</Warning>
-
-Reject anything that fails verification. Do not fall back to trusting the payload.
-
-## Retries
-
-A non-`200`, a timeout or a connection failure is retried with exponential backoff for 24 hours. Delivery is at-least-once, so handlers must be idempotent: key on `event.id` and ignore ones you have already processed.
-
-Order is not guaranteed. Use `created_at` to resolve sequence.
-
-## Handling
-
-Acknowledge first, work after. Return `200` as soon as you have persisted the event, then process it in a queue. Work done before the response counts against the 10-second timeout.
+Each released event has a documented schema, ordering behavior and verification example. Event access is scoped per project.

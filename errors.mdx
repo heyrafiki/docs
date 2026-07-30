@@ -3,64 +3,54 @@ title: "Errors"
 description: "HTTP status codes and the Heyrafiki error envelope."
 ---
 
-Every error returns the same envelope.
+Every API error returns the same envelope.
 
 ```json
 {
   "error": {
     "code": "api_key_invalid",
     "message": "This key is not authorized for the Heyrafiki API. Check that you are using the key for this environment.",
-    "docs": "https://heyrafiki.space/solutions/developers"
+    "docs": "https://docs.heyrafiki.space/errors"
   }
 }
 ```
 
-Branch on `error.code`. It is stable. `error.message` is written for humans and may change.
+Branch on `error.code`. It is stable. The message may change.
 
 ## Status codes
 
 | Status | Meaning | Retry |
 | --- | --- | --- |
-| `200` | Success | — |
-| `400` | Request is malformed or fails validation | No, fix the request |
-| `401` | Key missing, invalid, or wrong environment | No, fix the key |
-| `403` | Key is valid but not permitted, or Consent does not allow it | No |
-| `404` | Resource does not exist, or is not visible to this key | No |
-| `409` | Conflict with the resource's current state | No |
-| `422` | Well-formed but not actionable, such as booking a past Session | No |
-| `429` | Rate limited | Yes, after `Retry-After` |
-| `5xx` | Fault on our side | Yes, with exponential backoff |
+| `200` | Success | No |
+| `400` | Request validation failed | Fix the request |
+| `401` | Key missing, invalid or for another environment | Fix the key |
+| `403` | Key is valid but lacks access | No |
+| `404` | Resource not found or not visible | No |
+| `429` | Rate limit exceeded | After `Retry-After` |
+| `503` | Service temporarily unavailable | After `Retry-After` |
 
 ## Error codes
 
 | Code | Status | Cause |
 | --- | --- | --- |
 | `api_key_missing` | 401 | No `Authorization` or `x-api-key` header |
-| `api_key_invalid` | 401 | Unknown, revoked, or wrong-environment key |
-| `permission_denied` | 403 | Key lacks the scope for this resource |
-| `consent_required` | 403 | The Person has not consented to this sharing |
-| `resource_not_found` | 404 | No such resource for this key |
-| `validation_failed` | 400 | One or more fields failed validation |
-| `rate_limited` | 429 | Too many requests |
+| `api_key_invalid` | 401 | Unknown, revoked, malformed or wrong-environment key |
+| `permission_denied` | 403 | Key lacks the required scope or resource access |
+| `resource_not_found` | 404 | Resource does not exist or is not visible to the project |
+| `validation_failed` | 400 | A request parameter failed validation |
+| `rate_limit_exceeded` | 429 | The key exceeded its current request limit |
+| `service_unavailable` | 503 | A required service could not complete the request |
 
-## Auth failures
+## Authentication failures
 
-`401` responses also carry a `WWW-Authenticate` header.
+`401` responses include `WWW-Authenticate`.
 
-```
+```http
 WWW-Authenticate: Bearer realm="Heyrafiki API", error="invalid_request"
 ```
 
-`error="invalid_request"` means no key was presented. `error="invalid_token"` means a key was presented and rejected.
+`invalid_request` means no key was sent. `invalid_token` means a key was sent and rejected.
 
 ## Retries
 
-Retry `429` and `5xx` only. Back off exponentially and cap attempts; `429` responses carry `Retry-After` and the rate-limit headers described in [Versioning](/versioning). Write requests accept an `Idempotency-Key` header, so a retry never creates a second Session, Claim, or Payment.
-
-```bash
-curl https://api.heyrafiki.space/v1/sessions \
-  -H "Authorization: Bearer sk_test_xxxxxxxxxxxxxxxx" \
-  -H "Idempotency-Key: 8f14e45f-ea2b-4c1f-9b23-7a0c2d1e5f60" \
-  -d practitioner_id=prc_9a1 \
-  -d starts_at=2026-08-04T10:00:00Z
-```
+Retry `429` and `503` responses only. Read `Retry-After`, then use exponential backoff with jitter.

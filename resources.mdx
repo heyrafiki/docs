@@ -1,89 +1,143 @@
 ---
 title: "Resources"
-description: "The objects the Heyrafiki API exposes and how they relate."
+description: "The sandbox resources in the Heyrafiki API."
 ---
 
-Six objects. Everything else is a view over them.
+Discover a synthetic Practitioner, inspect recurring availability and read Session and Claim status.
 
-| Object | Prefix | Description |
-| --- | --- | --- |
-| Person | `per_` | Someone seeking or receiving Care. Owns Consent. |
-| Practitioner | `prc_` | A Clinician, verified against their Board's records. |
-| Session | `ses_` | One appointment, with its Room and its money. |
-| Note | `not_` | The clinical record of a Session. |
-| Claim | `clm_` | A request for a Payer to cover a Session. |
-| Ledger entry | `led_` | Double-entry money movement. |
+## List Practitioners
 
-## Lifecycle
-
-A Session moves through five states. Each transition emits a webhook.
-
+```bash
+curl "https://api.heyrafiki.space/v1/practitioners?limit=2" \
+  -H "Authorization: Bearer sk_test_xxxxxxxxxxxxxxxx"
 ```
-match  →  booked  →  delivered  →  note.approved  →  settled
-```
-
-| State | Set by | Money |
-| --- | --- | --- |
-| `booked` | Person or Practitioner | Self-pay captured and held |
-| `delivered` | Attendance in the Room | Held |
-| `note_approved` | Practitioner approves the Note | Claim generated if covered |
-| `settled` | Ledger | Released to the Practitioner |
-| `cancelled` | Either party | Refunded per policy |
-
-## Practitioner
 
 ```json
 {
-  "id": "prc_9a1c4e7b",
-  "object": "practitioner",
-  "name": "Aisha Abdullahi",
-  "profession": "Clinical Psychologist",
-  "verification": {
-    "status": "verified",
-    "board": "KCPA",
-    "last_checked_at": "2026-07-01T00:00:00Z"
-  },
-  "languages": ["en", "sw"],
-  "focus_areas": ["anxiety", "trauma"],
-  "formats": ["online", "in_person"],
-  "city": "Nairobi",
-  "country": "KE",
-  "rate": { "amount": 350000, "currency": "KES" },
-  "payers": ["jubilee", "britam", "aar"]
+  "object": "list",
+  "data": [
+    {
+      "id": "prc_2481",
+      "object": "practitioner",
+      "name": "Emily Makena",
+      "profession": "Clinical Psychologist",
+      "location": {
+        "city": "Nairobi",
+        "country": "Kenya"
+      },
+      "session_fee": {
+        "amount": 350000,
+        "currency": "KES"
+      }
+    }
+  ],
+  "has_more": false
 }
 ```
 
-Amounts are integers in the currency's smallest unit. `350000` is KES 3,500.00.
+`limit` accepts an integer from `1` to `100` and defaults to `20`.
 
-## Session
+## Retrieve a Practitioner
+
+```bash
+curl "https://api.heyrafiki.space/v1/practitioners/prc_2481" \
+  -H "Authorization: Bearer sk_test_xxxxxxxxxxxxxxxx"
+```
+
+The response uses the same Practitioner object returned by the list operation.
+
+## Retrieve recurring availability
+
+```bash
+curl "https://api.heyrafiki.space/v1/practitioners/prc_2481/availability" \
+  -H "Authorization: Bearer sk_test_xxxxxxxxxxxxxxxx"
+```
 
 ```json
 {
-  "id": "ses_2f8b10d4",
-  "object": "session",
-  "state": "booked",
-  "person_id": "per_c41a7e90",
-  "practitioner_id": "prc_9a1c4e7b",
-  "starts_at": "2026-08-04T10:00:00Z",
-  "duration_minutes": 50,
-  "format": "online",
-  "room_url": "https://rooms.heyrafiki.space/ses_2f8b10d4",
-  "coverage": { "type": "payer", "payer": "jubilee", "claim_id": "clm_77c0" },
-  "amount": { "amount": 350000, "currency": "KES" }
+  "object": "availability",
+  "practitioner_id": "prc_2481",
+  "timezone": "Africa/Nairobi",
+  "weekly_hours": [
+    {
+      "weekday": 1,
+      "start": "09:00",
+      "end": "17:00",
+      "formats": ["online", "in_person"]
+    }
+  ]
 }
 ```
 
-## What the API never returns
+`weekday` uses `0` for Sunday through `6` for Saturday. Hours are local to the returned IANA timezone. These are recurring weekly hours, not a promise that a particular Session slot remains bookable.
 
-Scope is enforced in the data model, not by filtering on the way out.
+## List Sessions
 
-- Clinical content of a Note. Approved Notes stay with the Practitioner. Partner keys see that a Note exists and is approved, never what it says.
-- Anything identifying under an Organization or Funder key. Those keys read aggregates only.
-- Message, Journal or Check content, under any key.
+```bash
+curl "https://api.heyrafiki.space/v1/sessions?limit=10" \
+  -H "Authorization: Bearer sk_test_xxxxxxxxxxxxxxxx"
+```
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "ses_demo_jubilee_001",
+      "object": "session",
+      "practitioner_id": "prc_2481",
+      "starts_at": "2026-08-02T07:00:00.000Z",
+      "ends_at": "2026-08-02T08:00:00.000Z",
+      "timezone": "Africa/Nairobi",
+      "format": "online",
+      "status": "confirmed",
+      "payment_source": "covered"
+    }
+  ],
+  "has_more": false
+}
+```
+
+Session responses intentionally omit Person, clinical, coverage and payment-provider identifiers.
+
+## List Claims
+
+```bash
+curl "https://api.heyrafiki.space/v1/claims?limit=10" \
+  -H "Authorization: Bearer sk_test_xxxxxxxxxxxxxxxx"
+```
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "clm_demo_jubilee_001",
+      "object": "claim",
+      "status": "submitted",
+      "amount": {
+        "currency": "KES",
+        "billed": 380000,
+        "approved": null,
+        "settled": null
+      },
+      "service_period": {
+        "starts_at": "2026-07-20T05:00:00.000Z",
+        "ends_at": "2026-07-20T05:50:00.000Z"
+      }
+    }
+  ],
+  "has_more": false
+}
+```
+
+Claim responses are tenant-scoped and omit Person, payer and clinical-record identifiers.
 
 ## Conventions
 
-- Times are RFC 3339 in UTC.
 - IDs are opaque strings. Never parse them.
-- Lists are cursor-paginated with `limit` and `starting_after`, and return `has_more`.
-- Unknown fields may be added at any time. Ignore fields you do not recognise.
+- Amounts are integers in the currency's minor unit. `350000` is KES 3,500.00.
+- Currency codes use ISO 4217.
+- Unknown fields may be added. Ignore fields your integration does not use.
+
+The generated endpoint reference is built from the versioned OpenAPI contract in this repository.

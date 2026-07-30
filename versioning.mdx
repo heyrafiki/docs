@@ -1,6 +1,6 @@
 ---
 title: "Versioning"
-description: "How the Heyrafiki API changes, what counts as breaking, and how long old versions live."
+description: "How the Heyrafiki API changes."
 ---
 
 The version is in the path.
@@ -9,52 +9,43 @@ The version is in the path.
 https://api.heyrafiki.space/v1
 ```
 
-You are pinned by using it. A `v1` request keeps behaving like `v1`.
+A `v1` request keeps the `v1` contract.
 
-## What ships without a new version
+## Additive changes
 
-These are additive. Clients must tolerate them, so parse defensively and ignore what you do not recognise.
+Clients must tolerate:
 
-- A new field on an existing response.
-- A new endpoint.
-- A new optional request parameter.
-- A new value in an enum, including a new `error.code` or webhook `type`.
-- A new webhook event type.
+- a new response field;
+- a new endpoint;
+- a new optional request parameter;
+- a new enum or `error.code` value.
 
 <Warning>
-Never validate responses against a closed schema, and never switch exhaustively on an enum without a default branch. Both break on additive changes.
+Ignore response fields your integration does not use. Every enum switch needs a default branch.
 </Warning>
 
-## What requires a new version
+## Breaking changes
 
-- Removing or renaming a field.
-- Changing a field's type or its meaning.
-- Removing an endpoint, or changing its path.
-- Making an optional parameter required.
-- Changing the shape of the error envelope.
+A new path version is required before we:
+
+- remove or rename a field;
+- change a field's type or meaning;
+- remove or move an endpoint;
+- make an optional parameter required;
+- change the error envelope.
 
 ## Deprecation
 
-When something is going away, it is announced in the [API changelog](/changelog) first, then carries a deprecation header for the remainder of its life.
-
-```
-Deprecation: true
-Sunset: Wed, 31 Dec 2026 23:59:59 GMT
-Link: <https://docs.heyrafiki.space/changelog>; rel="deprecation"
-```
-
-A deprecated version stays available for **at least 12 months** after the `Sunset` date is published. Security fixes continue for the whole window; new features do not land there.
+No `v1` retirement is scheduled. A future retirement will be announced in the [API changelog](/changelog) with `Deprecation`, `Sunset` and migration guidance.
 
 ## Rate limits
 
-Limits are per key, per environment.
+Limits apply per key and environment.
 
 | Header | Meaning |
 | --- | --- |
 | `X-RateLimit-Limit` | Requests allowed in the current window |
-| `X-RateLimit-Remaining` | Requests left in it |
-| `X-RateLimit-Reset` | Unix seconds until the window resets |
+| `X-RateLimit-Remaining` | Requests left in the window |
+| `X-RateLimit-Reset` | Unix timestamp when the window resets |
 
-Exceeding a limit returns `429` with `error.code` of `rate_limited` and a `Retry-After` header. Back off exponentially rather than retrying on a fixed timer, and read `Retry-After` when it is present.
-
-Webhook deliveries do not count against your request limit.
+Exceeding the limit returns `429` with `error.code` set to `rate_limit_exceeded` and a `Retry-After` header.

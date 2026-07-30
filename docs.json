@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Heyrafiki Docs",
-  "description": "The Heyrafiki API: authentication, errors, resources and webhooks.",
+  "description": "The Heyrafiki API: authentication, errors and live resources.",
   "styling": {
     "eyebrows": "breadcrumbs",
     "codeblocks": "dark"
@@ -42,7 +42,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Get API keys",
+      "label": "Request access",
       "href": "https://heyrafiki.space/waitlist"
     }
   },
@@ -59,15 +59,45 @@
     "groups": [
       {
         "group": "Get started",
-        "pages": ["index", "authentication", "errors"]
+        "pages": [
+          "index",
+          "quickstart",
+          "authentication",
+          "scopes",
+          "environments",
+          "requests",
+          "errors"
+        ]
+      },
+      {
+        "group": "Build",
+        "pages": ["sandbox", "testing", "sdks", "webhooks", "mcp"]
       },
       {
         "group": "API reference",
-        "pages": ["resources", "webhooks", "versioning"]
+        "openapi": "openapi/heyrafiki.openapi.yaml",
+        "pages": [
+          "resources",
+          "GET /",
+          "GET /practitioners",
+          "GET /practitioners/{practitioner_id}",
+          "GET /practitioners/{practitioner_id}/availability",
+          "GET /sessions",
+          "GET /sessions/{session_id}",
+          "GET /claims",
+          "GET /claims/{claim_id}",
+          "rate-limits",
+          "versioning"
+        ]
       },
       {
         "group": "Platform",
-        "pages": ["concepts/platform", "security/overview"]
+        "pages": [
+          "concepts/platform",
+          "concepts/capabilities",
+          "security/overview",
+          "security/data-boundaries"
+        ]
       },
       {
         "group": "Changelog",
