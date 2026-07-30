@@ -1,0 +1,73 @@
+---
+title: "Quickstart"
+description: "Make the first authenticated request to the Heyrafiki sandbox."
+---
+
+## 1. Create a sandbox key
+
+Open **API Keys** in the [Developer Platform](https://heyrafiki.space/dev/keys), create a sandbox key and copy it when shown. [Request access](https://heyrafiki.space/waitlist) if your Organization has not been enabled.
+
+<Tip>
+Keep the key out of screenshots. Screenshots are unusually good at finding public channels.
+</Tip>
+
+## 2. Inspect the API
+
+```bash
+curl https://api.heyrafiki.space/v1 \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY"
+```
+
+```json
+{
+  "object": "api",
+  "version": "v1",
+  "environment": "sandbox",
+  "resources": [
+    "practitioners",
+    "availability",
+    "bookings",
+    "sessions",
+    "eligibility_checks",
+    "preauthorizations",
+    "claims",
+    "remittances",
+    "webhook_endpoints"
+  ]
+}
+```
+
+## 3. Discover a Practitioner
+
+```bash
+curl "https://api.heyrafiki.space/v1/practitioners?limit=10" \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY"
+```
+
+Use the returned `prc_` identifier to retrieve recurring availability.
+
+```bash
+curl "https://api.heyrafiki.space/v1/practitioners/prc_2481/availability" \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY"
+```
+
+## 4. Create a Booking
+
+```bash
+curl https://api.heyrafiki.space/v1/bookings \
+  -X POST \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: booking-demo-001" \
+  -d '{
+    "practitioner_id": "prc_2481",
+    "starts_at": "2026-08-03T06:00:00.000Z",
+    "ends_at": "2026-08-03T07:00:00.000Z",
+    "format": "online",
+    "payment_source": "self_pay"
+  }'
+```
+
+<Note>
+Private beta data is synthetic. Do not send names, contacts, clinical content or payment credentials in test requests.
+</Note>

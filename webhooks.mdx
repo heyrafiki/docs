@@ -1,63 +1,70 @@
 ---
 title: "Webhooks"
-description: "Subscribe to Heyrafiki events, verify signatures and handle retries."
+description: "Register an endpoint, verify signatures and test delivery."
 ---
 
-Heyrafiki POSTs a JSON event to your endpoint when something happens. Respond `200` within 10 seconds.
+## Register an endpoint
+
+```bash
+curl https://api.heyrafiki.space/v1/webhook_endpoints \
+  -X POST \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://hooks.example.com/heyrafiki",
+    "events": ["claim.submitted", "claim.settled", "remittance.reconciled"]
+  }'
+```
+
+The response contains `signing_secret` once. Store it in a secret manager.
+
+Private-beta endpoints use HTTPS on an approved public hostname. Redirects and private network addresses are refused.
+
+## Verify a delivery
+
+Heyrafiki sends:
+
+- `Heyrafiki-Event-Id`: the stable event identifier;
+- `Heyrafiki-Signature`: `t=<unix>,v1=<hex digest>`;
+- `Content-Type: application/json`.
 
 ```json
 {
-  "id": "evt_5c2a9f13",
+  "id": "evt_01",
   "object": "event",
-  "type": "session.settled",
-  "created_at": "2026-08-04T10:52:11Z",
+  "type": "sandbox.ping",
+  "schema_version": "v1",
+  "created_at": "2026-07-30T09:00:00.000Z",
+  "livemode": false,
   "data": {
-    "id": "ses_2f8b10d4",
-    "object": "session",
-    "state": "settled"
+    "message": "pong"
   }
 }
 ```
 
-## Events
+Compute HMAC-SHA256 over `<timestamp>.<raw body>` with the signing secret. Compare signatures in constant time and reject timestamps outside five minutes. Verify the raw bytes before parsing JSON.
 
-| Type | Fires when |
-| --- | --- |
-| `session.booked` | A Session is created and payment is held |
-| `session.delivered` | Both parties attended |
-| `session.cancelled` | Either party cancels |
-| `note.approved` | A Practitioner approves a Note |
-| `claim.submitted` | A Claim goes to a Payer |
-| `claim.approved` | A Payer approves a Claim |
-| `claim.rejected` | A Payer rejects a Claim, with a reason |
-| `payout.settled` | Money reaches a Practitioner |
-| `practitioner.verified` | A verification check completes |
+## Test an endpoint
 
-## Verifying signatures
-
-Every request carries `X-Heyrafiki-Signature`, an HMAC-SHA256 of the raw body keyed with your webhook secret.
-
-```js
-import crypto from "node:crypto";
-
-export function verify(rawBody, signature, secret) {
-  const expected = crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
-}
+```bash
+curl https://api.heyrafiki.space/v1/webhook_endpoints/whe_xxx/test \
+  -X POST \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY"
 ```
 
-<Warning>
-Compute the HMAC over the raw request body, before any JSON parsing. Re-serialised JSON produces a different signature. Always compare in constant time.
-</Warning>
+The sandbox sends `sandbox.ping`. Transient failures use bounded retries and retain the same event identifier.
 
-Reject anything that fails verification. Do not fall back to trusting the payload.
+## Event types
 
-## Retries
+| Event | Emitted when |
+| --- | --- |
+| `claim.submitted` | A Claim enters review |
+| `claim.information_requested` | A payer requests evidence |
+| `claim.resubmitted` | Requested evidence is supplied |
+| `claim.approved` | The payer approves the full billed amount |
+| `claim.partially_approved` | The payer approves part of the billed amount |
+| `claim.denied` | The payer approves no amount |
+| `claim.settled` | Cumulative remittance reaches the approved amount |
+| `remittance.reconciled` | Every remittance allocation is recorded |
 
-A non-`200`, a timeout or a connection failure is retried with exponential backoff for 24 hours. Delivery is at-least-once, so handlers must be idempotent: key on `event.id` and ignore ones you have already processed.
-
-Order is not guaranteed. Use `created_at` to resolve sequence.
-
-## Handling
-
-Acknowledge first, work after. Return `200` as soon as you have persisted the event, then process it in a queue. Work done before the response counts against the 10-second timeout.
+Claim Events contain public workflow identifiers and state. They do not contain Person, Member or clinical content.

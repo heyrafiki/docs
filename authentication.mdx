@@ -19,10 +19,10 @@ curl https://api.heyrafiki.space/v1/practitioners \
 
 ## Environments
 
-| Prefix | Environment | Money moves | Data |
+| Prefix | Environment | Access | Data |
 | --- | --- | --- | --- |
-| `sk_test_` | Sandbox | No | Synthetic |
-| `sk_live_` | Production | Yes | Real |
+| `sk_test_` | Sandbox | Private beta | Synthetic |
+| `sk_live_` | Production | Enabled projects only | Regulated production data |
 
 A key is valid in one environment only. Using a sandbox key against production returns `api_key_invalid`.
 
@@ -34,5 +34,6 @@ Secret keys carry access to clinical and financial data. Never ship one to a bro
 
 - Call the API from your server. Public clients get scoped tokens, never a secret key.
 - Store keys in your secret manager or environment, never in source control.
-- Rotate on a schedule and immediately on suspected exposure. Rotation is instant and the old key stops working.
-- Requests over plain HTTP are rejected, not redirected. Any key sent that way is compromised, so rotate it.
+- The built-in request runner accepts sandbox keys for inspection and does not persist them. Do not reproduce that pattern in a public client.
+- Contact `developers@heyrafiki.space` to replace a private-beta key after suspected exposure.
+- Use HTTPS. If a key is sent over plain HTTP, treat it as compromised and replace it.

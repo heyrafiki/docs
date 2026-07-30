@@ -1,0 +1,94 @@
+---
+title: "Claims and remittance"
+description: "Submit, review and reconcile covered Care."
+---
+
+Claims start from delivered Care, an eligible Benefit and approved service evidence. Amounts use the currency's minor unit.
+
+## Submit a Claim
+
+```bash
+curl https://api.heyrafiki.space/v1/claims \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: claim-provider-1042" \
+  -d '{
+    "eligibility_check_id": "elig_21bba98e97044f78aa0a9ca2a95850a5",
+    "session_id": "ses_demo_claim_ready_001",
+    "provider_claim_reference": "provider:claim:1042",
+    "evidence_refs": ["evidence:service_attestation:1042"],
+    "lines": [{
+      "code_system": "urn:heyrafiki:service-code",
+      "code_system_version": "2026-07",
+      "service_code": "psychotherapy-60",
+      "units": 1,
+      "amount": 600000
+    }]
+  }'
+```
+
+If the eligibility response requires authorization, include its approved `preauthorization_id`. The authorization, covered Booking and delivered Session must refer to the same service.
+
+## Request evidence
+
+An adjudicator can move a submitted Claim to `queried`:
+
+```bash
+curl https://api.heyrafiki.space/v1/claims/clm_123/information_requests \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: claim-query-1042" \
+  -d '{
+    "reason_code": "service_evidence_required",
+    "requested_evidence_types": ["service_attestation"]
+  }'
+```
+
+Information requests use coded reasons and bounded evidence types. Evidence submissions contain references, not Clinical Notes:
+
+```bash
+curl https://api.heyrafiki.space/v1/claims/clm_123/evidence \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: claim-evidence-1042" \
+  -d '{
+    "information_request_id": "cir_123",
+    "evidence_refs": ["evidence:service_attestation:1042"]
+  }'
+```
+
+Resubmission increments `submission_version`. Earlier events remain in the audit history.
+
+## Adjudicate
+
+Every submitted line receives one decision. For each line:
+
+- `allowed = payer + patient_responsibility`
+- `billed = allowed + adjustment`
+
+The API derives `approved`, `partially_approved` or `denied` from the balanced line decisions. The payer's authorized reviewer remains the decision authority.
+
+## Reconcile remittance
+
+```bash
+curl https://api.heyrafiki.space/v1/remittances \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: remittance-2026-07-1042" \
+  -d '{
+    "payer_reference": "payer:remittance:1042",
+    "currency": "KES",
+    "received_at": "2026-07-30T12:00:00Z",
+    "allocations": [{
+      "claim_id": "clm_123",
+      "paid_amount": 600000,
+      "reason_codes": ["paid"]
+    }]
+  }'
+```
+
+A remittance may allocate to several Claims. Each allocation posts a balanced ledger transaction. A Claim reaches `settled` only when cumulative remittance equals its approved amount.
+
+<Note>
+  Eligibility is an observation for a service date, not a guarantee of Claim payment.
+</Note>

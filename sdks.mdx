@@ -1,0 +1,62 @@
+---
+title: "SDKs"
+description: "Typed clients generated from the same public contract."
+---
+
+SDKs follow the canonical OpenAPI contract and shared conformance fixtures. JavaScript and TypeScript come first. Python and Rust will use the same resource and error models.
+
+## JavaScript
+
+The JavaScript client covers API discovery, Practitioner discovery, availability, Bookings, Benefit eligibility, pre-authorizations, Sessions, Claims, remittances and Webhook endpoints.
+
+```ts
+import { Heyrafiki } from "@heyrafiki/heyrafiki-js";
+
+const heyrafiki = new Heyrafiki({
+  apiKey: process.env.HEYRAFIKI_API_KEY!,
+});
+
+const practitioners = await heyrafiki.practitioners.list({ limit: 10 });
+
+const booking = await heyrafiki.bookings.create(
+  {
+    practitioner_id: practitioners.data[0].id,
+    starts_at: "2026-08-03T06:00:00.000Z",
+    ends_at: "2026-08-03T07:00:00.000Z",
+    format: "online",
+    payment_source: "self_pay",
+  },
+  { idempotencyKey: "booking-demo-001" },
+);
+
+const eligibility = await heyrafiki.eligibilityChecks.create(
+  {
+    member_reference: "member_demo_jubilee_001",
+    service_code: "psychotherapy-60",
+    scheduled_at: booking.starts_at,
+    amount: 380000,
+    currency: "KES",
+  },
+  { idempotencyKey: "eligibility-demo-001" },
+);
+
+const claim = await heyrafiki.claims.create(
+  {
+    eligibility_check_id: eligibility.id,
+    session_id: "ses_demo_claim_ready_001",
+    provider_claim_reference: "provider:claim:1042",
+    lines: [
+      {
+        code_system: "urn:heyrafiki:service-code",
+        code_system_version: "2026-07",
+        service_code: "psychotherapy-60",
+        units: 1,
+        amount: 380000,
+      },
+    ],
+  },
+  { idempotencyKey: "claim-demo-1042" },
+);
+```
+
+The REST reference owns behavior. Client packages retain its resource names, scopes and error envelope.

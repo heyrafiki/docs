@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Heyrafiki Docs",
-  "description": "The Heyrafiki API: authentication, errors, resources and webhooks.",
+  "description": "The Heyrafiki API: authentication, errors and live resources.",
   "styling": {
     "eyebrows": "breadcrumbs",
     "codeblocks": "dark"
@@ -42,7 +42,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Get API keys",
+      "label": "Request access",
       "href": "https://heyrafiki.space/waitlist"
     }
   },
@@ -59,15 +59,65 @@
     "groups": [
       {
         "group": "Get started",
-        "pages": ["index", "authentication", "errors"]
+        "pages": [
+          "index",
+          "quickstart",
+          "authentication",
+          "scopes",
+          "environments",
+          "requests",
+          "errors"
+        ]
+      },
+      {
+        "group": "Build",
+        "pages": ["sandbox", "benefits", "claims", "testing", "sdks", "webhooks", "mcp"]
       },
       {
         "group": "API reference",
-        "pages": ["resources", "webhooks", "versioning"]
+        "openapi": "openapi/heyrafiki.openapi.yaml",
+        "pages": [
+          "resources",
+          "GET /",
+          "GET /practitioners",
+          "GET /practitioners/{practitioner_id}",
+          "GET /practitioners/{practitioner_id}/availability",
+          "GET /bookings",
+          "POST /bookings",
+          "GET /bookings/{booking_id}",
+          "GET /sessions",
+          "GET /sessions/{session_id}",
+          "POST /eligibility_checks",
+          "GET /eligibility_checks/{eligibility_check_id}",
+          "POST /preauthorizations",
+          "GET /preauthorizations/{preauthorization_id}",
+          "GET /claims",
+          "POST /claims",
+          "GET /claims/{claim_id}",
+          "POST /claims/{claim_id}/information_requests",
+          "POST /claims/{claim_id}/evidence",
+          "POST /claims/{claim_id}/adjudications",
+          "GET /remittances",
+          "POST /remittances",
+          "GET /remittances/{remittance_id}",
+          "GET /webhook_endpoints",
+          "POST /webhook_endpoints",
+          "GET /webhook_endpoints/{webhook_endpoint_id}",
+          "DELETE /webhook_endpoints/{webhook_endpoint_id}",
+          "POST /webhook_endpoints/{webhook_endpoint_id}/test",
+          "rate-limits",
+          "versioning"
+        ]
       },
       {
         "group": "Platform",
-        "pages": ["concepts/platform", "security/overview"]
+        "pages": [
+          "concepts/platform",
+          "concepts/institutions",
+          "concepts/capabilities",
+          "security/overview",
+          "security/data-boundaries"
+        ]
       },
       {
         "group": "Changelog",

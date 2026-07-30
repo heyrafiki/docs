@@ -1,0 +1,21 @@
+---
+title: "Data boundaries"
+description: "How integrations stay useful without exposing more data than they need."
+---
+
+Heyrafiki applies least privilege to every resource and environment.
+
+## Core rules
+
+- Identity references are kept apart from clinical records.
+- A key grants explicit scopes, not general Platform access.
+- Sandbox data is synthetic.
+- Clinical and financial resources return the minimum fields required by the authorized workflow.
+- Sensitive actions require stronger approval and audit controls than read operations.
+- Analytics does not receive messages, clinical content, assessment responses, credentials or payment details.
+
+## Developer responsibility
+
+Keep keys on the server, minimize retained responses, encrypt necessary data, define deletion behavior and avoid logging request bodies. Never place a secret key in a browser, mobile bundle, public repository or support ticket.
+
+Security issues should be reported privately through the process in the [Security overview](/security/overview).

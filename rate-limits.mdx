@@ -1,0 +1,20 @@
+---
+title: "Rate limits"
+description: "Read limits from every response and retry predictably."
+---
+
+Limits are assigned per key and project. Do not hard-code a plan-wide number.
+
+Successful responses include:
+
+```http
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 99
+X-RateLimit-Reset: 1785402060
+```
+
+`X-RateLimit-Reset` is a Unix timestamp in seconds.
+
+When the limit is exceeded, the API returns `429 rate_limit_exceeded` with `Retry-After`. Wait for that interval, then retry with exponential backoff and jitter.
+
+Contact the developer team before designing sustained high-throughput workloads. Limits may differ by environment, project and resource risk.

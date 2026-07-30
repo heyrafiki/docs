@@ -3,7 +3,7 @@ title: "Introduction"
 description: "The Heyrafiki API: base URL, authentication, errors and resources."
 ---
 
-The Heyrafiki API is a REST API over Mental Healthcare infrastructure: Practitioner verification, Matching, Sessions, clinical Notes, Claims and Payments.
+The Heyrafiki API exposes Mental Healthcare infrastructure through versioned REST contracts. The sandbox includes Practitioner discovery, Bookings, Benefits, Sessions, Claims, remittance and Webhooks.
 
 It uses standard HTTP verbs, returns JSON, and authenticates with a secret key sent as a Bearer token.
 
@@ -12,28 +12,8 @@ https://api.heyrafiki.space/v1
 ```
 
 <Note>
-The API is in private beta. The endpoints below are not yet live. Authentication, the error envelope and the base URL are final and respond today. Sandbox keys go to Waitlist members first.
+The API is in private beta. Sandbox keys are issued by invitation.
 </Note>
-
-## Try it now
-
-Every request to the API today returns a structured error. This is the real response, not an example.
-
-<CodeGroup>
-```bash cURL
-curl https://api.heyrafiki.space/v1/practitioners
-```
-
-```json Response
-{
-  "error": {
-    "code": "api_key_missing",
-    "message": "The Heyrafiki API requires a key. Send it as an Authorization: Bearer header, or as x-api-key.",
-    "docs": "https://heyrafiki.space/solutions/developers"
-  }
-}
-```
-</CodeGroup>
 
 ## Next
 
@@ -45,10 +25,7 @@ curl https://api.heyrafiki.space/v1/practitioners
     Status codes and the error envelope.
   </Card>
   <Card title="Resources" icon="cube" href="/resources">
-    The objects the API exposes.
-  </Card>
-  <Card title="Webhooks" icon="bolt" href="/webhooks">
-    Events, delivery and signatures.
+    Practitioners, Bookings, Benefits, Sessions, Claims, remittance and Webhooks.
   </Card>
   <Card title="Versioning" icon="code-branch" href="/versioning">
     Breaking versus additive, deprecation and rate limits.
