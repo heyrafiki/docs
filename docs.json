@@ -102,6 +102,7 @@
         "group": "Platform",
         "pages": [
           "concepts/platform",
+          "concepts/institutions",
           "concepts/capabilities",
           "security/overview",
           "security/data-boundaries"
