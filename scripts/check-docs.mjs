@@ -73,7 +73,6 @@ const activeContent = activePages
   .map((page) => readFileSync(join(root, `${page}.mdx`), "utf8"))
   .join("\n");
 const unreleasedClaims = [
-  "Idempotency-Key",
   "X-Heyrafiki-Signature",
   "starting_after",
   "session.booked",

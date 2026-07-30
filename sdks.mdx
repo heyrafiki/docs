@@ -7,7 +7,7 @@ SDKs follow the canonical OpenAPI contract and shared conformance fixtures. Java
 
 ## JavaScript
 
-The JavaScript client covers API discovery, Practitioner discovery, availability, Sessions and Claims.
+The JavaScript client covers API discovery, Practitioner discovery, availability, Bookings, Sessions, Claims and Webhook endpoints.
 
 ```ts
 import { Heyrafiki } from "@heyrafiki/heyrafiki-js";
@@ -17,6 +17,17 @@ const heyrafiki = new Heyrafiki({
 });
 
 const practitioners = await heyrafiki.practitioners.list({ limit: 10 });
+
+const booking = await heyrafiki.bookings.create(
+  {
+    practitioner_id: practitioners.data[0].id,
+    starts_at: "2026-08-03T06:00:00.000Z",
+    ends_at: "2026-08-03T07:00:00.000Z",
+    format: "online",
+    payment_source: "self_pay",
+  },
+  { idempotencyKey: "booking-demo-001" },
+);
 ```
 
 The REST reference owns behavior. Client packages retain its resource names, scopes and error envelope.

@@ -1,18 +1,26 @@
 ---
 title: "MCP"
-description: "A governed read-only surface for approved external agents."
+description: "Connect approved agents to scoped Heyrafiki capabilities."
 ---
 
-The MCP surface is read-only and sandbox-only. It maps to the same capabilities as REST.
+The MCP endpoint is:
+
+```
+https://mcp.heyrafiki.space/api/mcp
+```
+
+Connections use OAuth. The access token must be issued for the MCP resource and an approved WorkOS Organization. Heyrafiki then applies the project grant and tool scope.
 
 | Tool | Purpose | Required scope |
 | --- | --- | --- |
 | `list_practitioners` | List synthetic Practitioner profiles | `practitioners:read` |
 | `get_practitioner` | Retrieve one synthetic Practitioner | `practitioners:read` |
 | `get_practitioner_availability` | Read recurring weekly hours | `availability:read` |
+| `list_bookings` | List synthetic Bookings | `bookings:read` |
+| `get_booking` | Retrieve one synthetic Booking | `bookings:read` |
 | `list_sessions` | List synthetic Sessions | `sessions:read` |
 | `get_session` | Retrieve one synthetic Session | `sessions:read` |
 | `list_claims` | List tenant-scoped synthetic Claims | `claims:read` |
 | `get_claim` | Retrieve one tenant-scoped synthetic Claim | `claims:read` |
 
-MCP tools require the same scopes as their REST operations. They do not provide database access or bypass capability policy.
+MCP tools are read-only and sandbox-only. They use the same capability responses as REST and never expose database access.

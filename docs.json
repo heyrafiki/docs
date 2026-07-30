@@ -82,10 +82,18 @@
           "GET /practitioners",
           "GET /practitioners/{practitioner_id}",
           "GET /practitioners/{practitioner_id}/availability",
+          "GET /bookings",
+          "POST /bookings",
+          "GET /bookings/{booking_id}",
           "GET /sessions",
           "GET /sessions/{session_id}",
           "GET /claims",
           "GET /claims/{claim_id}",
+          "GET /webhook_endpoints",
+          "POST /webhook_endpoints",
+          "GET /webhook_endpoints/{webhook_endpoint_id}",
+          "DELETE /webhook_endpoints/{webhook_endpoint_id}",
+          "POST /webhook_endpoints/{webhook_endpoint_id}/test",
           "rate-limits",
           "versioning"
         ]

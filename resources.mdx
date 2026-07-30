@@ -3,7 +3,7 @@ title: "Resources"
 description: "The sandbox resources in the Heyrafiki API."
 ---
 
-Discover a synthetic Practitioner, inspect recurring availability and read Session and Claim status.
+Discover a synthetic Practitioner, create a Booking and read Session and Claim status.
 
 ## List Practitioners
 
@@ -70,6 +70,25 @@ curl "https://api.heyrafiki.space/v1/practitioners/prc_2481/availability" \
 ```
 
 `weekday` uses `0` for Sunday through `6` for Saturday. Hours are local to the returned IANA timezone. These are recurring weekly hours, not a promise that a particular Session slot remains bookable.
+
+## Create a Booking
+
+```bash
+curl https://api.heyrafiki.space/v1/bookings \
+  -X POST \
+  -H "Authorization: Bearer sk_test_xxxxxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: booking-demo-001" \
+  -d '{
+    "practitioner_id": "prc_2481",
+    "starts_at": "2026-08-03T06:00:00.000Z",
+    "ends_at": "2026-08-03T07:00:00.000Z",
+    "format": "online",
+    "payment_source": "self_pay"
+  }'
+```
+
+The same idempotency key and body return the original Booking. Reusing the key with a different body returns `409 idempotency_conflict`.
 
 ## List Sessions
 
