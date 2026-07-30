@@ -1,0 +1,78 @@
+---
+title: "Benefits"
+description: "Check Cover and reserve an approved Session."
+---
+
+The Benefit flow has two resources:
+
+1. An eligibility check evaluates one Member reference, service, date and amount.
+2. A pre-authorization binds an eligible decision to one covered Booking and reserves one Session.
+
+Both writes require an `Idempotency-Key`.
+
+## Check eligibility
+
+```bash
+curl https://api.heyrafiki.space/v1/eligibility_checks \
+  -X POST \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: eligibility-demo-001" \
+  -d '{
+    "member_reference": "member_demo_jubilee_001",
+    "service_code": "psychotherapy-60",
+    "scheduled_at": "2026-08-02T07:00:00.000Z",
+    "amount": 380000,
+    "currency": "KES"
+  }'
+```
+
+An eligible response states whether pre-authorization is required, the current Session allowance and the amount limit applied to the decision.
+
+```json
+{
+  "id": "elig_21bba98e97044f78aa0a9ca2a95850a5",
+  "object": "eligibility_check",
+  "status": "eligible",
+  "reason_codes": ["eligible"],
+  "service": {
+    "code": "psychotherapy-60",
+    "scheduled_at": "2026-08-02T07:00:00.000Z"
+  },
+  "amount": {
+    "requested": 380000,
+    "currency": "KES",
+    "maximum_per_session": 600000
+  },
+  "authorization_required": true,
+  "remaining_sessions": 6,
+  "coverage_valid_until": "2027-01-01T00:00:00.000Z",
+  "checked_at": "2026-07-30T11:17:01.374Z"
+}
+```
+
+`ineligible` is a decision, not a transport error. Inspect `reason_codes` before continuing.
+
+## Create a pre-authorization
+
+The Booking must exist in the same tenant, use Cover and start at the time evaluated by the eligibility check.
+
+```bash
+curl https://api.heyrafiki.space/v1/preauthorizations \
+  -X POST \
+  -H "Authorization: Bearer $HEYRAFIKI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: preauthorization-demo-001" \
+  -d '{
+    "eligibility_check_id": "elig_21bba98e97044f78aa0a9ca2a95850a5",
+    "booking_id": "bkg_demo_jubilee_001"
+  }'
+```
+
+An approved pre-authorization reserves one Session atomically. Retrying the same request returns the original resource and does not reserve another Session.
+
+## Data boundary
+
+Responses omit the Member reference, payer identifier and internal coverage record. Clinical Notes, Diagnoses and Session content are never part of this contract.
+
+Use `benefits:write` for decisions and `benefits:read` for retrieval.

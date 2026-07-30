@@ -71,7 +71,7 @@
       },
       {
         "group": "Build",
-        "pages": ["sandbox", "testing", "sdks", "webhooks", "mcp"]
+        "pages": ["sandbox", "benefits", "testing", "sdks", "webhooks", "mcp"]
       },
       {
         "group": "API reference",
@@ -87,6 +87,10 @@
           "GET /bookings/{booking_id}",
           "GET /sessions",
           "GET /sessions/{session_id}",
+          "POST /eligibility_checks",
+          "GET /eligibility_checks/{eligibility_check_id}",
+          "POST /preauthorizations",
+          "GET /preauthorizations/{preauthorization_id}",
           "GET /claims",
           "GET /claims/{claim_id}",
           "GET /webhook_endpoints",

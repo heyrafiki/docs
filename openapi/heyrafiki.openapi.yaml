@@ -321,6 +321,168 @@ paths:
           $ref: "#/components/responses/TooManyRequests"
         "503":
           $ref: "#/components/responses/ServiceUnavailable"
+  /eligibility_checks:
+    post:
+      operationId: createEligibilityCheck
+      summary: Check Benefit eligibility
+      description: Evaluates synthetic Cover for a scheduled service. Requires `benefits:write`.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EligibilityCheckInput"
+      responses:
+        "200":
+          description: The original eligibility decision for an idempotent replay
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EligibilityCheck"
+        "201":
+          description: An eligibility decision
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EligibilityCheck"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /eligibility_checks/{eligibility_check_id}:
+    get:
+      operationId: getEligibilityCheck
+      summary: Retrieve an eligibility check
+      description: Returns one tenant-scoped synthetic eligibility decision. Requires `benefits:read`.
+      parameters:
+        - $ref: "#/components/parameters/EligibilityCheckId"
+      responses:
+        "200":
+          description: An eligibility decision
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EligibilityCheck"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /preauthorizations:
+    post:
+      operationId: createPreauthorization
+      summary: Create a pre-authorization
+      description: Reserves one covered synthetic Session against an eligible Benefit. Requires `benefits:write`.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PreauthorizationInput"
+      responses:
+        "200":
+          description: The original pre-authorization for an idempotent replay
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Preauthorization"
+        "201":
+          description: An approved pre-authorization
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Preauthorization"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /preauthorizations/{preauthorization_id}:
+    get:
+      operationId: getPreauthorization
+      summary: Retrieve a pre-authorization
+      description: Returns one tenant-scoped synthetic pre-authorization. Requires `benefits:read`.
+      parameters:
+        - $ref: "#/components/parameters/PreauthorizationId"
+      responses:
+        "200":
+          description: A pre-authorization
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Preauthorization"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
   /claims:
     get:
       operationId: listClaims
@@ -564,6 +726,24 @@ components:
         type: string
         maxLength: 100
         pattern: ^clm_[A-Za-z0-9_-]+$
+    EligibilityCheckId:
+      name: eligibility_check_id
+      in: path
+      required: true
+      description: A public eligibility-check identifier.
+      schema:
+        type: string
+        maxLength: 100
+        pattern: ^elig_[A-Za-z0-9_-]+$
+    PreauthorizationId:
+      name: preauthorization_id
+      in: path
+      required: true
+      description: A public pre-authorization identifier.
+      schema:
+        type: string
+        maxLength: 100
+        pattern: ^preauth_[A-Za-z0-9_-]+$
     BookingId:
       name: booking_id
       in: path
@@ -913,6 +1093,149 @@ components:
         payment_source:
           type: string
           enum: [self_pay, covered]
+    EligibilityCheckInput:
+      type: object
+      additionalProperties: false
+      required: [member_reference, service_code, scheduled_at, amount, currency]
+      properties:
+        member_reference:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: ^[A-Za-z0-9_-]+$
+        service_code:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: ^[A-Za-z0-9._:-]+$
+        scheduled_at:
+          type: string
+          format: date-time
+        amount:
+          type: integer
+          minimum: 1
+          description: Requested amount in the currency's minor unit.
+        currency:
+          type: string
+          enum: [KES, USD, EUR, GBP]
+    EligibilityCheck:
+      type: object
+      additionalProperties: false
+      required:
+        [id, object, status, reason_codes, service, amount, authorization_required, remaining_sessions, coverage_valid_until, checked_at]
+      properties:
+        id:
+          type: string
+          maxLength: 100
+          pattern: ^elig_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: eligibility_check
+        status:
+          type: string
+          enum: [eligible, ineligible]
+        reason_codes:
+          type: array
+          items:
+            type: string
+            enum:
+              [eligible, coverage_not_found, coverage_inactive, outside_coverage_period, benefit_exhausted, amount_exceeds_benefit]
+        service:
+          type: object
+          additionalProperties: false
+          required: [code, scheduled_at]
+          properties:
+            code:
+              type: string
+            scheduled_at:
+              type: string
+              format: date-time
+        amount:
+          type: object
+          additionalProperties: false
+          required: [requested, currency, maximum_per_session]
+          properties:
+            requested:
+              type: integer
+              minimum: 1
+            currency:
+              type: string
+              pattern: ^[A-Z]{3}$
+            maximum_per_session:
+              type: [integer, "null"]
+              minimum: 1
+        authorization_required:
+          type: boolean
+        remaining_sessions:
+          type: [integer, "null"]
+          minimum: 0
+        coverage_valid_until:
+          type: [string, "null"]
+          format: date-time
+        checked_at:
+          type: string
+          format: date-time
+    PreauthorizationInput:
+      type: object
+      additionalProperties: false
+      required: [eligibility_check_id, booking_id]
+      properties:
+        eligibility_check_id:
+          type: string
+          maxLength: 100
+          pattern: ^elig_[A-Za-z0-9_-]+$
+        booking_id:
+          type: string
+          maxLength: 100
+          pattern: ^bkg_[A-Za-z0-9_-]+$
+    Preauthorization:
+      type: object
+      additionalProperties: false
+      required:
+        [id, object, eligibility_check_id, booking_id, status, reason_codes, amount, valid_until, created_at]
+      properties:
+        id:
+          type: string
+          maxLength: 100
+          pattern: ^preauth_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: preauthorization
+        eligibility_check_id:
+          type: string
+          maxLength: 100
+          pattern: ^elig_[A-Za-z0-9_-]+$
+        booking_id:
+          type: string
+          maxLength: 100
+          pattern: ^bkg_[A-Za-z0-9_-]+$
+        status:
+          type: string
+          enum: [pending, approved, denied, expired, cancelled]
+        reason_codes:
+          type: array
+          items:
+            type: string
+        amount:
+          type: object
+          additionalProperties: false
+          required: [requested, approved, currency]
+          properties:
+            requested:
+              type: integer
+              minimum: 1
+            approved:
+              type: [integer, "null"]
+              minimum: 1
+            currency:
+              type: string
+              pattern: ^[A-Z]{3}$
+        valid_until:
+          type: [string, "null"]
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
     ClaimList:
       type: object
       additionalProperties: false

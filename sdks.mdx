@@ -7,7 +7,7 @@ SDKs follow the canonical OpenAPI contract and shared conformance fixtures. Java
 
 ## JavaScript
 
-The JavaScript client covers API discovery, Practitioner discovery, availability, Bookings, Sessions, Claims and Webhook endpoints.
+The JavaScript client covers API discovery, Practitioner discovery, availability, Bookings, Benefit eligibility, pre-authorizations, Sessions, Claims and Webhook endpoints.
 
 ```ts
 import { Heyrafiki } from "@heyrafiki/heyrafiki-js";
@@ -27,6 +27,17 @@ const booking = await heyrafiki.bookings.create(
     payment_source: "self_pay",
   },
   { idempotencyKey: "booking-demo-001" },
+);
+
+const eligibility = await heyrafiki.eligibilityChecks.create(
+  {
+    member_reference: "member_demo_jubilee_001",
+    service_code: "psychotherapy-60",
+    scheduled_at: booking.starts_at,
+    amount: 380000,
+    currency: "KES",
+  },
+  { idempotencyKey: "eligibility-demo-001" },
 );
 ```
 

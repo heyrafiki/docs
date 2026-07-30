@@ -22,5 +22,7 @@ Connections use OAuth. The access token must be issued for the MCP resource and 
 | `get_session` | Retrieve one synthetic Session | `sessions:read` |
 | `list_claims` | List tenant-scoped synthetic Claims | `claims:read` |
 | `get_claim` | Retrieve one tenant-scoped synthetic Claim | `claims:read` |
+| `get_eligibility_check` | Retrieve one synthetic eligibility decision | `benefits:read` |
+| `get_preauthorization` | Retrieve one synthetic pre-authorization | `benefits:read` |
 
 MCP tools are read-only and sandbox-only. They use the same capability responses as REST and never expose database access.
