@@ -1563,13 +1563,15 @@ components:
     ClaimLine:
       type: object
       additionalProperties: false
-      required: [line_number, code_system, service_code, units, amount]
+      required: [line_number, code_system, code_system_version, service_code, units, amount]
       properties:
         line_number:
           type: integer
           minimum: 1
         code_system:
           type: string
+        code_system_version:
+          type: [string, "null"]
         service_code:
           type: string
         units:
@@ -1611,6 +1613,10 @@ components:
               code_system:
                 type: string
                 minLength: 2
+                maxLength: 100
+              code_system_version:
+                type: [string, "null"]
+                minLength: 1
                 maxLength: 100
               service_code:
                 type: string
