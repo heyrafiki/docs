@@ -71,7 +71,7 @@
       },
       {
         "group": "Build",
-        "pages": ["sandbox", "benefits", "testing", "sdks", "webhooks", "mcp"]
+        "pages": ["sandbox", "benefits", "claims", "testing", "sdks", "webhooks", "mcp"]
       },
       {
         "group": "API reference",
@@ -92,7 +92,14 @@
           "POST /preauthorizations",
           "GET /preauthorizations/{preauthorization_id}",
           "GET /claims",
+          "POST /claims",
           "GET /claims/{claim_id}",
+          "POST /claims/{claim_id}/information_requests",
+          "POST /claims/{claim_id}/evidence",
+          "POST /claims/{claim_id}/adjudications",
+          "GET /remittances",
+          "POST /remittances",
+          "GET /remittances/{remittance_id}",
           "GET /webhook_endpoints",
           "POST /webhook_endpoints",
           "GET /webhook_endpoints/{webhook_endpoint_id}",

@@ -3,7 +3,7 @@ title: "Resources"
 description: "The sandbox resources in the Heyrafiki API."
 ---
 
-Discover a synthetic Practitioner, create a Booking, check Benefits and read Session and Claim status.
+Discover a synthetic Practitioner, create a Booking, check Benefits and move covered Care from Claim to remittance.
 
 ## List Practitioners
 
@@ -140,6 +140,8 @@ curl "https://api.heyrafiki.space/v1/claims?limit=10" \
       "id": "clm_demo_jubilee_001",
       "object": "claim",
       "status": "submitted",
+      "provider_claim_reference": null,
+      "submission_version": 1,
       "amount": {
         "currency": "KES",
         "billed": 380000,
@@ -149,14 +151,19 @@ curl "https://api.heyrafiki.space/v1/claims?limit=10" \
       "service_period": {
         "starts_at": "2026-07-20T05:00:00.000Z",
         "ends_at": "2026-07-20T05:50:00.000Z"
-      }
+      },
+      "lines": [],
+      "information_requests": [],
+      "adjudication": null,
+      "submitted_at": "2026-07-20T05:50:00.000Z",
+      "updated_at": "2026-07-20T05:50:00.000Z"
     }
   ],
   "has_more": false
 }
 ```
 
-Claim responses are tenant-scoped and omit Person, payer and clinical-record identifiers.
+Claim responses are project-scoped and omit Person, payer and clinical-record identifiers. See [Claims and remittance](/claims) for submission, evidence, adjudication and reconciliation.
 
 ## Conventions
 

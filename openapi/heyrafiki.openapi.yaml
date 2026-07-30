@@ -521,6 +521,41 @@ paths:
           $ref: "#/components/responses/TooManyRequests"
         "503":
           $ref: "#/components/responses/ServiceUnavailable"
+    post:
+      operationId: createClaim
+      summary: Submit a Claim
+      description: Submits a Claim from delivered Care and eligible Benefit evidence. Requires `claims:write`.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClaimInput"
+      responses:
+        "201":
+          description: The Claim was submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Claim"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
   /claims/{claim_id}:
     get:
       operationId: getClaim
@@ -542,6 +577,204 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Claim"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /claims/{claim_id}/information_requests:
+    post:
+      operationId: createClaimInformationRequest
+      summary: Request Claim information
+      description: Records a payer request for supporting evidence. Requires `claims:adjudicate`.
+      parameters:
+        - $ref: "#/components/parameters/ClaimId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClaimInformationRequestInput"
+      responses:
+        "201":
+          description: The information request was recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Claim"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /claims/{claim_id}/evidence:
+    post:
+      operationId: submitClaimEvidence
+      summary: Submit Claim evidence
+      description: Fulfils an open information request and resubmits the Claim. Requires `claims:write`.
+      parameters:
+        - $ref: "#/components/parameters/ClaimId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClaimEvidenceInput"
+      responses:
+        "200":
+          description: The Claim was resubmitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Claim"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /claims/{claim_id}/adjudications:
+    post:
+      operationId: adjudicateClaim
+      summary: Adjudicate a Claim
+      description: Records a line-level payer decision. Requires `claims:adjudicate`.
+      parameters:
+        - $ref: "#/components/parameters/ClaimId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClaimAdjudicationInput"
+      responses:
+        "200":
+          description: The Claim was adjudicated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Claim"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /remittances:
+    get:
+      operationId: listRemittances
+      summary: List remittances
+      description: Returns remittances for the authenticated project. Requires `remittances:read`.
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: A remittance list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RemittanceList"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+    post:
+      operationId: createRemittance
+      summary: Record a remittance
+      description: Allocates payer remittance to adjudicated Claims. Requires `remittances:write`.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RemittanceInput"
+      responses:
+        "201":
+          description: The remittance was reconciled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Remittance"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /remittances/{remittance_id}:
+    get:
+      operationId: getRemittance
+      summary: Retrieve a remittance
+      description: Returns one project-scoped remittance. Requires `remittances:read`.
+      parameters:
+        - $ref: "#/components/parameters/RemittanceId"
+      responses:
+        "200":
+          description: A remittance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Remittance"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -726,6 +959,15 @@ components:
         type: string
         maxLength: 100
         pattern: ^clm_[A-Za-z0-9_-]+$
+    RemittanceId:
+      name: remittance_id
+      in: path
+      required: true
+      description: A public remittance identifier.
+      schema:
+        type: string
+        maxLength: 100
+        pattern: ^rem_[A-Za-z0-9_-]+$
     EligibilityCheckId:
       name: eligibility_check_id
       in: path
@@ -1253,7 +1495,8 @@ components:
     Claim:
       type: object
       additionalProperties: false
-      required: [id, object, status, amount, service_period]
+      required:
+        [id, object, status, provider_claim_reference, submission_version, amount, service_period, lines, information_requests, adjudication, submitted_at, updated_at]
       properties:
         id:
           type: string
@@ -1264,7 +1507,13 @@ components:
           const: claim
         status:
           type: string
-          enum: [draft, submitted, approved, settled, queried, denied]
+          enum:
+            [draft, submitted, queried, approved, partially_approved, denied, settled, reversed, cancelled]
+        provider_claim_reference:
+          type: [string, "null"]
+        submission_version:
+          type: integer
+          minimum: 1
         amount:
           type: object
           additionalProperties: false
@@ -1293,6 +1542,388 @@ components:
             ends_at:
               type: string
               format: date-time
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClaimLine"
+        information_requests:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClaimInformationRequest"
+        adjudication:
+          oneOf:
+            - $ref: "#/components/schemas/ClaimAdjudication"
+            - type: "null"
+        submitted_at:
+          type: [string, "null"]
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ClaimLine:
+      type: object
+      additionalProperties: false
+      required: [line_number, code_system, service_code, units, amount]
+      properties:
+        line_number:
+          type: integer
+          minimum: 1
+        code_system:
+          type: string
+        service_code:
+          type: string
+        units:
+          type: number
+          exclusiveMinimum: 0
+        amount:
+          type: integer
+          minimum: 1
+    ClaimInput:
+      type: object
+      additionalProperties: false
+      required:
+        [eligibility_check_id, session_id, provider_claim_reference, lines]
+      properties:
+        eligibility_check_id:
+          type: string
+          pattern: ^elig_[A-Za-z0-9_-]+$
+        preauthorization_id:
+          type: [string, "null"]
+          pattern: ^preauth_[A-Za-z0-9_-]+$
+        session_id:
+          type: string
+          pattern: ^ses_[A-Za-z0-9_-]+$
+        provider_claim_reference:
+          type: string
+          minLength: 3
+          maxLength: 200
+        evidence_refs:
+          $ref: "#/components/schemas/EvidenceReferences"
+        lines:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required: [code_system, service_code, units, amount]
+            properties:
+              code_system:
+                type: string
+                minLength: 2
+                maxLength: 100
+              service_code:
+                type: string
+                minLength: 2
+                maxLength: 100
+              units:
+                type: number
+                exclusiveMinimum: 0
+                maximum: 100
+              amount:
+                type: integer
+                minimum: 1
+    EvidenceReferences:
+      type: array
+      maxItems: 32
+      items:
+        type: string
+        minLength: 3
+        maxLength: 200
+        pattern: ^[A-Za-z][A-Za-z0-9:_-]+$
+    ClaimInformationRequest:
+      type: object
+      additionalProperties: false
+      required:
+        [id, object, reason_code, requested_evidence_types, status, due_at, created_at, resolved_at]
+      properties:
+        id:
+          type: string
+          pattern: ^cir_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: claim_information_request
+        reason_code:
+          type: string
+        requested_evidence_types:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [open, fulfilled, cancelled]
+        due_at:
+          type: [string, "null"]
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        resolved_at:
+          type: [string, "null"]
+          format: date-time
+    ClaimInformationRequestInput:
+      type: object
+      additionalProperties: false
+      required: [reason_code, requested_evidence_types]
+      properties:
+        reason_code:
+          type: string
+          pattern: ^[a-z0-9_]+$
+          minLength: 2
+          maxLength: 80
+        requested_evidence_types:
+          type: array
+          minItems: 1
+          maxItems: 16
+          items:
+            type: string
+            pattern: ^[a-z0-9_]+$
+        due_at:
+          type: [string, "null"]
+          format: date-time
+    ClaimEvidenceInput:
+      type: object
+      additionalProperties: false
+      required: [information_request_id, evidence_refs]
+      properties:
+        information_request_id:
+          type: string
+          pattern: ^cir_[A-Za-z0-9_-]+$
+        evidence_refs:
+          allOf:
+            - $ref: "#/components/schemas/EvidenceReferences"
+            - minItems: 1
+    ClaimAdjudicationLine:
+      type: object
+      additionalProperties: false
+      required: [line_number, amount, reason_codes]
+      properties:
+        line_number:
+          type: integer
+          minimum: 1
+        amount:
+          type: object
+          additionalProperties: false
+          required: [billed, allowed, payer, patient_responsibility, adjustment]
+          properties:
+            billed:
+              type: integer
+              minimum: 1
+            allowed:
+              type: integer
+              minimum: 0
+            payer:
+              type: integer
+              minimum: 0
+            patient_responsibility:
+              type: integer
+              minimum: 0
+            adjustment:
+              type: integer
+              minimum: 0
+        reason_codes:
+          type: array
+          minItems: 1
+          maxItems: 16
+          items:
+            type: string
+            pattern: ^[a-z0-9_]+$
+    ClaimAdjudicationInput:
+      type: object
+      additionalProperties: false
+      required: [policy_reference, policy_version, reason_codes, lines]
+      properties:
+        policy_reference:
+          type: string
+          minLength: 3
+          maxLength: 200
+        policy_version:
+          type: string
+          minLength: 1
+          maxLength: 100
+        reason_codes:
+          type: array
+          minItems: 1
+          maxItems: 32
+          items:
+            type: string
+            pattern: ^[a-z0-9_]+$
+        evidence_refs:
+          $ref: "#/components/schemas/EvidenceReferences"
+        lines:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/ClaimAdjudicationLine"
+    ClaimAdjudication:
+      type: object
+      additionalProperties: false
+      required:
+        [id, object, version, decision, amount, reason_codes, policy, lines, decided_at]
+      properties:
+        id:
+          type: string
+          pattern: ^adj_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: claim_adjudication
+        version:
+          type: integer
+          minimum: 1
+        decision:
+          type: string
+          enum: [approved, partially_approved, denied]
+        amount:
+          type: object
+          additionalProperties: false
+          required: [currency, billed, payer, patient_responsibility, adjustment]
+          properties:
+            currency:
+              type: string
+              pattern: ^[A-Z]{3}$
+            billed:
+              type: integer
+              minimum: 1
+            payer:
+              type: integer
+              minimum: 0
+            patient_responsibility:
+              type: integer
+              minimum: 0
+            adjustment:
+              type: integer
+              minimum: 0
+        reason_codes:
+          type: array
+          items:
+            type: string
+        policy:
+          type: object
+          additionalProperties: false
+          required: [reference, version]
+          properties:
+            reference:
+              type: string
+            version:
+              type: string
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClaimAdjudicationLine"
+        decided_at:
+          type: string
+          format: date-time
+    RemittanceList:
+      type: object
+      additionalProperties: false
+      required: [object, data, has_more]
+      properties:
+        object:
+          type: string
+          const: list
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Remittance"
+        has_more:
+          type: boolean
+    Remittance:
+      type: object
+      additionalProperties: false
+      required:
+        [id, object, status, payer_reference, amount, allocations, received_at, reconciled_at]
+      properties:
+        id:
+          type: string
+          pattern: ^rem_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: remittance
+        status:
+          type: string
+          enum: [received, reconciled, exception]
+        payer_reference:
+          type: string
+        amount:
+          type: object
+          additionalProperties: false
+          required: [currency, paid]
+          properties:
+            currency:
+              type: string
+              pattern: ^[A-Z]{3}$
+            paid:
+              type: integer
+              minimum: 1
+        allocations:
+          type: array
+          items:
+            $ref: "#/components/schemas/RemittanceAllocation"
+        received_at:
+          type: string
+          format: date-time
+        reconciled_at:
+          type: [string, "null"]
+          format: date-time
+    RemittanceAllocation:
+      type: object
+      additionalProperties: false
+      required: [claim_id, paid_amount, reason_codes]
+      properties:
+        claim_id:
+          type: string
+          pattern: ^clm_[A-Za-z0-9_-]+$
+        paid_amount:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        reason_codes:
+          type: array
+          maxItems: 16
+          items:
+            type: string
+            pattern: ^[a-z0-9_]+$
+    RemittanceInput:
+      type: object
+      additionalProperties: false
+      required: [payer_reference, currency, received_at, allocations]
+      properties:
+        payer_reference:
+          type: string
+          minLength: 3
+          maxLength: 200
+        currency:
+          type: string
+          enum: [KES, USD, EUR, GBP]
+        received_at:
+          type: string
+          format: date-time
+        allocations:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/RemittanceAllocationInput"
+    RemittanceAllocationInput:
+      type: object
+      additionalProperties: false
+      required: [claim_id, paid_amount]
+      properties:
+        claim_id:
+          type: string
+          pattern: ^clm_[A-Za-z0-9_-]+$
+        paid_amount:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        reason_codes:
+          type: array
+          maxItems: 16
+          default: []
+          items:
+            type: string
+            pattern: ^[a-z0-9_]+$
     WebhookEndpointList:
       type: object
       additionalProperties: false
@@ -1379,10 +2010,11 @@ components:
         events:
           type: array
           minItems: 1
-          maxItems: 1
+          maxItems: 16
           items:
             type: string
-            const: sandbox.ping
+            enum:
+              [sandbox.ping, claim.submitted, claim.information_requested, claim.resubmitted, claim.approved, claim.partially_approved, claim.denied, claim.settled, remittance.reconciled]
     WebhookDelivery:
       type: object
       additionalProperties: false

@@ -14,7 +14,11 @@ Scopes are attached to a key when it is issued.
 | `sessions:read` | List and retrieve synthetic Sessions |
 | `benefits:read` | Retrieve synthetic eligibility and pre-authorization decisions |
 | `benefits:write` | Check synthetic eligibility and create pre-authorizations |
-| `claims:read` | List and retrieve tenant-scoped synthetic Claim status |
+| `claims:read` | List and retrieve project-scoped synthetic Claims |
+| `claims:write` | Submit Claims and fulfil information requests |
+| `claims:adjudicate` | Request evidence and record payer decisions |
+| `remittances:read` | List and retrieve remittances |
+| `remittances:write` | Record and reconcile remittance allocations |
 | `webhooks:read` | List and retrieve Webhook endpoints |
 | `webhooks:write` | Create, disable and test Webhook endpoints |
 

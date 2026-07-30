@@ -12,7 +12,7 @@ curl https://api.heyrafiki.space/v1/webhook_endpoints \
   -H "Content-Type: application/json" \
   -d '{
     "url": "https://hooks.example.com/heyrafiki",
-    "events": ["sandbox.ping"]
+    "events": ["claim.submitted", "claim.settled", "remittance.reconciled"]
   }'
 ```
 
@@ -53,3 +53,18 @@ curl https://api.heyrafiki.space/v1/webhook_endpoints/whe_xxx/test \
 ```
 
 The sandbox sends `sandbox.ping`. Transient failures use bounded retries and retain the same event identifier.
+
+## Event types
+
+| Event | Emitted when |
+| --- | --- |
+| `claim.submitted` | A Claim enters review |
+| `claim.information_requested` | A payer requests evidence |
+| `claim.resubmitted` | Requested evidence is supplied |
+| `claim.approved` | The payer approves the full billed amount |
+| `claim.partially_approved` | The payer approves part of the billed amount |
+| `claim.denied` | The payer approves no amount |
+| `claim.settled` | Cumulative remittance reaches the approved amount |
+| `remittance.reconciled` | Every remittance allocation is recorded |
+
+Claim Events contain public workflow identifiers and state. They do not contain Person, Member or clinical content.

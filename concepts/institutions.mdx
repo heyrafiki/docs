@@ -23,7 +23,8 @@ The sandbox provides:
 - Practitioner discovery and recurring availability;
 - tenant-scoped Bookings and Sessions;
 - Benefit eligibility and pre-authorization;
-- tenant-scoped Claim status;
+- project-scoped Claim submission, review and adjudication;
+- remittance allocation and reconciliation;
 - signed Webhook endpoint management;
 - read-only MCP tools over the same resources.
 
@@ -31,7 +32,7 @@ Use separate projects and keys for each environment. Sandbox data is synthetic.
 
 ## Insurers and payers
 
-Check eligibility before committing Cover. Where authorization is required, bind the eligibility decision to a covered Booking. Use the Claim resource for current Claim status.
+Check eligibility before committing Cover. Where authorization is required, bind the eligibility decision to a covered Booking. Submit Claims from delivered Care, record line decisions, then allocate remittance against the approved amount.
 
 Clinical Notes, message content and unrelated identity data are outside the payer contract.
 
