@@ -6,29 +6,45 @@ rss: true
 
 Released API changes appear here. Product and website changes are on the [Heyrafiki changelog](https://heyrafiki.space/changelog).
 
-<Update label="30 July 2026" description="Practitioner discovery" tags={["Added"]}>
+<Update label="31 July 2026" description="Pre-authorization decisions" tags={["Added", "Changed"]}>
+**Added** `POST /v1/preauthorizations/{preauthorization_id}/decisions` for payer decisions. Approval reserves the Benefit. Denial leaves it available.
+
+**Added** `preauthorization.requested`, `preauthorization.approved`, `preauthorization.denied` and `preauthorization.expired` Webhook events.
+
+**Changed** `POST /v1/preauthorizations` to open a request without reserving the Benefit. Payer decisions require `benefits:decide`.
+</Update>
+
+<Update label="30 July 2026" description="Practitioner profiles and availability" tags={["Added"]}>
 **Added** sandbox Practitioner retrieval at `GET /v1/practitioners/{practitioner_id}`.
 
 **Added** recurring weekly hours at `GET /v1/practitioners/{practitioner_id}/availability`.
-
-**Added** synthetic Session list and retrieval without Person or clinical identifiers.
-
-**Added** project-scoped Claim submission, information requests, evidence resubmission and line-level adjudication.
-
-**Added** remittance allocation, ledger reconciliation and Claim settlement.
-
-**Added** language-neutral conformance fixtures for the JavaScript SDK foundation.
-
-**Added** tenant-scoped Booking list, retrieval and idempotent creation.
-
-**Added** tenant-scoped Benefit eligibility and pre-authorization with one-Session reservations.
-
-**Added** Webhook endpoint registration, Claim and remittance Events, signed delivery and endpoint controls.
-
-**Added** thirteen read-only MCP tools with OAuth resource validation and project scopes.
 </Update>
 
-<Update label="29 July 2026" description="Private beta foundation" tags={["Added"]}>
+<Update label="30 July 2026" description="Bookings, Sessions and Benefits" tags={["Added"]}>
+**Added** idempotent Booking creation, plus Booking and Session list and retrieval endpoints.
+
+**Added** Benefit eligibility checks and pre-authorization requests for Sandbox projects.
+</Update>
+
+<Update label="30 July 2026" description="Claims and remittances" tags={["Added"]}>
+**Added** Claim submission, information requests, evidence resubmission and line-level adjudication.
+
+**Added** remittance creation, allocation, reconciliation and Claim settlement.
+</Update>
+
+<Update label="30 July 2026" description="Webhooks" tags={["Added"]}>
+**Added** Webhook endpoint registration, signed delivery, bounded retries and test events.
+
+**Added** Claim, remittance and pre-authorization events. See [Webhooks](/webhooks) for the event catalogue.
+</Update>
+
+<Update label="30 July 2026" description="MCP server beta" tags={["Added", "Beta"]}>
+**Added** thirteen read-only tools for Practitioner, Booking, Session, Benefit, Claim and remittance data.
+
+The MCP server validates OAuth resource indicators and project scopes on every request. See [MCP server](/mcp-server).
+</Update>
+
+<Update label="29 July 2026" description="Sandbox API" tags={["Added"]}>
 **Added** authenticated API discovery at `GET /v1`.
 
 **Added** synthetic Practitioner listings for sandbox projects at `GET /v1/practitioners`.
