@@ -71,7 +71,7 @@
       },
       {
         "group": "Build",
-        "pages": ["sandbox", "benefits", "claims", "testing", "sdks", "webhooks", "mcp"]
+        "pages": ["sandbox", "benefits", "claims", "testing", "sdks", "webhooks", "mcp-server"]
       },
       {
         "group": "API reference",

@@ -1,15 +1,22 @@
 ---
-title: "MCP"
-description: "Connect approved agents to scoped Heyrafiki capabilities."
+title: "MCP server"
+sidebarTitle: "MCP"
+description: "Connect approved agents to scoped Heyrafiki sandbox capabilities."
+tag: "Beta"
+keywords: ["Heyrafiki MCP", "Model Context Protocol", "healthcare agents"]
 ---
 
-The MCP endpoint is:
+<Note>
+  Beta. MCP access is available to approved sandbox projects.
+</Note>
+
+Connect an MCP client to:
 
 ```
 https://mcp.heyrafiki.space/api/mcp
 ```
 
-Connections use OAuth. The access token must be issued for the MCP resource and an approved WorkOS Organization. Heyrafiki then applies the project grant and tool scope.
+Connections use OAuth. Access tokens are bound to the MCP resource, a Heyrafiki Organization and an approved tool scope.
 
 | Tool | Purpose | Required scope |
 | --- | --- | --- |
@@ -27,4 +34,4 @@ Connections use OAuth. The access token must be issued for the MCP resource and 
 | `list_remittances` | List project-scoped synthetic remittances | `remittances:read` |
 | `get_remittance` | Retrieve one synthetic remittance | `remittances:read` |
 
-MCP tools are read-only and sandbox-only. They use the same capability responses as REST and never expose database access.
+MCP tools are read-only and use the same resource contracts as the REST API. [Request access](https://heyrafiki.space/waitlist) for a sandbox project.
