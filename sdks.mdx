@@ -1,11 +1,16 @@
 ---
 title: "SDKs"
 description: "Typed clients generated from the same public contract."
+keywords: ["Heyrafiki SDK", "JavaScript healthcare API", "Heyrafiki CLI"]
 ---
 
-SDKs follow the canonical OpenAPI contract and shared conformance fixtures. JavaScript and TypeScript come first. Python and Rust will use the same resource and error models.
+SDKs follow the canonical OpenAPI contract and shared conformance fixtures. JavaScript and TypeScript are available in Beta. Python and Rust are planned against the same resource and error models.
 
 ## JavaScript
+
+```bash
+npm install @heyrafiki/heyrafiki-js@beta
+```
 
 The JavaScript client covers API discovery, Practitioner discovery, availability, Bookings, Benefit eligibility, pre-authorizations, Sessions, Claims, remittances and Webhook endpoints.
 
@@ -60,3 +65,25 @@ const claim = await heyrafiki.claims.create(
 ```
 
 The REST reference owns behavior. Client packages retain its resource names, scopes and error envelope.
+
+## Command line
+
+Run the CLI without installing it globally:
+
+```bash
+npx @heyrafiki/cli@beta doctor
+```
+
+Set `HEYRAFIKI_API_KEY`, then make a read request:
+
+```bash
+npx @heyrafiki/cli@beta get /practitioners?limit=5
+```
+
+The Beta CLI supports read requests. Use the SDK or REST API for writes so idempotency and approval rules remain explicit.
+
+## Packages
+
+- [`@heyrafiki/heyrafiki-js`](https://github.com/heyrafiki/heyrafiki-js) provides the typed server-side client.
+- [`@heyrafiki/cli`](https://github.com/heyrafiki/heyrafiki-js/tree/main/cli) provides command-line access.
+- [`@heyrafiki/openapi`](https://github.com/heyrafiki/openapi) distributes the versioned OpenAPI 3.1 contract.
