@@ -401,11 +401,104 @@ paths:
           $ref: "#/components/responses/TooManyRequests"
         "503":
           $ref: "#/components/responses/ServiceUnavailable"
+  /coverages:
+    post:
+      operationId: recordCoverageObservation
+      summary: Record a Coverage observation
+      description: Appends a payer source observation and updates its Coverage snapshot. Requires `coverages:write`.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CoverageObservationInput"
+      responses:
+        "200":
+          description: The original observation for an idempotent replay
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoverageObservation"
+        "201":
+          description: A Coverage observation
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoverageObservation"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /coverage_batches:
+    post:
+      operationId: recordCoverageBatch
+      summary: Record a Coverage batch
+      description: Validates and records a versioned payer Coverage batch. Requires `coverages:write`.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/CoverageBatchArtifactReference"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CoverageBatchInput"
+      responses:
+        "200":
+          description: A replayed Coverage batch result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoverageBatchResult"
+        "201":
+          description: A recorded Coverage batch result
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoverageBatchResult"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
   /preauthorizations:
     post:
       operationId: createPreauthorization
-      summary: Create a pre-authorization
-      description: Reserves one covered synthetic Session against an eligible Benefit. Requires `benefits:write`.
+      summary: Request a pre-authorization
+      description: Opens a pending synthetic pre-authorization for an eligible covered Booking. Requires `benefits:write`.
       parameters:
         - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
@@ -422,7 +515,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Preauthorization"
         "201":
-          description: An approved pre-authorization
+          description: A pending pre-authorization
           headers:
             X-RateLimit-Limit:
               $ref: "#/components/headers/RateLimitLimit"
@@ -479,6 +572,50 @@ paths:
           $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /preauthorizations/{preauthorization_id}/decisions:
+    post:
+      operationId: decidePreauthorization
+      summary: Decide a pre-authorization
+      description: Records the payer organization's decision and reserves the Benefit only when approved. Requires `benefits:decide`.
+      parameters:
+        - $ref: "#/components/parameters/PreauthorizationId"
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PreauthorizationDecisionInput"
+      responses:
+        "200":
+          description: The decided pre-authorization
+          headers:
+            X-RateLimit-Limit:
+              $ref: "#/components/headers/RateLimitLimit"
+            X-RateLimit-Remaining:
+              $ref: "#/components/headers/RateLimitRemaining"
+            X-RateLimit-Reset:
+              $ref: "#/components/headers/RateLimitReset"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Preauthorization"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
         "429":
           $ref: "#/components/responses/TooManyRequests"
         "503":
@@ -729,7 +866,7 @@ paths:
     post:
       operationId: createRemittance
       summary: Record a remittance
-      description: Allocates payer remittance to adjudicated Claims. Requires `remittances:write`.
+      description: Allocates payer remittance advice to adjudicated Claims without recording payment settlement. Requires `remittances:write`.
       parameters:
         - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
@@ -1013,6 +1150,16 @@ components:
         type: string
         minLength: 8
         maxLength: 255
+    CoverageBatchArtifactReference:
+      name: X-Heyrafiki-Artifact-Reference
+      in: header
+      required: true
+      description: Stable reference for the source artifact retained by the payer.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 190
+        pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
   headers:
     RateLimitLimit:
       description: Maximum requests allowed in the current minute.
@@ -1067,6 +1214,12 @@ components:
             $ref: "#/components/schemas/ErrorEnvelope"
     Conflict:
       description: The request conflicts with current state.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    PayloadTooLarge:
+      description: The request body exceeds the endpoint limit.
       content:
         application/json:
           schema:
@@ -1381,7 +1534,7 @@ components:
           items:
             type: string
             enum:
-              [eligible, coverage_not_found, coverage_inactive, outside_coverage_period, benefit_exhausted, amount_exceeds_benefit]
+              [eligible, coverage_not_found, coverage_inactive, coordination_required, outside_coverage_period, benefit_exhausted, amount_exceeds_benefit]
         service:
           type: object
           additionalProperties: false
@@ -1417,6 +1570,273 @@ components:
         checked_at:
           type: string
           format: date-time
+    CoverageObservationInput:
+      type: object
+      additionalProperties: false
+      required:
+        [source_contract_reference, external_coverage_reference, source_version, tenant_reference, member_reference, plan_name, service_code, status, currency, amount_limit, remaining_sessions, authorization_required, coordination_priority, valid_from, valid_until, observed_at, evidence_references]
+      properties:
+        source_contract_reference:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+        external_coverage_reference:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+        source_version:
+          type: string
+          minLength: 1
+          maxLength: 120
+        tenant_reference:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+        member_reference:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+          description: An opaque payer reference. Do not send a name, contact detail or government identifier.
+        plan_name:
+          type: string
+          minLength: 1
+          maxLength: 160
+        service_code:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+        status:
+          type: string
+          enum: [active, paused, exhausted, expired]
+        currency:
+          type: string
+          enum: [KES, USD, EUR, GBP]
+        amount_limit:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+          description: Per-Session limit in the currency's minor unit.
+        remaining_sessions:
+          type: integer
+          minimum: 0
+          maximum: 100000
+        authorization_required:
+          type: boolean
+        coordination_priority:
+          type: [integer, "null"]
+          minimum: 1
+          maximum: 100
+          description: 1 is primary. Leave null when coordination does not apply.
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+        observed_at:
+          type: string
+          format: date-time
+          description: Timestamp carried by the payer source.
+        evidence_references:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            type: string
+            minLength: 1
+            maxLength: 220
+            pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+    CoverageObservation:
+      type: object
+      additionalProperties: false
+      required:
+        [id, object, coverage_id, source, source_contract_reference, external_coverage_reference, source_version, snapshot_version, status, service_code, amount_limit, remaining_sessions, authorization_required, coordination_priority, valid_from, valid_until, observed_at]
+      properties:
+        id:
+          type: string
+          pattern: ^cobs_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: coverage_observation
+        coverage_id:
+          type: string
+          pattern: ^cov_[A-Za-z0-9_-]+$
+        source:
+          type: string
+          enum: [payer_api, batch_file]
+        source_contract_reference:
+          type: string
+        external_coverage_reference:
+          type: string
+        source_version:
+          type: string
+        snapshot_version:
+          type: integer
+          minimum: 1
+        status:
+          type: string
+          enum: [active, paused, exhausted, expired]
+        service_code:
+          type: string
+        amount_limit:
+          type: object
+          additionalProperties: false
+          required: [currency, value]
+          properties:
+            currency:
+              type: string
+              enum: [KES, USD, EUR, GBP]
+            value:
+              type: integer
+              minimum: 1
+        remaining_sessions:
+          type: integer
+          minimum: 0
+        authorization_required:
+          type: boolean
+        coordination_priority:
+          type: [integer, "null"]
+          minimum: 1
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+        observed_at:
+          type: string
+          format: date-time
+    CoverageBatchRecordInput:
+      type: object
+      additionalProperties: false
+      required:
+        [coverage_reference, record_version, tenant_reference, member_reference, plan_name, service_code, status, currency, amount_limit, remaining_sessions, authorization_required, coordination_priority, valid_from, valid_until]
+      properties:
+        coverage_reference:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+        record_version:
+          type: string
+          minLength: 1
+          maxLength: 120
+        tenant_reference:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+        member_reference:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+          description: An opaque payer reference. Do not send a name, contact detail or government identifier.
+        plan_name:
+          type: string
+          minLength: 1
+          maxLength: 160
+        service_code:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+        status:
+          type: string
+          enum: [active, paused, exhausted, expired]
+        currency:
+          type: string
+          enum: [KES, USD, EUR, GBP]
+        amount_limit:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+          description: Per-Session limit in the currency's minor unit.
+        remaining_sessions:
+          type: integer
+          minimum: 0
+          maximum: 100000
+        authorization_required:
+          type: boolean
+        coordination_priority:
+          type: [integer, "null"]
+          minimum: 1
+          maximum: 100
+        valid_from:
+          type: string
+          format: date-time
+        valid_until:
+          type: string
+          format: date-time
+    CoverageBatchInput:
+      type: object
+      additionalProperties: false
+      required:
+        [contract_version, batch_reference, batch_version, source_contract_reference, generated_at, records]
+      properties:
+        contract_version:
+          type: string
+          const: "2026-08-01"
+        batch_reference:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+        batch_version:
+          type: string
+          minLength: 1
+          maxLength: 120
+        source_contract_reference:
+          type: string
+          minLength: 1
+          maxLength: 220
+          pattern: ^[A-Za-z0-9][A-Za-z0-9:._/-]*$
+        generated_at:
+          type: string
+          format: date-time
+        records:
+          type: array
+          minItems: 1
+          maxItems: 500
+          items:
+            $ref: "#/components/schemas/CoverageBatchRecordInput"
+    CoverageBatchResult:
+      type: object
+      additionalProperties: false
+      required:
+        [object, batch_reference, artifact_sha256, total, recorded, replayed, observations]
+      properties:
+        object:
+          type: string
+          const: coverage_batch_result
+        batch_reference:
+          type: string
+        artifact_sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+        total:
+          type: integer
+          minimum: 1
+          maximum: 500
+        recorded:
+          type: integer
+          minimum: 0
+          maximum: 500
+        replayed:
+          type: integer
+          minimum: 0
+          maximum: 500
+        observations:
+          type: array
+          minItems: 1
+          maxItems: 500
+          items:
+            $ref: "#/components/schemas/CoverageObservation"
     PreauthorizationInput:
       type: object
       additionalProperties: false
@@ -1430,11 +1850,88 @@ components:
           type: string
           maxLength: 100
           pattern: ^bkg_[A-Za-z0-9_-]+$
+    PreauthorizationDecisionInput:
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required:
+            [outcome, approved_amount, valid_until, reason_codes, policy_reference, policy_version, evidence_references]
+          properties:
+            outcome:
+              type: string
+              const: approved
+            approved_amount:
+              type: integer
+              minimum: 1
+              maximum: 9007199254740991
+            valid_until:
+              type: string
+              format: date-time
+            reason_codes:
+              $ref: "#/components/schemas/PreauthorizationReasonCodes"
+            policy_reference:
+              type: string
+              minLength: 3
+              maxLength: 200
+              pattern: ^[A-Za-z][A-Za-z0-9:_-]+$
+            policy_version:
+              type: string
+              minLength: 1
+              maxLength: 100
+            evidence_references:
+              $ref: "#/components/schemas/PreauthorizationEvidenceInputReferences"
+        - type: object
+          additionalProperties: false
+          required:
+            [outcome, reason_codes, policy_reference, policy_version, evidence_references]
+          properties:
+            outcome:
+              type: string
+              const: denied
+            reason_codes:
+              $ref: "#/components/schemas/PreauthorizationReasonCodes"
+            policy_reference:
+              type: string
+              minLength: 3
+              maxLength: 200
+              pattern: ^[A-Za-z][A-Za-z0-9:_-]+$
+            policy_version:
+              type: string
+              minLength: 1
+              maxLength: 100
+            evidence_references:
+              $ref: "#/components/schemas/PreauthorizationEvidenceInputReferences"
+      discriminator:
+        propertyName: outcome
+    PreauthorizationReasonCodes:
+      type: array
+      minItems: 1
+      maxItems: 32
+      items:
+        type: string
+        pattern: ^[a-z0-9_]{2,80}$
+    PreauthorizationEvidenceInputReferences:
+      type: array
+      minItems: 1
+      maxItems: 29
+      items:
+        type: string
+        minLength: 3
+        maxLength: 300
+        pattern: ^[A-Za-z][A-Za-z0-9:_-]+$
+    PreauthorizationEvidenceReferences:
+      type: array
+      minItems: 1
+      maxItems: 32
+      items:
+        type: string
+        minLength: 1
+        maxLength: 300
     Preauthorization:
       type: object
       additionalProperties: false
       required:
-        [id, object, eligibility_check_id, booking_id, status, reason_codes, amount, valid_until, created_at]
+        [id, object, eligibility_check_id, booking_id, status, reason_codes, amount, valid_until, created_at, decision]
       properties:
         id:
           type: string
@@ -1478,6 +1975,47 @@ components:
         created_at:
           type: string
           format: date-time
+        decision:
+          oneOf:
+            - $ref: "#/components/schemas/PreauthorizationDecision"
+            - type: "null"
+    PreauthorizationDecision:
+      type: object
+      additionalProperties: false
+      required:
+        [id, object, version, outcome, reason_codes, policy, authority_reference, evidence_references, decided_at]
+      properties:
+        id:
+          type: string
+          maxLength: 100
+          pattern: ^pad_[A-Za-z0-9_-]+$
+        object:
+          type: string
+          const: preauthorization_decision
+        version:
+          type: integer
+          minimum: 1
+        outcome:
+          type: string
+          enum: [approved, denied]
+        reason_codes:
+          $ref: "#/components/schemas/PreauthorizationReasonCodes"
+        policy:
+          type: object
+          additionalProperties: false
+          required: [reference, version]
+          properties:
+            reference:
+              type: string
+            version:
+              type: string
+        authority_reference:
+          type: string
+        evidence_references:
+          $ref: "#/components/schemas/PreauthorizationEvidenceReferences"
+        decided_at:
+          type: string
+          format: date-time
     ClaimList:
       type: object
       additionalProperties: false
@@ -1517,7 +2055,7 @@ components:
         amount:
           type: object
           additionalProperties: false
-          required: [currency, billed, approved, settled]
+          required: [currency, billed, approved, remitted, settled]
           properties:
             currency:
               type: string
@@ -1528,9 +2066,14 @@ components:
             approved:
               type: [integer, "null"]
               minimum: 0
+            remitted:
+              type: [integer, "null"]
+              minimum: 0
+              description: Payer remittance advice allocated to the Claim.
             settled:
               type: [integer, "null"]
               minimum: 0
+              description: Money movement confirmed by an authorized settlement observation.
         service_period:
           type: object
           additionalProperties: false
@@ -2020,7 +2563,7 @@ components:
           items:
             type: string
             enum:
-              [sandbox.ping, claim.submitted, claim.information_requested, claim.resubmitted, claim.approved, claim.partially_approved, claim.denied, claim.settled, remittance.reconciled]
+              [sandbox.ping, preauthorization.requested, preauthorization.approved, preauthorization.denied, preauthorization.expired, claim.submitted, claim.information_requested, claim.resubmitted, claim.approved, claim.partially_approved, claim.denied, claim.settled, remittance.reconciled]
     WebhookDelivery:
       type: object
       additionalProperties: false
