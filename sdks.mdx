@@ -10,8 +10,8 @@ SDKs follow the canonical OpenAPI contract and shared conformance fixtures.
 
 | Client | Status | Primary use |
 | --- | --- | --- |
-| JavaScript and TypeScript | Beta | Node.js services and web applications |
-| CLI | Beta | Local development, CI and operations |
+| JavaScript and TypeScript | Source preview | Node.js services and web applications |
+| CLI | Source preview | Local development, CI and operations |
 | OpenAPI 3.1 | Published | Code generation and contract validation |
 | Python | Planned | Backend services, research and data workflows |
 | Go | Planned | Backend services, infrastructure and integration tooling |
@@ -21,15 +21,15 @@ SDKs follow the canonical OpenAPI contract and shared conformance fixtures.
 | Swift | Planned | Apple platform applications |
 | Rust | Planned | Systems integrations and high-throughput services |
 
-A client advances when it has an owner, automated releases and conformance coverage for authentication, errors, pagination, retries and idempotency.
+A client is published when it has an owner, automated releases and conformance coverage for authentication, errors, pagination, retries and idempotency.
 
-## JavaScript
+## JavaScript and TypeScript
 
-```bash
-npm install @heyrafiki/heyrafiki-js@beta
-```
+The [public source preview](https://github.com/heyrafiki/heyrafiki-js) covers API discovery, Practitioner discovery, availability, Bookings, Benefit eligibility, pre-authorizations, Sessions, Claims, remittances and Webhook endpoints.
 
-The JavaScript client covers API discovery, Practitioner discovery, availability, Bookings, Benefit eligibility, pre-authorizations, Sessions, Claims, remittances and Webhook endpoints.
+<Note>
+  The npm package is not published.
+</Note>
 
 ```ts
 import { Heyrafiki } from "@heyrafiki/heyrafiki-js";
@@ -85,22 +85,10 @@ The REST reference owns behavior. Client packages retain its resource names, sco
 
 ## Command line
 
-Run the CLI without installing it globally:
+The [CLI source preview](https://github.com/heyrafiki/heyrafiki-js/tree/main/cli) supports read requests. No npm package is published.
 
-```bash
-npx @heyrafiki/cli@beta doctor
-```
+## Repositories
 
-Set `HEYRAFIKI_API_KEY`, then make a read request:
-
-```bash
-npx @heyrafiki/cli@beta get /practitioners?limit=5
-```
-
-The Beta CLI supports read requests. Use the SDK or REST API for writes so idempotency and approval rules remain explicit.
-
-## Packages
-
-- [`@heyrafiki/heyrafiki-js`](https://github.com/heyrafiki/heyrafiki-js) provides the typed server-side client.
-- [`@heyrafiki/cli`](https://github.com/heyrafiki/heyrafiki-js/tree/main/cli) provides command-line access.
-- [`@heyrafiki/openapi`](https://github.com/heyrafiki/openapi) distributes the versioned OpenAPI 3.1 contract.
+- [`heyrafiki-js`](https://github.com/heyrafiki/heyrafiki-js) contains the typed server-side client and its tests.
+- [`heyrafiki-js/cli`](https://github.com/heyrafiki/heyrafiki-js/tree/main/cli) contains the command-line client and its tests.
+- [`openapi`](https://github.com/heyrafiki/openapi) contains the versioned OpenAPI 3.1 contract.

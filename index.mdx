@@ -1,21 +1,37 @@
 ---
-title: "Introduction"
-description: "The Heyrafiki API: base URL, authentication, errors and resources."
+title: "Mental Healthcare infrastructure"
+sidebarTitle: "Introduction"
+description: "Build Care, Cover and Claims workflows through the Heyrafiki API."
+keywords: ["Mental Healthcare API", "health insurance API", "Heyrafiki API"]
 ---
 
-The Heyrafiki API exposes Mental Healthcare infrastructure through versioned REST contracts. The sandbox includes Practitioner discovery, Bookings, Benefits, Sessions, Claims, remittance and Webhooks.
+The Heyrafiki API connects Practitioner discovery, Bookings, Benefits, Sessions, Claims, remittance and Webhooks through versioned REST contracts.
 
-It uses standard HTTP verbs, returns JSON, and authenticates with a secret key sent as a Bearer token.
+Use the sandbox to build complete integrations with synthetic data.
 
-```
+```text
 https://api.heyrafiki.space/v1
 ```
 
 <Note>
-The API is in private beta. Sandbox keys are issued by invitation.
+  The API is in private beta. Sandbox keys are issued by invitation, and sandbox records never represent real People, Practitioners, Claims or payments.
 </Note>
 
-## Next
+## Choose a path
+
+<CardGroup cols={3}>
+  <Card title="Developers" icon="code" href="/quickstart">
+    Authenticate, make a request and work through the sandbox.
+  </Card>
+  <Card title="Insurers and Organizations" icon="building" href="/concepts/institutions">
+    Integrate Benefits, Claims, remittance and Care operations.
+  </Card>
+  <Card title="Public and research integrations" icon="landmark" href="/concepts/institutions#regulators-and-public-systems">
+    Review authority boundaries, synthetic testing and protocol-bound access.
+  </Card>
+</CardGroup>
+
+## Start with the contract
 
 <CardGroup cols={2}>
   <Card title="Authentication" icon="key" href="/authentication">
@@ -27,7 +43,7 @@ The API is in private beta. Sandbox keys are issued by invitation.
   <Card title="Resources" icon="cube" href="/resources">
     Practitioners, Bookings, Benefits, Sessions, Claims, remittance and Webhooks.
   </Card>
-  <Card title="Versioning" icon="code-branch" href="/versioning">
-    Breaking versus additive, deprecation and rate limits.
+  <Card title="Sandbox" icon="flask" href="/sandbox">
+    Synthetic records, failure cases and the request runner.
   </Card>
 </CardGroup>
