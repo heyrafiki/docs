@@ -3,18 +3,18 @@ title: "Institutional integrations"
 description: "Connect Care, Cover, Claims and audit through governed contracts."
 ---
 
-Heyrafiki gives Insurers, health Organizations and public health systems a governed contract across Practitioner networks, Care delivery, Benefits and Payments.
+Institutional integrations use versioned resources for Practitioner discovery, Bookings, Benefits, Claims and remittance.
 
 ## Integration boundaries
 
 | Boundary | Contract |
 | --- | --- |
-| Practitioner trust | Source-attributed credential evidence with separate registration, practising-licence and speciality status |
-| Care exchange | Consent-bound records using applicable FHIR profiles and controlled clinical terminology |
-| Cover and Claims | Idempotent eligibility, authorization, Claim, remittance and reconciliation workflows |
-| Governance | Organization-scoped credentials, least-privilege scopes, signed Webhooks, request IDs and audit evidence |
+| Access | Organization-scoped credentials, project isolation and least-privilege scopes |
+| Cover and Claims | Idempotent eligibility, pre-authorization, Claim and remittance workflows |
+| Events | Signed Webhooks, request IDs and bounded retries |
+| Data | Synthetic sandbox records and purpose-bound production access |
 
-External authorities keep ownership of their decisions. A regulator owns professional status. A payer owns Benefit and adjudication decisions. Heyrafiki records the authorized exchange, normalized state and evidence needed to operate the workflow.
+Credential issuers remain authoritative for professional status. Payers remain authoritative for Benefit and Claim decisions. API responses carry references to those decisions.
 
 ## Available contract
 
@@ -26,7 +26,7 @@ The sandbox provides:
 - project-scoped Claim submission, review and adjudication;
 - remittance allocation and reconciliation;
 - signed Webhook endpoint management;
-- read-only MCP tools over the same resources.
+- Beta, read-only MCP tools over the same resources.
 
 Use separate projects and keys for each environment. Sandbox data is synthetic.
 
@@ -42,10 +42,10 @@ Use Practitioner, availability, Booking and Session resources to coordinate Care
 
 ## Regulators and public systems
 
-National and regulator integrations follow the authority's active identity, Consent, terminology and exchange profiles. Heyrafiki does not replace the source authority or turn a sandbox connection into an endorsement.
+Use the sandbox to test identity, Consent, terminology and exchange mappings with synthetic data. Production access follows the authority's active requirements and approval process.
 
 ## Research
 
-Research access is protocol-bound and separate from product analytics. Approved work uses the minimum permitted data, de-identification or aggregation, controlled exports and reproducible dataset lineage.
+Research access requires an approved protocol and the minimum permitted data. Approved exports retain their provenance and access controls.
 
 See [Security](/security/overview), [Data boundaries](/security/data-boundaries), [Authentication](/authentication) and [Webhooks](/webhooks).

@@ -1,40 +1,40 @@
 ---
-title: "How Heyrafiki works"
-description: "Care, Cover and Payments through one connected workflow."
+title: "Platform workflow"
+description: "How public resources connect Care, Cover, Claims and remittance."
 ---
 
-Heyrafiki is one Rail beneath Mental Healthcare. Finding Care, delivering it, recording it, covering it and paying for it are one system rather than five that email each other.
+Heyrafiki connects Care and payment operations through shared resource identifiers and versioned contracts.
 
-## Surfaces
+## Resource model
 
-| Surface | Who uses it | What it does |
-| --- | --- | --- |
-| App | People | Find and fund Care, join Sessions, control sharing |
-| Practice | Practitioners | Run a Practice: Calendar, Inbox, Notes, Claims, Payouts |
-| Organization | Employers, Universities, NGOs | Fund Care Budgets, read aggregate reporting |
-| Insurer | Payers | Adjudicate Claims, manage the Practitioner Network |
-| API | Builders | Approved capabilities through versioned contracts |
+| Resource | Purpose |
+| --- | --- |
+| Practitioners and availability | Discover synthetic profiles and recurring hours |
+| Bookings and Sessions | Link scheduled Care to its lifecycle record |
+| Eligibility and pre-authorization | Record payer decisions before covered Care |
+| Claims and remittance | Submit delivered services and reconcile payer funds |
+| Webhooks | Receive signed notifications when resource state changes |
 
-## A Session, end to end
+## Covered Care, end to end
 
 <Steps>
-  <Step title="Match">
-    A Person states language, focus, budget, schedule and Cover. Iris filters to currently eligible Practitioners, ranks by fit and shows the reasons. The Person chooses.
+  <Step title="Discover">
+    List Practitioners, retrieve one profile and read recurring availability.
+  </Step>
+  <Step title="Check Cover">
+    Create an eligibility check. Where the payer requires authorization, bind a pre-authorization request to that decision.
   </Step>
   <Step title="Book">
-    The booking creates the Session and its Room. Self-pay is captured now and held.
+    Create a Booking with the selected Practitioner, time, format and payment source.
   </Step>
-  <Step title="Meet">
-    The Session runs online or in person. If the Practitioner brings Iris in as Scribe, the Client is told in the Room.
+  <Step title="Deliver">
+    The Booking and Session identifiers keep the scheduled service linked to its lifecycle record.
   </Step>
-  <Step title="Approve">
-    Iris drafts a SOAP Note. Nothing enters the record until the Practitioner approves it.
-  </Step>
-  <Step title="Settle">
-    A completed Session releases the authorized settlement workflow. Covered Sessions generate a Claim from approved Care and Benefit evidence.
+  <Step title="Claim and reconcile">
+    Submit the delivered service, record Claim decisions and allocate remittance against the approved amount.
   </Step>
 </Steps>
 
-## Money
+## Financial references
 
-The double-entry Ledger is the source of truth, not the payment provider. Booking captures into an escrow account, delivery releases to the Practitioner, and covered Sessions post a receivable against the Payer instead. Every movement is a Ledger entry with a matching pair.
+Eligibility, pre-authorization, Booking, Session, Claim and remittance identifiers stay linked across the workflow. See [Resources](/resources) for money representation and identifier rules.
