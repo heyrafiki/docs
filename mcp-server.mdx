@@ -1,37 +1,47 @@
 ---
 title: "MCP server"
 sidebarTitle: "MCP"
-description: "Connect approved agents to scoped Heyrafiki sandbox capabilities."
+description: "Connect approved agents to scoped Heyrafiki capabilities."
 tag: "Beta"
 keywords: ["Heyrafiki MCP", "Model Context Protocol", "healthcare agents"]
 ---
 
 <Note>
-  Beta. MCP access is available to approved sandbox projects.
+  Beta. MCP access is available to approved Sandbox projects.
 </Note>
 
-Connect an MCP client to:
+Connect agents to Practitioner, Booking, Session, Benefits and Claims workflows through the same resource contracts as the REST API.
+
+## Connect
+
+Use this remote server URL in your MCP client:
 
 ```
 https://mcp.heyrafiki.space/api/mcp
 ```
 
-Connections use OAuth. Access tokens are bound to the MCP resource, a Heyrafiki Organization and an approved tool scope.
+The client starts OAuth when authorization is required. Access tokens are bound to the MCP resource, a Heyrafiki Organization and approved scopes.
+
+## Available tools
 
 | Tool | Purpose | Required scope |
 | --- | --- | --- |
-| `list_practitioners` | List synthetic Practitioner profiles | `practitioners:read` |
-| `get_practitioner` | Retrieve one synthetic Practitioner | `practitioners:read` |
+| `list_practitioners` | List Practitioner profiles | `practitioners:read` |
+| `get_practitioner` | Retrieve a Practitioner | `practitioners:read` |
 | `get_practitioner_availability` | Read recurring weekly hours | `availability:read` |
-| `list_bookings` | List synthetic Bookings | `bookings:read` |
-| `get_booking` | Retrieve one synthetic Booking | `bookings:read` |
-| `list_sessions` | List synthetic Sessions | `sessions:read` |
-| `get_session` | Retrieve one synthetic Session | `sessions:read` |
-| `list_claims` | List tenant-scoped synthetic Claims | `claims:read` |
-| `get_claim` | Retrieve one tenant-scoped synthetic Claim | `claims:read` |
-| `get_eligibility_check` | Retrieve one synthetic eligibility decision | `benefits:read` |
-| `get_preauthorization` | Retrieve one synthetic pre-authorization | `benefits:read` |
-| `list_remittances` | List project-scoped synthetic remittances | `remittances:read` |
-| `get_remittance` | Retrieve one synthetic remittance | `remittances:read` |
+| `list_bookings` | List Bookings | `bookings:read` |
+| `get_booking` | Retrieve a Booking | `bookings:read` |
+| `list_sessions` | List Sessions | `sessions:read` |
+| `get_session` | Retrieve a Session | `sessions:read` |
+| `list_claims` | List Organization-scoped Claims | `claims:read` |
+| `get_claim` | Retrieve an Organization-scoped Claim | `claims:read` |
+| `get_eligibility_check` | Retrieve an eligibility decision | `benefits:read` |
+| `get_preauthorization` | Retrieve a pre-authorization | `benefits:read` |
+| `list_remittances` | List project-scoped remittances | `remittances:read` |
+| `get_remittance` | Retrieve a remittance | `remittances:read` |
 
-MCP tools are read-only and use the same resource contracts as the REST API. [Request access](https://heyrafiki.space/waitlist) for a sandbox project.
+## Access boundaries
+
+Beta tools are read-only. Results are limited to the authenticated Sandbox project and Organization, and every call is checked against its required scope.
+
+[Request access](https://heyrafiki.space/waitlist) for a Sandbox project.
