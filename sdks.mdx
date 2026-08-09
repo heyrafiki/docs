@@ -1,7 +1,7 @@
 ---
 title: "SDKs"
 description: "Typed clients generated from the same public contract."
-keywords: ["Heyrafiki SDK", "JavaScript healthcare API", "Heyrafiki CLI"]
+keywords: ["Heyrafiki SDK", "healthcare API clients", "Heyrafiki CLI"]
 ---
 
 SDKs follow the canonical OpenAPI contract and shared conformance fixtures.
@@ -13,15 +13,36 @@ SDKs follow the canonical OpenAPI contract and shared conformance fixtures.
 | JavaScript and TypeScript | Source preview | Node.js services and web applications |
 | CLI | Source preview | Local development, CI and operations |
 | OpenAPI 3.1 | Published | Code generation and contract validation |
-| Python | Planned | Backend services, research and data workflows |
-| Go | Planned | Backend services, infrastructure and integration tooling |
-| .NET | Planned | Insurers, health systems and government integrations |
+| Python | Source preview | Backend services, research and data workflows |
+| Go | Source preview | Backend services, infrastructure and integration tooling |
+| .NET | Source preview | Insurers, health systems and government integrations |
 | Dart and Flutter | Planned | Cross-platform applications |
 | Kotlin | Planned | Android applications |
 | Swift | Planned | Apple platform applications |
-| Rust | Planned | Systems integrations and high-throughput services |
+| Rust | Source preview | Systems integrations and high-throughput services |
 
 A client is published when it has an owner, automated releases and conformance coverage for authentication, errors, pagination, retries and idempotency.
+
+## Language clients
+
+<Columns cols={2}>
+  <Card title="Python" href="https://github.com/heyrafiki/heyrafiki-python">
+    Typed synchronous and asynchronous clients for Python 3.10 and newer.
+  </Card>
+  <Card title="Go" href="https://github.com/heyrafiki/heyrafiki-go">
+    Typed services, request controls and bounded retry behavior for Go.
+  </Card>
+  <Card title=".NET" href="https://github.com/heyrafiki/heyrafiki-dotnet">
+    Typed clients for .NET, including insurer and health-system integrations.
+  </Card>
+  <Card title="Rust" href="https://github.com/heyrafiki/heyrafiki-rust">
+    Typed clients for systems integrations and correctness-sensitive services.
+  </Card>
+</Columns>
+
+<Note>
+  The source previews are public. Registry packages have not been released.
+</Note>
 
 ## JavaScript and TypeScript
 
@@ -91,4 +112,8 @@ The [CLI source preview](https://github.com/heyrafiki/heyrafiki-js/tree/main/cli
 
 - [`heyrafiki-js`](https://github.com/heyrafiki/heyrafiki-js) contains the typed server-side client and its tests.
 - [`heyrafiki-js/cli`](https://github.com/heyrafiki/heyrafiki-js/tree/main/cli) contains the command-line client and its tests.
+- [`heyrafiki-python`](https://github.com/heyrafiki/heyrafiki-python) contains the Python client and its contract-generation checks.
+- [`heyrafiki-go`](https://github.com/heyrafiki/heyrafiki-go) contains the Go client and its conformance tests.
+- [`heyrafiki-dotnet`](https://github.com/heyrafiki/heyrafiki-dotnet) contains the .NET client and its package verification.
+- [`heyrafiki-rust`](https://github.com/heyrafiki/heyrafiki-rust) contains the Rust client and its dependency policy.
 - [`openapi`](https://github.com/heyrafiki/openapi) contains the versioned OpenAPI 3.1 contract.
