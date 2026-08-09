@@ -3,24 +3,142 @@ title: "MCP server"
 sidebarTitle: "MCP"
 description: "Connect approved agents to scoped Heyrafiki capabilities."
 tag: "Beta"
-keywords: ["Heyrafiki MCP", "Model Context Protocol", "healthcare agents"]
+keywords: ["Heyrafiki MCP", "Model Context Protocol", "MCP 2026-07-28"]
 ---
 
 <Note>
   Beta. MCP access is available to approved Sandbox projects.
 </Note>
 
-Connect agents to Practitioner, Booking, Session, Benefits and Claims workflows through the same resource contracts as the REST API.
+Heyrafiki MCP exposes read-only Practitioner, Booking, Session, Benefits,
+Claims and remittance tools over the same contracts as the REST API.
 
-## Connect
+## Endpoint
 
-Use this remote server URL in your MCP client:
+Heyrafiki implements MCP revision `2026-07-28` over Streamable HTTP.
+[Read the protocol specification](https://modelcontextprotocol.io/specification/2026-07-28).
 
 ```
 https://mcp.heyrafiki.space/api/mcp
 ```
 
-The client starts OAuth when authorization is required. Access tokens are bound to the MCP resource, a Heyrafiki Organization and approved scopes.
+The protocol is stateless. Current clients send the protocol version and
+capabilities with every request. New integrations should not depend on an
+`initialize` exchange or `Mcp-Session-Id`.
+
+## Connect
+
+<Steps>
+  <Step title="Add the remote server">
+    Use the endpoint above in a client that supports MCP `2026-07-28`.
+  </Step>
+  <Step title="Complete OAuth">
+    The server returns protected-resource metadata when authorization is
+    required. The client uses it to discover the authorization server and
+    request the approved scopes.
+  </Step>
+  <Step title="Discover capabilities">
+    Call `server/discover`, then `tools/list`. The available operations are
+    determined by the authenticated Sandbox project and its scopes.
+  </Step>
+</Steps>
+
+Access tokens are bound to the MCP resource, a Heyrafiki Organization and an
+approved grant. A token cannot use a tool outside the intersection of its token
+scopes and grant scopes.
+
+## Wire contract
+
+Every POST includes these HTTP headers:
+
+| Header | Value |
+| --- | --- |
+| `MCP-Protocol-Version` | `2026-07-28` |
+| `Mcp-Method` | The JSON-RPC method, such as `server/discover` or `tools/call` |
+| `Mcp-Name` | The tool name for `tools/call` |
+| `Content-Type` | `application/json` |
+
+The values in `MCP-Protocol-Version`, `Mcp-Method` and `Mcp-Name` must match
+the JSON-RPC body. A mismatch is rejected with `HeaderMismatch` (`-32020`).
+
+Every request also carries protocol metadata inside `params._meta`:
+
+```json
+{
+  "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+  "io.modelcontextprotocol/clientInfo": {
+    "name": "your-client",
+    "version": "1.0.0"
+  },
+  "io.modelcontextprotocol/clientCapabilities": {}
+}
+```
+
+## Discover the server
+
+After OAuth, call `server/discover` before invoking a tool.
+
+```bash
+curl https://mcp.heyrafiki.space/api/mcp \
+  -X POST \
+  -H "Authorization: Bearer $HEYRAFIKI_MCP_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "MCP-Protocol-Version: 2026-07-28" \
+  -H "Mcp-Method: server/discover" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "server/discover",
+    "params": {
+      "_meta": {
+        "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+        "io.modelcontextprotocol/clientInfo": {
+          "name": "your-client",
+          "version": "1.0.0"
+        },
+        "io.modelcontextprotocol/clientCapabilities": {}
+      }
+    }
+  }'
+```
+
+Successful results use `resultType: "complete"`. Discovery and tool-list
+responses also include `ttlMs` and `cacheScope`. Treat `private` results as
+specific to the authenticated client and project.
+
+## Call a tool
+
+```bash
+curl https://mcp.heyrafiki.space/api/mcp \
+  -X POST \
+  -H "Authorization: Bearer $HEYRAFIKI_MCP_TOKEN" \
+  -H "Content-Type: application/json" \
+  -H "MCP-Protocol-Version: 2026-07-28" \
+  -H "Mcp-Method: tools/call" \
+  -H "Mcp-Name: list_practitioners" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 2,
+    "method": "tools/call",
+    "params": {
+      "name": "list_practitioners",
+      "arguments": { "limit": 10 },
+      "_meta": {
+        "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+        "io.modelcontextprotocol/clientInfo": {
+          "name": "your-client",
+          "version": "1.0.0"
+        },
+        "io.modelcontextprotocol/clientCapabilities": {}
+      }
+    }
+  }'
+```
+
+<Tip>
+  Use an MCP SDK where possible. It adds the required transport headers and
+  per-request metadata for you.
+</Tip>
 
 ## Available tools
 
@@ -42,6 +160,8 @@ The client starts OAuth when authorization is required. Access tokens are bound 
 
 ## Access boundaries
 
-Beta tools are read-only. Results are limited to the authenticated Sandbox project and Organization, and every call is checked against its required scope.
+Beta tools are read-only. Results are limited to the authenticated Sandbox
+project and Organization. Every request is size-bounded, rate-limited, scoped
+and recorded in the MCP access audit.
 
 [Request access](https://heyrafiki.space/waitlist) for a Sandbox project.

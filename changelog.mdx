@@ -6,6 +6,12 @@ rss: true
 
 Released API changes appear here. Product and website changes are on the [Heyrafiki changelog](https://heyrafiki.space/changelog).
 
+<Update label="9 August 2026" description="MCP 2026-07-28" tags={["Changed", "Beta"]}>
+**Changed** the remote MCP server to the `2026-07-28` protocol contract, including stateless discovery, per-request capability metadata, transport header validation and structured completion results.
+
+**Added** private cache hints for `server/discover` and `tools/list`. See [MCP server](/mcp-server) for the connection contract.
+</Update>
+
 <Update label="31 July 2026" description="Pre-authorization decisions" tags={["Added", "Changed"]}>
 **Added** `POST /v1/preauthorizations/{preauthorization_id}/decisions` for payer decisions. Approval reserves the Benefit. Denial leaves it available.
 
