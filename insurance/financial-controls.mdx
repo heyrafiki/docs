@@ -1,0 +1,106 @@
+---
+title: "Insurance financial controls"
+description: "Review the deterministic amount, authorization and reconciliation rules behind covered Care."
+keywords: ["insurance controls", "claim adjudication math", "remittance reconciliation", "actuarial data"]
+---
+
+Heyrafiki uses integer minor units, balanced Claim lines and distinct evidence for authorization, adjudication, remittance and settlement. Models may help a reviewer find work. Deterministic rules decide whether a financial state transition is valid and write its audit evidence.
+
+## Money representation
+
+- Every amount is an integer in the currency's minor unit.
+- Every resource carries its ISO 4217 currency.
+- Arithmetic does not use binary floating point.
+- Cross-currency allocation is rejected. Currency conversion remains outside the Claim contract.
+- Limits are applied to the service and effective period carried by the payer observation.
+
+## Claim line identities
+
+Each adjudicated line must balance:
+
+```text
+allowed = payer + patient_responsibility
+billed = allowed + adjustment
+```
+
+The Claim totals are the exact sum of their lines:
+
+```text
+claim_payer = sum(line.payer)
+claim_patient_responsibility = sum(line.patient_responsibility)
+claim_adjustment = sum(line.adjustment)
+claim_billed = sum(line.billed)
+```
+
+The recorded decision follows the payer amount:
+
+| Condition | Decision |
+| --- | --- |
+| `payer = 0` | `denied` |
+| `0 < payer < billed` | `partially_approved` |
+| `payer = billed` | `approved` |
+
+Negative amounts, unbalanced lines, duplicate line numbers and a decision that disagrees with the amounts are rejected.
+
+## Benefit reservation
+
+Eligibility observes the payer's current Benefit state for one Member reference, service, date and amount. It does not promise future Claim payment.
+
+When authorization is required, approval reserves one Session atomically. Retrying the same approval does not reserve a second Session. Cancellation or an authorized recovery releases the reservation through an explicit event rather than editing prior evidence.
+
+## Adjudication provenance
+
+Every adjudication records:
+
+- the Claim and submission version reviewed;
+- the payer policy reference and version;
+- a decision for every submitted line;
+- coded reasons and bounded evidence references;
+- the authorized actor and decision time;
+- a new adjudication version when the payer changes its decision.
+
+Earlier submissions, information requests and decisions remain in the audit history.
+
+## Remittance and settlement
+
+Remittance is payer advice. Settlement is independent evidence that funds moved. They are recorded separately.
+
+```text
+remittance_paid = sum(allocation.paid_amount)
+claim_advice_outstanding = claim_approved - cumulative_remittance_allocations
+claim_settlement_outstanding = claim_approved - cumulative_matched_settlement
+```
+
+A remittance reaches `reconciled` only when an independent settlement observation matches its payer, currency and total. A variance moves the remittance to `exception` for review. A Claim reaches `settled` only when cumulative matched settlement equals its approved payer amount.
+
+Over-allocation, payer mismatch, currency mismatch and allocation to a Claim without an adjudicated payer amount are rejected.
+
+## Actuarial use
+
+The operational contract preserves the service date, Coverage version, Benefit decision, submitted amount, allowed amount, payer amount, status history and remittance timing needed for governed payer analysis.
+
+Actuarial measures require explicit exposure and valuation assumptions. A payer analysis should define at least:
+
+```text
+claim_frequency = incurred_claim_count / member_exposure_units
+claim_severity = incurred_allowed_amount / incurred_claim_count
+incurred_cost_per_exposure = incurred_allowed_amount / member_exposure_units
+loss_ratio = incurred_claim_cost / earned_premium
+```
+
+Use one stated cohort basis and valuation date. Distinguish service date, submission date, adjudication date and payment date. Count Claims consistently, preserve zero-Claim exposure, and include an explicit treatment for reported-but-not-settled and incurred-but-not-reported cost.
+
+The payer remains the authority for premium, exposure, reserving assumptions, IBNR, capital models, IFRS 17 measurement and regulatory returns. Heyrafiki supplies governed operational evidence and does not replace the payer's actuarial valuation system.
+
+## Evidence available to reviewers
+
+| Control | Evidence |
+| --- | --- |
+| Amount balance | OpenAPI schemas, database constraints and automated behavior tests |
+| Retry safety | Idempotency records and same-key replay tests |
+| Decision authority | Organization, project, scope and actor records |
+| Change history | Append-only observations, submissions, decisions and Events |
+| Payment separation | Distinct remittance advice, settlement observation and reconciliation records |
+| Privacy boundary | Opaque references and schemas that exclude clinical content |
+
+Review the [Claims guide](/claims), [Security boundary](/security/data-boundaries) and [acceptance test plan](/insurance/acceptance-testing) alongside the API contract.
