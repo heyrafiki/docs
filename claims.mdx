@@ -87,7 +87,7 @@ curl https://api.heyrafiki.space/v1/remittances \
   }'
 ```
 
-A remittance may allocate to several Claims. Each allocation posts a balanced ledger transaction. A Claim reaches `settled` only when cumulative remittance equals its approved amount.
+A remittance may allocate to several Claims. The allocations remain payer advice until an authorized settlement source independently confirms the funds. A matching settlement observation posts the balanced ledger transaction. A Claim reaches `settled` only when cumulative matched settlement equals its approved amount.
 
 <Note>
   Eligibility is an observation for a service date, not a guarantee of Claim payment.

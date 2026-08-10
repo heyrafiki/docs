@@ -74,6 +74,14 @@
         "pages": ["sandbox", "benefits", "claims", "testing", "sdks", "webhooks", "mcp-server"]
       },
       {
+        "group": "Insurance integration",
+        "pages": [
+          "insurance/integration-guide",
+          "insurance/financial-controls",
+          "insurance/acceptance-testing"
+        ]
+      },
+      {
         "group": "API reference",
         "openapi": "openapi/heyrafiki.openapi.yaml",
         "pages": [
