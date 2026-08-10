@@ -1,119 +1,174 @@
 ---
 title: "SDKs"
-description: "Typed clients generated from the same public contract."
-keywords: ["Heyrafiki SDK", "healthcare API clients", "Heyrafiki CLI"]
+description: "Typed JavaScript, Python, Go, .NET and Rust clients for the Heyrafiki API."
+keywords: ["Heyrafiki SDK", "healthcare API clients", "insurance API", "Heyrafiki CLI"]
 ---
 
-SDKs follow the canonical OpenAPI contract and shared conformance fixtures.
+Every SDK follows the same OpenAPI contract, authentication rules, idempotency
+requirements, error envelope and request identifiers.
 
-## Language roadmap
+## Choose a client
 
-| Client | Status | Primary use |
+| Client | Runtime | Primary use |
 | --- | --- | --- |
-| JavaScript and TypeScript | Source preview | Node.js services and web applications |
-| CLI | Source preview | Local development, CI and operations |
-| OpenAPI 3.1 | Published | Code generation and contract validation |
-| Python | Source preview | Backend services, research and data workflows |
-| Go | Source preview | Backend services, infrastructure and integration tooling |
-| .NET | Source preview | Insurers, health systems and government integrations |
-| Dart and Flutter | Planned | Cross-platform applications |
-| Kotlin | Planned | Android applications |
-| Swift | Planned | Apple platform applications |
-| Rust | Source preview | Systems integrations and high-throughput services |
+| [`rafiki-js`](https://github.com/heyrafiki/rafiki-js) | Node.js 22+ | TypeScript services and web backends |
+| [`rafiki-py`](https://github.com/heyrafiki/rafiki-py) | Python 3.10+ | Backend services, research and data workflows |
+| [`rafiki-go`](https://github.com/heyrafiki/rafiki-go) | Go 1.25+ | Infrastructure and integration services |
+| [`rafiki-net`](https://github.com/heyrafiki/rafiki-net) | .NET Standard 2.0, .NET 8 and .NET 10 | Insurer, health-system and government integrations |
+| [`rafiki-rs`](https://github.com/heyrafiki/rafiki-rs) | Rust 1.85+ | Correctness-sensitive and high-throughput services |
+| [`hey`](https://github.com/heyrafiki/hey) | Node.js 22+ | Local diagnostics, CI and governed API reads |
+| [`contract`](https://github.com/heyrafiki/contract) | OpenAPI 3.1 | Code generation and contract validation |
 
-A client is published when it has an owner, automated releases and conformance coverage for authentication, errors, pagination, retries and idempotency.
+Each client is available from its public repository for Sandbox integration.
+The repository owns its source-install path, compatibility policy, release
+checks and provenance.
 
-## Language clients
+## Build from source
 
-<Columns cols={2}>
-  <Card title="Python" href="https://github.com/heyrafiki/heyrafiki-python">
-    Typed synchronous and asynchronous clients for Python 3.10 and newer.
-  </Card>
-  <Card title="Go" href="https://github.com/heyrafiki/heyrafiki-go">
-    Typed services, request controls and bounded retry behavior for Go.
-  </Card>
-  <Card title=".NET" href="https://github.com/heyrafiki/heyrafiki-dotnet">
-    Typed clients for .NET, including insurer and health-system integrations.
-  </Card>
-  <Card title="Rust" href="https://github.com/heyrafiki/heyrafiki-rust">
-    Typed clients for systems integrations and correctness-sensitive services.
-  </Card>
-</Columns>
+<Tabs>
+  <Tab title="JavaScript">
 
-<Note>
-  The source previews are public. Registry packages have not been released.
-</Note>
+```bash
+git clone https://github.com/heyrafiki/rafiki-js.git
+cd rafiki-js
+npm ci
+npm run check
+```
 
-## JavaScript and TypeScript
+  </Tab>
+  <Tab title="Python">
 
-The [public source preview](https://github.com/heyrafiki/heyrafiki-js) covers API discovery, Practitioner discovery, availability, Bookings, Benefit eligibility, pre-authorizations, Sessions, Claims, remittances and Webhook endpoints.
+```bash
+git clone https://github.com/heyrafiki/rafiki-py.git
+cd rafiki-py
+python -m pip install -e ".[dev]"
+pytest
+```
 
-<Note>
-  The npm package is not published.
-</Note>
+  </Tab>
+  <Tab title="Go">
 
-```ts
-import { Heyrafiki } from "@heyrafiki/heyrafiki-js";
+```bash
+git clone https://github.com/heyrafiki/rafiki-go.git
+cd rafiki-go
+go test -race ./...
+```
+
+  </Tab>
+  <Tab title=".NET">
+
+```bash
+git clone https://github.com/heyrafiki/rafiki-net.git
+cd rafiki-net
+dotnet restore
+dotnet test -c Release
+```
+
+  </Tab>
+  <Tab title="Rust">
+
+```bash
+git clone https://github.com/heyrafiki/rafiki-rs.git
+cd rafiki-rs
+cargo test --all-features
+```
+
+  </Tab>
+</Tabs>
+
+## Make the first request
+
+<CodeGroup>
+
+```typescript JavaScript
+import { Heyrafiki } from "@heyrafiki/rafiki-js";
 
 const heyrafiki = new Heyrafiki({
   apiKey: process.env.HEYRAFIKI_API_KEY!,
 });
 
-const practitioners = await heyrafiki.practitioners.list({ limit: 10 });
-
-const booking = await heyrafiki.bookings.create(
-  {
-    practitioner_id: practitioners.data[0].id,
-    starts_at: "2026-08-03T06:00:00.000Z",
-    ends_at: "2026-08-03T07:00:00.000Z",
-    format: "online",
-    payment_source: "self_pay",
-  },
-  { idempotencyKey: "booking-demo-001" },
-);
-
-const eligibility = await heyrafiki.eligibilityChecks.create(
-  {
-    member_reference: "member_demo_jubilee_001",
-    service_code: "psychotherapy-60",
-    scheduled_at: booking.starts_at,
-    amount: 380000,
-    currency: "KES",
-  },
-  { idempotencyKey: "eligibility-demo-001" },
-);
-
-const claim = await heyrafiki.claims.create(
-  {
-    eligibility_check_id: eligibility.id,
-    session_id: "ses_demo_claim_ready_001",
-    provider_claim_reference: "provider:claim:1042",
-    lines: [
-      {
-        code_system: "urn:heyrafiki:service-code",
-        code_system_version: "2026-07",
-        service_code: "psychotherapy-60",
-        units: 1,
-        amount: 380000,
-      },
-    ],
-  },
-  { idempotencyKey: "claim-demo-1042" },
-);
+const practitioners = await heyrafiki.practitioners.list({ limit: 5 });
 ```
 
-The REST reference owns behavior. Client packages retain its resource names, scopes and error envelope.
+```python Python
+import os
+
+from heyrafiki import create_client, unwrap
+from heyrafiki.api.default import list_practitioners
+
+with create_client(os.environ["HEYRAFIKI_API_KEY"]) as client:
+    response = list_practitioners.sync_detailed(client=client, limit=5)
+    practitioners = unwrap(response)
+```
+
+```go Go
+client, err := heyrafiki.NewClient(os.Getenv("HEYRAFIKI_API_KEY"))
+if err != nil {
+    log.Fatal(err)
+}
+
+practitioners, err := client.Practitioners.List(
+    context.Background(),
+    &heyrafiki.ListOptions{Limit: 5},
+)
+```
+
+```csharp .NET
+using var heyrafiki = new HeyrafikiClient(new HeyrafikiClientOptions
+{
+    ApiKey = Environment.GetEnvironmentVariable("HEYRAFIKI_API_KEY")
+        ?? throw new InvalidOperationException("HEYRAFIKI_API_KEY is required."),
+});
+
+var practitioners = await heyrafiki.Practitioners.ListAsync(limit: 5);
+```
+
+```rust Rust
+let client = Client::new(std::env::var("HEYRAFIKI_API_KEY")?)?;
+let practitioners = client
+    .practitioners()
+    .list(ListParams::new(5)?)
+    .await?;
+```
+
+</CodeGroup>
+
+Sandbox keys return fictitious records. Keep secret keys in server-side secret
+stores and retain the request identifier when tracing a failed call.
+
+## Write safely
+
+All clients preserve the REST contract's write controls:
+
+- caller-owned idempotency keys for replay-safe writes;
+- bounded retries only where the operation and key make retry safe;
+- typed errors with HTTP status, stable error code and request identifier;
+- integer minor units for money;
+- no automatic exposure of raw response bodies in errors.
+
+The REST reference remains authoritative for resource behavior, scopes and
+error codes.
 
 ## Command line
 
-The [CLI source preview](https://github.com/heyrafiki/heyrafiki-js/tree/main/cli) supports read requests. No npm package is published.
+[`hey`](https://github.com/heyrafiki/hey) checks local configuration and makes
+authenticated read requests against Sandbox projects.
 
-## Repositories
+```bash
+git clone https://github.com/heyrafiki/hey.git
+cd hey
+npm ci
+npm run check
+node dist/index.js doctor
+```
 
-- [`heyrafiki-js`](https://github.com/heyrafiki/heyrafiki-js) contains the typed server-side client and its tests.
-- [`heyrafiki-js/cli`](https://github.com/heyrafiki/heyrafiki-js/tree/main/cli) contains the command-line client and its tests.
-- [`heyrafiki-python`](https://github.com/heyrafiki/heyrafiki-python) contains the Python client and its contract-generation checks.
-- [`heyrafiki-go`](https://github.com/heyrafiki/heyrafiki-go) contains the Go client and its conformance tests.
-- [`heyrafiki-dotnet`](https://github.com/heyrafiki/heyrafiki-dotnet) contains the .NET client and its package verification.
-- [`heyrafiki-rust`](https://github.com/heyrafiki/heyrafiki-rust) contains the Rust client and its dependency policy.
-- [`openapi`](https://github.com/heyrafiki/openapi) contains the versioned OpenAPI 3.1 contract.
+## Verify the contract
+
+<Columns cols={2}>
+  <Card title="Contract" icon="brackets-curly" href="https://github.com/heyrafiki/contract">
+    Inspect the versioned OpenAPI schemas, scopes, errors and Assurance Graph.
+  </Card>
+  <Card title="Proving Ground" icon="flask" href="https://github.com/heyrafiki/proving-ground">
+    Run contract, financial-identity, bitemporal and adversarial conformance suites.
+  </Card>
+</Columns>

@@ -81,7 +81,7 @@ curl --get "https://api.heyrafiki.space/v1/claims/$CLAIM_ID/valuation" \
 ```
 
 ```javascript Node.js
-import { Heyrafiki } from "@heyrafiki/heyrafiki-js";
+import { Heyrafiki } from "@heyrafiki/rafiki-js";
 
 const heyrafiki = new Heyrafiki({
   apiKey: process.env.HEYRAFIKI_API_KEY,
@@ -204,11 +204,11 @@ The response includes the ordered Claim events with `effective_at`, `recorded_at
 
 ## Inspect the public evidence
 
-The [synthetic valuation fixture](https://github.com/heyrafiki/openapi/blob/main/fixtures/claim-valuation-timeline.json), [JSON Schema](https://github.com/heyrafiki/openapi/blob/main/assurance/claim-valuation-timeline.schema.json) and [conformance test](https://github.com/heyrafiki/openapi/blob/main/scripts/check-claim-valuation-timeline.mjs) live with the OpenAPI contract.
+The [valuation fixture](https://github.com/heyrafiki/proving-ground/blob/main/fixtures/claim-valuation-timeline.json), [JSON Schema](https://github.com/heyrafiki/proving-ground/blob/main/assurance/claim-valuation-timeline.schema.json) and [conformance test](https://github.com/heyrafiki/proving-ground/blob/main/scripts/check-claim-valuation-timeline.mjs) live in Proving Ground.
 
 ```bash
-git clone https://github.com/heyrafiki/openapi.git
-cd openapi
+git clone https://github.com/heyrafiki/proving-ground.git
+cd proving-ground
 npm ci
 npm run test:financial-controls
 ```

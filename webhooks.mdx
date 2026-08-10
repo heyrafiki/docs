@@ -18,7 +18,7 @@ curl https://api.heyrafiki.space/v1/webhook_endpoints \
 
 The response contains `signing_secret` once. Store it in a secret manager.
 
-Private-beta endpoints use HTTPS on an approved public hostname. Redirects and private network addresses are refused.
+Webhook endpoints use HTTPS on an approved public hostname. Redirects and private network addresses are refused.
 
 <Tip>
   Return `2xx` after signature verification and durable event capture. Run slow Claim, reporting or notification work asynchronously.
