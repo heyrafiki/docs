@@ -8,7 +8,7 @@
 /* Page title */
 #content-area h1,
 article h1 {
-  font-size: 1.9rem;
+  font-size: 1.68rem;
   line-height: 1.15;
   letter-spacing: -0.03em;
   font-weight: 600;
@@ -17,7 +17,7 @@ article h1 {
 /* Section headings */
 #content-area h2,
 article h2 {
-  font-size: 1.22rem;
+  font-size: 1.08rem;
   line-height: 1.25;
   letter-spacing: -0.02em;
   font-weight: 600;
@@ -26,7 +26,7 @@ article h2 {
 
 #content-area h3,
 article h3 {
-  font-size: 1.02rem;
+  font-size: 0.92rem;
   line-height: 1.3;
   letter-spacing: -0.015em;
   font-weight: 600;
@@ -37,19 +37,19 @@ article h3 {
 #content-area li,
 article p,
 article li {
-  font-size: 0.95rem;
-  line-height: 1.68;
+  font-size: 0.84rem;
+  line-height: 1.66;
 }
 
 /* The lede under a page title */
 #content-area > div:first-child p:first-of-type {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 /* Tables read as data, not prose */
 #content-area table,
 article table {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
 }
 
 #content-area th,
@@ -61,18 +61,32 @@ article th {
 /* Code sits a touch smaller so snippets fit without wrapping */
 #content-area code,
 article code {
-  font-size: 0.84rem;
+  font-size: 0.78rem;
 }
 
 #content-area pre code,
 article pre code {
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   line-height: 1.6;
 }
 
 /* Cards on the landing page */
 #content-area .card h2,
 #content-area .card h3 {
-  font-size: 0.95rem;
+  font-size: 0.86rem;
   margin-top: 0;
+}
+
+/* Dense institutional tables need clear row tracking without adding visual weight. */
+#content-area tbody tr:nth-child(even),
+article tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--hr-brand) 3%, transparent);
+}
+
+/* Keep touch targets comfortable even as the reading scale becomes denser. */
+#content-area a,
+#content-area button,
+article a,
+article button {
+  text-underline-offset: 0.18em;
 }

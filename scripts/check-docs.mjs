@@ -59,7 +59,25 @@ for (const line of spec.split(/\r?\n/)) {
   if (currentPath && methodMatch) operations.add(`${methodMatch[1].toUpperCase()} ${currentPath}`);
 }
 
-const activePages = config.navigation.groups.flatMap((group) => group.pages ?? []);
+function collectNavigationPages(node) {
+  if (typeof node === "string") return [node];
+  if (Array.isArray(node)) return node.flatMap(collectNavigationPages);
+  if (!node || typeof node !== "object") return [];
+
+  return [
+    ...(node.pages ? collectNavigationPages(node.pages) : []),
+    ...(node.groups ? collectNavigationPages(node.groups) : []),
+    ...(node.tabs ? collectNavigationPages(node.tabs) : []),
+    ...(node.anchors ? collectNavigationPages(node.anchors) : []),
+    ...(node.dropdowns ? collectNavigationPages(node.dropdowns) : []),
+    ...(node.products ? collectNavigationPages(node.products) : []),
+    ...(node.versions ? collectNavigationPages(node.versions) : []),
+    ...(node.languages ? collectNavigationPages(node.languages) : []),
+    ...(node.menu ? collectNavigationPages(node.menu) : []),
+  ];
+}
+
+const activePages = [...new Set(collectNavigationPages(config.navigation))];
 for (const page of activePages) {
   if (/^(GET|POST|PUT|PATCH|DELETE) \//.test(page)) {
     if (!operations.has(page)) failures.push(`docs.json: unknown OpenAPI operation ${page}`);

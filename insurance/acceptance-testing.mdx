@@ -6,6 +6,41 @@ keywords: ["payer sandbox", "insurance API testing", "claims integration testing
 
 Use one isolated Sandbox project and synthetic records for the full payer pilot. Keep the API key in a secret manager and store the request ID, idempotency key and resulting resource identifier for every write.
 
+<Tip>
+  Run the pilot as one shared evidence room. Payer engineering, actuarial and finance, Care operations, security and privacy, and governance each sign off on their own controls against the same synthetic workflow.
+</Tip>
+
+## Pilot control room
+
+<Tabs>
+  <Tab title="Engineering" icon="code">
+    Own the contract commit, environment mapping, retry policy, idempotency keys, Webhook consumer and integration logs.
+  </Tab>
+  <Tab title="Actuarial and finance" icon="calculator">
+    Own independent amount recomputation, Benefit interpretation, valuation assumptions, remittance allocation and settlement variance review.
+  </Tab>
+  <Tab title="Care operations" icon="stethoscope">
+    Own service-code mapping, Practitioner workflow, delivered-service evidence and escalation when operational evidence is incomplete.
+  </Tab>
+  <Tab title="Security and privacy" icon="lock">
+    Own scopes, tenant isolation, synthetic-data controls, secret handling, signature verification and data-minimization review.
+  </Tab>
+  <Tab title="Governance" icon="scale-balanced">
+    Own policy references, decision authority, audit retrieval, incident contacts, activation approval and rollback authority.
+  </Tab>
+</Tabs>
+
+```mermaid
+flowchart LR
+    Contract["Freeze contract commit"] --> Positive["Run positive workflow"]
+    Positive --> Negative["Run authorization and failure cases"]
+    Negative --> Reconcile["Recompute financial evidence"]
+    Reconcile --> Retrieve["Retrieve audit pack"]
+    Retrieve --> Decide{"Named owners approve"}
+    Decide -->|Approved| Gate["Open production activation gate"]
+    Decide -->|Changes required| Contract
+```
+
 ## Acceptance sequence
 
 | Sequence | Test | Evidence to retain |
@@ -81,6 +116,35 @@ The pilot evidence pack should contain:
 - the production activation and rollback checklist.
 
 Do not place keys, personal data, clinical records or payment credentials in the evidence pack.
+
+<AccordionGroup>
+  <Accordion title="Minimum evidence pack structure" icon="folder-tree" defaultOpen>
+    <Tree>
+      <Tree.Folder name="01-contract" defaultOpen>
+        <Tree.File name="openapi-commit.txt" />
+        <Tree.File name="service-code-map.csv" />
+        <Tree.File name="scope-map.md" />
+      </Tree.Folder>
+      <Tree.Folder name="02-execution">
+        <Tree.File name="synthetic-fixtures.json" />
+        <Tree.File name="request-index.csv" />
+        <Tree.File name="negative-tests.md" />
+      </Tree.Folder>
+      <Tree.Folder name="03-financial-controls">
+        <Tree.File name="claim-recalculation.csv" />
+        <Tree.File name="remittance-reconciliation.csv" />
+      </Tree.Folder>
+      <Tree.Folder name="04-governance">
+        <Tree.File name="owner-map.md" />
+        <Tree.File name="activation-checklist.md" />
+        <Tree.File name="rollback-plan.md" />
+      </Tree.Folder>
+    </Tree>
+  </Accordion>
+  <Accordion title="Evidence that must stay outside the pack" icon="ban">
+    API keys, WorkOS credentials, Person identity, Clinical Notes, Session content, Assessment answers, payment credentials and unrestricted production exports remain outside the pilot repository.
+  </Accordion>
+</AccordionGroup>
 
 ## Exit criteria
 
