@@ -6,7 +6,8 @@ keywords: ["regulatory assurance", "insurance API controls", "government integra
 
 The Assurance Graph connects each public API operation to an accountable capability, control owner, governing source and executable evidence artifact. It gives insurer, government, regulator, security and engineering reviewers one path from a public statement to the contract and test that support it.
 
-The graph describes verified Heyrafiki behavior. It does not claim regulatory approval, certification or partnership.
+The graph describes verified Heyrafiki behavior and keeps each institutional
+authority, operating decision and control owner explicit.
 
 ```mermaid
 flowchart LR
@@ -44,25 +45,25 @@ flowchart LR
   </Accordion>
 </AccordionGroup>
 
-## Current graph coverage
+## Graph coverage
 
 The graph maps 31 public operations into 10 accountable capabilities and 9 controls. It covers API discovery, Practitioners, Bookings, Sessions, eligibility, Coverage, pre-authorization, Claim valuation, remittance and Webhooks.
 
 <CardGroup cols={2}>
-  <Card title="Run the benchmark" icon="flask" href="https://github.com/heyrafiki/openapi/blob/main/BENCHMARK.md">
+  <Card title="Run the benchmark" icon="flask" href="https://github.com/heyrafiki/proving-ground">
     Reproduce four suites and five adversarial mutation checks from the public manifest.
   </Card>
-  <Card title="Open the graph" icon="diagram-project" href="https://github.com/heyrafiki/openapi/blob/main/assurance/assurance-graph.json">
+  <Card title="Open the graph" icon="diagram-project" href="https://github.com/heyrafiki/contract/blob/main/assurance/assurance-graph.json">
     Inspect the machine-readable capability, source, control and evidence links.
   </Card>
-  <Card title="Read the schema" icon="brackets-curly" href="https://github.com/heyrafiki/openapi/blob/main/assurance/assurance-graph.schema.json">
+  <Card title="Read the schema" icon="brackets-curly" href="https://github.com/heyrafiki/contract/blob/main/assurance/assurance-graph.schema.json">
     Validate the graph independently with JSON Schema 2020-12.
   </Card>
 </CardGroup>
 
 ```bash
-git clone https://github.com/heyrafiki/openapi.git
-cd openapi
+git clone https://github.com/heyrafiki/proving-ground.git
+cd proving-ground
 npm ci
 npm test
 ```
@@ -73,10 +74,11 @@ The suite validates the OpenAPI contract, financial invariants, the bitemporal C
 
 API discovery and the public evidence repository are open. Sandbox operations use a sandbox key. Institutional capabilities use scoped Organization grants with separately approved production authority.
 
-Create a key in the [Developer Platform](https://app.heyrafiki.space/dev/keys) if your Organization has access. Otherwise [request access](https://heyrafiki.space/waitlist) and review the [synthetic pilot acceptance plan](/insurance/acceptance-testing) now.
+Create a key in the [Developer Platform](https://app.heyrafiki.space/dev/keys) if your Organization has access. Otherwise [request access](https://heyrafiki.space/waitlist) and review the [acceptance test plan](/insurance/acceptance-testing) now.
 
 ## Research surface
 
 The open conformance system provides a reproducible base for research in reported Claim development, mental-health Benefit utilization, provider-network capacity, privacy-constrained aggregation and Consent-aware computation. A research claim requires a formal problem, stated assumptions, baseline methods, reproducible synthetic or approved data, evaluation results and expert review.
 
-That boundary is deliberate. The graph makes a new hypothesis testable; it does not label an untested idea as new mathematics.
+The graph turns each research hypothesis into a reviewable path through stated
+assumptions, versioned evidence, baseline methods and reproducible results.
