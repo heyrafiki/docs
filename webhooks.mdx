@@ -20,6 +20,10 @@ The response contains `signing_secret` once. Store it in a secret manager.
 
 Private-beta endpoints use HTTPS on an approved public hostname. Redirects and private network addresses are refused.
 
+<Tip>
+  Return `2xx` after signature verification and durable event capture. Run slow Claim, reporting or notification work asynchronously.
+</Tip>
+
 ## Verify a delivery
 
 Heyrafiki sends:
@@ -44,6 +48,85 @@ Heyrafiki sends:
 
 Compute HMAC-SHA256 over `<timestamp>.<raw body>` with the signing secret. Compare signatures in constant time and reject timestamps outside five minutes. Verify the raw bytes before parsing JSON.
 
+<CodeGroup>
+
+```javascript Node.js
+import { createHmac, timingSafeEqual } from "node:crypto";
+
+export function verifyHeyrafikiWebhook(rawBody, signatureHeader, secret) {
+  const parts = Object.fromEntries(
+    signatureHeader.split(",").map((part) => part.trim().split("=", 2)),
+  );
+  const timestamp = Number(parts.t);
+  const supplied = Buffer.from(parts.v1 ?? "", "hex");
+  const expected = Buffer.from(
+    createHmac("sha256", secret)
+      .update(String(timestamp) + "." + rawBody)
+      .digest("hex"),
+    "hex",
+  );
+
+  const fresh = Math.abs(Date.now() / 1000 - timestamp) <= 300;
+  return fresh && supplied.length === expected.length &&
+    timingSafeEqual(supplied, expected);
+}
+```
+
+```python Python
+import hashlib
+import hmac
+import time
+
+def verify_heyrafiki_webhook(raw_body: bytes, header: str, secret: str) -> bool:
+    parts = dict(part.strip().split("=", 1) for part in header.split(","))
+    timestamp = int(parts["t"])
+    signed = str(timestamp).encode() + b"." + raw_body
+    expected = hmac.new(secret.encode(), signed, hashlib.sha256).hexdigest()
+    fresh = abs(time.time() - timestamp) <= 300
+    return fresh and hmac.compare_digest(parts.get("v1", ""), expected)
+```
+
+```go Go
+package webhooks
+
+import (
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/hex"
+    "strconv"
+    "strings"
+    "time"
+)
+
+func Verify(rawBody []byte, header, secret string, now time.Time) bool {
+    parts := map[string]string{}
+    for _, part := range strings.Split(header, ",") {
+        pair := strings.SplitN(strings.TrimSpace(part), "=", 2)
+        if len(pair) == 2 {
+            parts[pair[0]] = pair[1]
+        }
+    }
+
+    timestamp, err := strconv.ParseInt(parts["t"], 10, 64)
+    supplied, decodeErr := hex.DecodeString(parts["v1"])
+    if err != nil || decodeErr != nil ||
+        now.Sub(time.Unix(timestamp, 0)).Abs() > 5*time.Minute {
+        return false
+    }
+
+    mac := hmac.New(sha256.New, []byte(secret))
+    mac.Write([]byte(strconv.FormatInt(timestamp, 10) + "."))
+    mac.Write(rawBody)
+    return hmac.Equal(supplied, mac.Sum(nil))
+}
+```
+
+</CodeGroup>
+
+<Warning>
+  Read and verify the raw request body. Re-serializing parsed JSON changes the signed bytes and invalidates the comparison.
+</Warning>
+
 ## Test an endpoint
 
 ```bash
@@ -53,6 +136,18 @@ curl https://api.heyrafiki.space/v1/webhook_endpoints/whe_xxx/test \
 ```
 
 The sandbox sends `sandbox.ping`. Transient failures use bounded retries and retain the same event identifier.
+
+<AccordionGroup>
+  <Accordion title="Accepted delivery" icon="circle-check" defaultOpen>
+    Return `200`, `202` or another `2xx` response only after the event identifier and raw payload are durably captured. Duplicate identifiers return success without repeating the business action.
+  </Accordion>
+  <Accordion title="Retryable delivery">
+    A timeout or retryable server response keeps the same event identifier. Consumers must make event processing idempotent and must not create a second Claim, payment action or notification.
+  </Accordion>
+  <Accordion title="Rejected delivery">
+    Reject a missing signature, invalid digest or stale timestamp before parsing or processing the event. Do not reveal the signing secret or comparison details in the response.
+  </Accordion>
+</AccordionGroup>
 
 ## Event types
 

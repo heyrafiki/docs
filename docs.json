@@ -33,6 +33,19 @@
       "family": "Instrument Sans"
     }
   },
+  "api": {
+    "openapi": "openapi/heyrafiki.openapi.yaml",
+    "playground": {
+      "display": "interactive",
+      "proxy": true
+    },
+    "examples": {
+      "languages": ["bash", "javascript", "python", "go"],
+      "defaults": "required",
+      "prefill": true,
+      "autogenerate": true
+    }
+  },
   "navbar": {
     "links": [
       {
@@ -55,83 +68,117 @@
   "metadata": {
     "timestamp": true
   },
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude", "mcp", "cursor"]
+  },
   "navigation": {
-    "groups": [
+    "tabs": [
       {
-        "group": "Get started",
-        "pages": [
-          "index",
-          "quickstart",
-          "authentication",
-          "scopes",
-          "environments",
-          "requests",
-          "errors"
+        "tab": "Build",
+        "icon": "code",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "index",
+              "quickstart",
+              "authentication",
+              "scopes",
+              "environments",
+              "requests",
+              "errors"
+            ]
+          },
+          {
+            "group": "Integration tools",
+            "pages": ["sandbox", "testing", "sdks", "webhooks", "mcp-server"]
+          }
         ]
       },
       {
-        "group": "Build",
-        "pages": ["sandbox", "benefits", "claims", "testing", "sdks", "webhooks", "mcp-server"]
-      },
-      {
-        "group": "Insurance integration",
-        "pages": [
-          "insurance/integration-guide",
-          "insurance/financial-controls",
-          "insurance/acceptance-testing"
+        "tab": "Insurance",
+        "icon": "shield-check",
+        "groups": [
+          {
+            "group": "Payer workflows",
+            "pages": ["benefits", "claims"]
+          },
+          {
+            "group": "Integration assurance",
+            "pages": [
+              "insurance/integration-guide",
+              "insurance/financial-controls",
+              "insurance/acceptance-testing"
+            ]
+          }
         ]
       },
       {
-        "group": "API reference",
-        "openapi": "openapi/heyrafiki.openapi.yaml",
-        "pages": [
-          "resources",
-          "GET /",
-          "GET /practitioners",
-          "GET /practitioners/{practitioner_id}",
-          "GET /practitioners/{practitioner_id}/availability",
-          "GET /bookings",
-          "POST /bookings",
-          "GET /bookings/{booking_id}",
-          "GET /sessions",
-          "GET /sessions/{session_id}",
-          "POST /coverages",
-          "POST /coverage_batches",
-          "POST /eligibility_checks",
-          "GET /eligibility_checks/{eligibility_check_id}",
-          "POST /preauthorizations",
-          "GET /preauthorizations/{preauthorization_id}",
-          "POST /preauthorizations/{preauthorization_id}/decisions",
-          "GET /claims",
-          "POST /claims",
-          "GET /claims/{claim_id}",
-          "POST /claims/{claim_id}/information_requests",
-          "POST /claims/{claim_id}/evidence",
-          "POST /claims/{claim_id}/adjudications",
-          "GET /remittances",
-          "POST /remittances",
-          "GET /remittances/{remittance_id}",
-          "GET /webhook_endpoints",
-          "POST /webhook_endpoints",
-          "GET /webhook_endpoints/{webhook_endpoint_id}",
-          "DELETE /webhook_endpoints/{webhook_endpoint_id}",
-          "POST /webhook_endpoints/{webhook_endpoint_id}/test",
-          "rate-limits",
-          "versioning"
+        "tab": "Institutions",
+        "icon": "landmark",
+        "groups": [
+          {
+            "group": "Institutional integration",
+            "pages": [
+              "concepts/institutions",
+              "concepts/platform",
+              "concepts/capabilities"
+            ]
+          },
+          {
+            "group": "Security and data governance",
+            "pages": ["security/overview", "security/data-boundaries"]
+          }
         ]
       },
       {
-        "group": "Platform",
-        "pages": [
-          "concepts/platform",
-          "concepts/institutions",
-          "concepts/capabilities",
-          "security/overview",
-          "security/data-boundaries"
+        "tab": "API reference",
+        "icon": "brackets-curly",
+        "groups": [
+          {
+            "group": "REST API",
+            "openapi": "openapi/heyrafiki.openapi.yaml",
+            "pages": [
+              "resources",
+              "GET /",
+              "GET /practitioners",
+              "GET /practitioners/{practitioner_id}",
+              "GET /practitioners/{practitioner_id}/availability",
+              "GET /bookings",
+              "POST /bookings",
+              "GET /bookings/{booking_id}",
+              "GET /sessions",
+              "GET /sessions/{session_id}",
+              "POST /coverages",
+              "POST /coverage_batches",
+              "POST /eligibility_checks",
+              "GET /eligibility_checks/{eligibility_check_id}",
+              "POST /preauthorizations",
+              "GET /preauthorizations/{preauthorization_id}",
+              "POST /preauthorizations/{preauthorization_id}/decisions",
+              "GET /claims",
+              "POST /claims",
+              "GET /claims/{claim_id}",
+              "POST /claims/{claim_id}/information_requests",
+              "POST /claims/{claim_id}/evidence",
+              "POST /claims/{claim_id}/adjudications",
+              "GET /remittances",
+              "POST /remittances",
+              "GET /remittances/{remittance_id}",
+              "GET /webhook_endpoints",
+              "POST /webhook_endpoints",
+              "GET /webhook_endpoints/{webhook_endpoint_id}",
+              "DELETE /webhook_endpoints/{webhook_endpoint_id}",
+              "POST /webhook_endpoints/{webhook_endpoint_id}/test",
+              "rate-limits",
+              "versioning"
+            ]
+          }
         ]
       },
       {
-        "group": "Changelog",
+        "tab": "Changelog",
+        "icon": "clock-rotate-left",
         "pages": ["changelog"]
       }
     ]
