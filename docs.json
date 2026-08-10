@@ -161,6 +161,7 @@
               "GET /claims",
               "POST /claims",
               "GET /claims/{claim_id}",
+              "GET /claims/{claim_id}/valuation",
               "POST /claims/{claim_id}/information_requests",
               "POST /claims/{claim_id}/evidence",
               "POST /claims/{claim_id}/adjudications",

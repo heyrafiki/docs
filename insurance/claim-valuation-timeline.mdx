@@ -68,6 +68,140 @@ Remittance remains payer advice. Settlement remains independent evidence of mone
   </Tab>
 </Tabs>
 
+## Call the valuation
+
+Use the Claim identifier created by the Sandbox flow and supply an explicit ISO 8601 cutoff. The operation requires `claims:read` and returns only facts whose business time and knowledge time are both on or before the cutoff.
+
+<CodeGroup>
+
+```bash cURL
+curl --get "https://api.heyrafiki.space/v1/claims/$CLAIM_ID/valuation" \
+  --header "Authorization: Bearer $HEYRAFIKI_API_KEY" \
+  --data-urlencode "valuation_at=2026-07-31T23:59:59.000Z"
+```
+
+```javascript Node.js
+import { Heyrafiki } from "@heyrafiki/heyrafiki-js";
+
+const heyrafiki = new Heyrafiki({
+  apiKey: process.env.HEYRAFIKI_API_KEY,
+});
+
+const valuation = await heyrafiki.claims.valuation(
+  process.env.CLAIM_ID,
+  { valuationAt: "2026-07-31T23:59:59.000Z" },
+);
+
+console.log(valuation.amount.outstanding);
+```
+
+```python Python
+import os
+import requests
+
+response = requests.get(
+    f"https://api.heyrafiki.space/v1/claims/{os.environ['CLAIM_ID']}/valuation",
+    headers={"Authorization": f"Bearer {os.environ['HEYRAFIKI_API_KEY']}"},
+    params={"valuation_at": "2026-07-31T23:59:59.000Z"},
+    timeout=10,
+)
+response.raise_for_status()
+print(response.json()["amount"]["outstanding"])
+```
+
+```go Go
+package main
+
+import (
+    "context"
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "net/url"
+    "os"
+    "time"
+)
+
+func main() {
+    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
+
+    endpoint := "https://api.heyrafiki.space/v1/claims/" +
+        url.PathEscape(os.Getenv("CLAIM_ID")) + "/valuation"
+    request, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
+    if err != nil {
+        panic(err)
+    }
+    query := request.URL.Query()
+    query.Set("valuation_at", "2026-07-31T23:59:59.000Z")
+    request.URL.RawQuery = query.Encode()
+    request.Header.Set("Authorization", "Bearer "+os.Getenv("HEYRAFIKI_API_KEY"))
+
+    response, err := http.DefaultClient.Do(request)
+    if err != nil {
+        panic(err)
+    }
+    defer response.Body.Close()
+    if response.StatusCode != http.StatusOK {
+        panic(fmt.Sprintf("valuation failed: %s", response.Status))
+    }
+
+    var valuation struct {
+        Amount struct {
+            Outstanding int64 `json:"outstanding"`
+        } `json:"amount"`
+    }
+    if err := json.NewDecoder(response.Body).Decode(&valuation); err != nil {
+        panic(err)
+    }
+    fmt.Println(valuation.Amount.Outstanding)
+}
+```
+
+</CodeGroup>
+
+<AccordionGroup>
+  <Accordion title="200 · Claim valuation" icon="circle-check" defaultOpen>
+    ```json
+    {
+      "id": "clm_synthetic_001:2026-07-31T23:59:59.000Z",
+      "object": "claim_valuation",
+      "claim_id": "clm_synthetic_001",
+      "valuation_at": "2026-07-31T23:59:59.000Z",
+      "currency": "KES",
+      "status": "partially_approved",
+      "amount": {
+        "billed": 600000,
+        "payer_liability": 450000,
+        "patient_responsibility": 50000,
+        "adjustment": 100000,
+        "remitted": 350000,
+        "settled": 350000,
+        "outstanding": 100000
+      },
+      "policy": {
+        "reference": "policy:mental-health:001",
+        "version": "2026-01"
+      },
+      "events": [
+        {
+          "sequence": 2,
+          "type": "partially_approved",
+          "effective_at": "2026-07-14T10:00:00.000Z",
+          "recorded_at": "2026-07-14T10:00:01.000Z",
+          "previous_status": "submitted",
+          "next_status": "partially_approved",
+          "reason_code": "covered_with_cost_share",
+          "evidence_references": ["policy:mental-health:001:2026-01"]
+        }
+      ]
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+The response includes the ordered Claim events with `effective_at`, `recorded_at`, status transitions, reason codes and bounded evidence references. The `GET /claims/{claim_id}/valuation` API reference contains the complete schema and error contract.
+
 ## Inspect the public evidence
 
 The [synthetic valuation fixture](https://github.com/heyrafiki/openapi/blob/main/fixtures/claim-valuation-timeline.json), [JSON Schema](https://github.com/heyrafiki/openapi/blob/main/assurance/claim-valuation-timeline.schema.json) and [conformance test](https://github.com/heyrafiki/openapi/blob/main/scripts/check-claim-valuation-timeline.mjs) live with the OpenAPI contract.
