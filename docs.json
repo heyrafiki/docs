@@ -108,6 +108,7 @@
             "pages": [
               "insurance/integration-guide",
               "insurance/financial-controls",
+              "insurance/claim-valuation-timeline",
               "insurance/acceptance-testing"
             ]
           }
@@ -121,6 +122,7 @@
             "group": "Institutional integration",
             "pages": [
               "concepts/institutions",
+              "institutions/assurance-graph",
               "concepts/platform",
               "concepts/capabilities"
             ]
