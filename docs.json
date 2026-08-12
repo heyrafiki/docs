@@ -59,6 +59,15 @@
       "href": "https://heyrafiki.space/waitlist"
     }
   },
+  "footer": {
+    "socials": {
+      "website": "https://heyrafiki.space",
+      "github": "https://github.com/heyrafiki",
+      "linkedin": "https://www.linkedin.com/company/heyrafiki",
+      "x": "https://x.com/heyrafikios",
+      "instagram": "https://www.instagram.com/heyrafikios"
+    }
+  },
   "search": {
     "prompt": "Search Heyrafiki Docs"
   },
