@@ -139,6 +139,10 @@
           {
             "group": "Security and data governance",
             "pages": ["security/overview", "security/data-boundaries"]
+          },
+          {
+            "group": "Research and evidence",
+            "pages": ["research/evidence"]
           }
         ]
       },
