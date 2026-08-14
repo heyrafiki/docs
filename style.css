@@ -3,12 +3,13 @@
 
 :root {
   --hr-brand: #184a34;
+  --hr-brand-soft: color-mix(in srgb, var(--hr-brand) 34%, transparent);
 }
 
 /* Page title */
 #content-area h1,
 article h1 {
-  font-size: 1.68rem;
+  font-size: 1.78rem;
   line-height: 1.15;
   letter-spacing: -0.03em;
   font-weight: 600;
@@ -17,7 +18,7 @@ article h1 {
 /* Section headings */
 #content-area h2,
 article h2 {
-  font-size: 1.08rem;
+  font-size: 1.14rem;
   line-height: 1.25;
   letter-spacing: -0.02em;
   font-weight: 600;
@@ -26,7 +27,7 @@ article h2 {
 
 #content-area h3,
 article h3 {
-  font-size: 0.92rem;
+  font-size: 0.98rem;
   line-height: 1.3;
   letter-spacing: -0.015em;
   font-weight: 600;
@@ -37,19 +38,19 @@ article h3 {
 #content-area li,
 article p,
 article li {
-  font-size: 0.84rem;
-  line-height: 1.66;
+  font-size: 0.93rem;
+  line-height: 1.7;
 }
 
 /* The lede under a page title */
 #content-area > div:first-child p:first-of-type {
-  font-size: 0.9rem;
+  font-size: 0.98rem;
 }
 
 /* Tables read as data, not prose */
 #content-area table,
 article table {
-  font-size: 0.8rem;
+  font-size: 0.84rem;
 }
 
 #content-area th,
@@ -61,19 +62,19 @@ article th {
 /* Code sits a touch smaller so snippets fit without wrapping */
 #content-area code,
 article code {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
 }
 
 #content-area pre code,
 article pre code {
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   line-height: 1.6;
 }
 
 /* Cards on the landing page */
 #content-area .card h2,
 #content-area .card h3 {
-  font-size: 0.86rem;
+  font-size: 0.91rem;
   margin-top: 0;
 }
 
@@ -89,4 +90,41 @@ article tbody tr:nth-child(even) {
 article a,
 article button {
   text-underline-offset: 0.18em;
+}
+
+/* Long role selectors stay compact on desktop and retain deliberate,
+   discoverable horizontal scrolling when a narrow viewport needs it. */
+#content-area [role="tablist"],
+article [role="tablist"] {
+  gap: 0.2rem;
+  scrollbar-color: var(--hr-brand-soft) transparent;
+  scrollbar-width: thin;
+}
+
+#content-area [role="tablist"]::-webkit-scrollbar,
+article [role="tablist"]::-webkit-scrollbar {
+  height: 0.25rem;
+}
+
+#content-area [role="tablist"]::-webkit-scrollbar-track,
+article [role="tablist"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#content-area [role="tablist"]::-webkit-scrollbar-thumb,
+article [role="tablist"]::-webkit-scrollbar-thumb {
+  background: var(--hr-brand-soft);
+  border-radius: 999px;
+}
+
+#content-area [role="tablist"] button,
+article [role="tablist"] button {
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+#content-area [role="tablist"] button:focus-visible,
+article [role="tablist"] button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--hr-brand) 72%, white);
+  outline-offset: 2px;
 }

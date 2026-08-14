@@ -1,6 +1,7 @@
 ---
 title: "Quickstart"
 description: "Make the first authenticated request to the Heyrafiki sandbox."
+keywords: ["Heyrafiki quickstart", "Sandbox API", "mental healthcare API tutorial"]
 ---
 
 ## 1. Create a sandbox key
@@ -71,3 +72,20 @@ curl https://api.heyrafiki.space/v1/bookings \
 <Note>
 Sandbox requests use fictitious records. Do not send names, contacts, clinical content or payment credentials in test requests.
 </Note>
+
+## Continue the integration
+
+<CardGroup cols={2}>
+  <Card title="Test failures and retries" icon="rotate" href="/testing">
+    Exercise authorization, idempotency, rate limits and recovery before adding a workflow.
+  </Card>
+  <Card title="Add covered Care" icon="file-invoice-dollar" href="/benefits">
+    Check eligibility and complete the pre-authorization sequence.
+  </Card>
+  <Card title="Receive changes" icon="satellite-dish" href="/webhooks">
+    Register an endpoint, verify signatures and handle duplicate deliveries.
+  </Card>
+  <Card title="Open the API map" icon="diagram-project" href="/resources">
+    Browse the 31 released operations by resource area.
+  </Card>
+</CardGroup>
