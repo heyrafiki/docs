@@ -48,15 +48,53 @@ for (const path of publicFiles) {
 const specPath = join(root, "openapi", "heyrafiki.openapi.yaml");
 const spec = readFileSync(specPath, "utf8");
 const operations = new Set();
+const operationDetails = [];
 let currentPath = "";
+let currentOperation = null;
+function finishOperation() {
+  if (!currentOperation) return;
+  operationDetails.push(currentOperation);
+  currentOperation = null;
+}
 for (const line of spec.split(/\r?\n/)) {
   const pathMatch = line.match(/^  (\/[^:]*):\s*$/);
   if (pathMatch) {
+    finishOperation();
     currentPath = pathMatch[1];
     continue;
   }
   const methodMatch = line.match(/^    (get|post|put|patch|delete):\s*$/);
-  if (currentPath && methodMatch) operations.add(`${methodMatch[1].toUpperCase()} ${currentPath}`);
+  if (currentPath && methodMatch) {
+    finishOperation();
+    const name = `${methodMatch[1].toUpperCase()} ${currentPath}`;
+    operations.add(name);
+    currentOperation = { name, body: "" };
+    continue;
+  }
+  if (currentOperation) currentOperation.body += `${line}\n`;
+}
+finishOperation();
+
+const operationIds = new Set();
+for (const operation of operationDetails) {
+  const id = operation.body.match(/^      operationId:\s*(\S+)\s*$/m)?.[1];
+  if (!id) failures.push(`OpenAPI: ${operation.name} has no operationId`);
+  else if (operationIds.has(id)) failures.push(`OpenAPI: duplicate operationId ${id}`);
+  else operationIds.add(id);
+  if (!/^      summary:\s*\S/m.test(operation.body)) {
+    failures.push(`OpenAPI: ${operation.name} has no summary`);
+  }
+  if (!/^      description:\s*\S/m.test(operation.body)) {
+    failures.push(`OpenAPI: ${operation.name} has no description`);
+  }
+  if (!/^        "2\d\d":/m.test(operation.body)) {
+    failures.push(`OpenAPI: ${operation.name} has no success response`);
+  }
+  for (const status of ["401", "429"]) {
+    if (!new RegExp(`^        "${status}":`, "m").test(operation.body)) {
+      failures.push(`OpenAPI: ${operation.name} has no ${status} response`);
+    }
+  }
 }
 
 function collectNavigationPages(node) {
@@ -78,12 +116,33 @@ function collectNavigationPages(node) {
 }
 
 const activePages = [...new Set(collectNavigationPages(config.navigation))];
+const documentedOperations = new Set(
+  activePages.filter((page) => /^(GET|POST|PUT|PATCH|DELETE) \//.test(page)),
+);
 for (const page of activePages) {
   if (/^(GET|POST|PUT|PATCH|DELETE) \//.test(page)) {
     if (!operations.has(page)) failures.push(`docs.json: unknown OpenAPI operation ${page}`);
     continue;
   }
   if (!existsSync(join(root, `${page}.mdx`))) failures.push(`docs.json: missing page ${page}`);
+}
+for (const operation of operations) {
+  if (!documentedOperations.has(operation)) {
+    failures.push(`docs.json: undocumented OpenAPI operation ${operation}`);
+  }
+}
+
+for (const page of activePages.filter(
+  (entry) => !/^(GET|POST|PUT|PATCH|DELETE) \//.test(entry),
+)) {
+  const label = `${page}.mdx`;
+  const content = readFileSync(join(root, label), "utf8");
+  const frontmatter = content.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? "";
+  for (const field of ["title", "description", "keywords"]) {
+    if (!new RegExp(`^${field}:\\s*\\S`, "m").test(frontmatter)) {
+      failures.push(`${label}: missing ${field} frontmatter`);
+    }
+  }
 }
 
 const activeContent = activePages

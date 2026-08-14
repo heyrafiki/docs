@@ -1,7 +1,28 @@
 ---
-title: "Resources"
-description: "The sandbox resources in the Heyrafiki API."
+title: "API overview"
+sidebarTitle: "Overview"
+description: "Map the released Heyrafiki API across Care, Benefits, Claims, remittance and Webhooks."
+keywords: ["Heyrafiki API", "mental healthcare API", "insurance API", "OpenAPI"]
 ---
+
+The released OpenAPI 1.0.0 contract contains 31 operations across eight resource areas. Every operation in this map is implemented in the Sandbox and generated into an endpoint page under **API reference**.
+
+## Released surface
+
+| Area | Operations | What you can do |
+| --- | ---: | --- |
+| API discovery | 1 | Inspect the authenticated project, environment and API version |
+| Practitioners | 3 | List and retrieve synthetic Practitioners and recurring availability |
+| Bookings | 3 | List, create and retrieve Bookings |
+| Sessions | 2 | List and retrieve minimum-necessary Session records |
+| Benefits | 7 | Record Coverage, check eligibility and manage pre-authorization decisions |
+| Claims | 7 | Submit, retrieve, query, evidence, adjudicate and reconstruct Claim valuation |
+| Remittances | 3 | List, create and retrieve remittance advice and reconciliation state |
+| Webhooks | 5 | List, register, retrieve, disable and test endpoints |
+
+The reference is generated from the same versioned contract used by the public conformance suite. A new endpoint appears here only after implementation, authorization and error behavior, examples, compatibility ownership and sensitive-data review pass the publication gate.
+
+## Start with one workflow
 
 Discover a synthetic Practitioner, create a Booking, check Benefits and move covered Care from Claim to remittance.
 
