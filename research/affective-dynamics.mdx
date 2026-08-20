@@ -1,0 +1,107 @@
+---
+title: "Affective Dynamics"
+description: "Understand Heyrafiki's consent-governed approach to longitudinal affective context, example data and Practitioner review."
+keywords: ["Affective Dynamics", "longitudinal mental health data", "experience sampling", "Practitioner review"]
+---
+
+Affective Dynamics describes how repeated affective observations change over
+time. Heyrafiki uses it to organise longitudinal context for a Person and their
+Practitioner. It does not make a Diagnosis or decide what a pattern means.
+
+## Start with the public tools
+
+- [Use the browser Lab](https://heyrafiki.space/resources/lab#affective-dynamics)
+  to move example check-ins and see the descriptive summary change.
+- [Read the research note](https://heyrafiki.space/resources/articles/affective-dynamics-what-change-can-and-cannot-tell-us)
+  for the scientific basis and limitations.
+- [Run the public protocol](https://github.com/heyrafiki/proving-ground/tree/main/research/affective-dynamics)
+  for synthetic edge cases, expected boundaries and the reviewer checklist.
+
+## What the view describes
+
+| Description | Question it answers | Important limit |
+| --- | --- | --- |
+| Average | Where are the observations centred in this window? | The Instrument, window and missing observations affect the value. |
+| Variation | How spread out are the observations? | Variation does not preserve temporal order. |
+| Direction | Does the available sequence move up or down over elapsed time? | A short cluster is not treated as a trajectory. |
+| Successive change | How much do adjacent observations differ after accounting for elapsed time? | The summary does not identify a cause. |
+| Inertia | How strongly does one observation predict the next? | The value is withheld when intervals are irregular or variance is zero. |
+| Return | Does the sequence return toward its declared reference range? | If the return is not observed, the duration remains unresolved. |
+
+## Evidence carried with each observation
+
+Each observation keeps the fields needed to decide whether it is comparable
+and eligible for the requested purpose:
+
+- dimension identifier and version;
+- value and declared scale;
+- observed time and recorded time;
+- Consent reference and version;
+- source and source version;
+- quality state and weight; and
+- optional context references that do not contain Session content.
+
+The original observations, computed description and Practitioner
+interpretation remain separate records.
+
+## When a measure is withheld
+
+The view returns a clear empty or not-interpretable state when:
+
+- too few eligible check-ins are available;
+- the available period is too short;
+- timing is too irregular for lag-one autocorrelation;
+- the series has no variance;
+- no return is observed inside the available window;
+- Consent does not permit the read; or
+- the request crosses an Organization boundary.
+
+No missing observation is silently filled in.
+
+## Time and reconstruction
+
+`observed_at` records when an observation applied. `recorded_at` records when
+the system learned it. A read at a knowledge cutoff includes only observations
+whose `recorded_at` value is at or before that cutoff. This allows a reviewer to
+reconstruct what the system could have shown at that time.
+
+## Access and review
+
+| Audience | Access boundary |
+| --- | --- |
+| Person | May read their own consented view. |
+| Practitioner | May read a shared Client view inside an active Care relationship and record a separate review. |
+| Researcher | May use only an approved protocol, research scope and eligible de-identified data. |
+| System | May run committed synthetic fixtures for conformance testing. |
+
+The public Lab uses example data. The authenticated Platform preview remains
+feature-gated, and Affective Dynamics is not currently a public REST resource.
+Use the Proving Ground protocol for integration-independent evaluation.
+
+## Reproduce the public boundary
+
+```bash
+git clone https://github.com/heyrafiki/proving-ground.git
+cd proving-ground
+npm ci
+npm run test:affective-dynamics
+```
+
+The check validates nine synthetic case families, the declared comparators and
+the protocol's failure boundaries. Population, language and Instrument-specific
+clinical studies require their own approved protocol.
+
+## Published sources
+
+- [Jahng, Wood and Trull (2008)](https://doi.org/10.1037/a0014173) on
+  variability, temporal dependency and successive differences.
+- [Kuppens, Allen and Sheeber (2010)](https://doi.org/10.1177/0956797610372634)
+  on emotional inertia.
+- [Houben, Van Den Noortgate and Kuppens (2015)](https://doi.org/10.1037/a0038822)
+  on short-term emotion dynamics and well-being.
+- [Dejonckheere and colleagues (2019)](https://doi.org/10.1038/s41562-019-0555-0)
+  on incremental value beyond mean and variance.
+- [McNeish and colleagues (2021)](https://doi.org/10.1080/10705511.2021.1915788)
+  on measurement in intensive longitudinal data.
+- [Schneider and colleagues (2023)](https://doi.org/10.3758/s13428-022-01995-1)
+  on reliability and sampling error in within-person dynamics.

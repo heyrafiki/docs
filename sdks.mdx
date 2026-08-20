@@ -4,7 +4,7 @@ description: "Typed JavaScript, Python, Go, .NET and Rust clients for the Heyraf
 keywords: ["Heyrafiki SDK", "healthcare API clients", "insurance API", "Heyrafiki CLI"]
 ---
 
-Every SDK follows the same OpenAPI contract, authentication rules, idempotency
+Every SDK follows the same OpenAPI definition, authentication rules, idempotency
 requirements, error envelope and request identifiers.
 
 <Note>
@@ -23,7 +23,7 @@ requirements, error envelope and request identifiers.
 | [`rafiki-net`](https://github.com/heyrafiki/rafiki-net) | .NET Standard 2.0, .NET 8 and .NET 10 | Insurer, health-system and government integrations |
 | [`rafiki-rs`](https://github.com/heyrafiki/rafiki-rs) | Rust 1.85+ | Correctness-sensitive and high-throughput services |
 | [`hey`](https://github.com/heyrafiki/hey) | Node.js 22+ | Local diagnostics, CI and governed API reads |
-| [`contract`](https://github.com/heyrafiki/contract) | OpenAPI 3.1 | Code generation and contract validation |
+| [`contract`](https://github.com/heyrafiki/contract) | OpenAPI 3.1 | Code generation and API compatibility checks |
 
 Each client is available from its public repository for Sandbox integration.
 The repository owns its source-install path, compatibility policy, release
@@ -152,7 +152,7 @@ stores and retain the request identifier when tracing a failed call.
 
 ## Write safely
 
-All clients preserve the REST contract's write controls:
+All clients preserve the REST API's write controls:
 
 - caller-owned idempotency keys for replay-safe writes;
 - bounded retries only where the operation and key make retry safe;
@@ -176,13 +176,13 @@ npm run check
 node dist/index.js doctor
 ```
 
-## Verify the contract
+## Verify API compatibility
 
 <Columns cols={2}>
-  <Card title="Contract" icon="brackets-curly" href="https://github.com/heyrafiki/contract">
+  <Card title="API definition" icon="brackets-curly" href="https://github.com/heyrafiki/contract">
     Inspect the versioned OpenAPI schemas, scopes, errors and Assurance Graph.
   </Card>
   <Card title="Proving Ground" icon="flask" href="https://github.com/heyrafiki/proving-ground">
-    Run contract, financial-identity, bitemporal and adversarial conformance suites.
+    Run API, financial-identity, bitemporal and adversarial conformance suites.
   </Card>
 </Columns>

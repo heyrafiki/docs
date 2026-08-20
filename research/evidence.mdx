@@ -1,15 +1,15 @@
 ---
 title: "Research and evidence"
-description: "Follow Heyrafiki statements to public contracts, executable evidence and explicit research limitations."
+description: "Follow Heyrafiki statements to public API definitions, executable evidence and explicit research limitations."
 keywords: ["mental health research evidence", "reproducible conformance", "First Light", "Assurance Graph"]
 ---
 
-Heyrafiki publishes the evidence that another team can inspect and run. The public path starts with a defined statement and ends with a versioned contract, synthetic fixture, expected result, deterministic runner and visible limitation.
+Heyrafiki publishes evidence that another team can inspect and run. The public path starts with a defined statement and ends with a versioned definition, synthetic fixture, expected result, deterministic runner and visible limitation.
 
 ```mermaid
 flowchart LR
-    Statement["Defined statement"] --> Contract["Versioned contract"]
-    Contract --> Fixture["Synthetic fixture"]
+    Statement["Defined statement"] --> Definition["Versioned definition"]
+    Definition --> Fixture["Synthetic fixture"]
     Fixture --> Expected["Expected result"]
     Expected --> Runner["Deterministic runner"]
     Runner --> Limitation["Stated limitation"]
@@ -19,12 +19,12 @@ flowchart LR
 
 | Authority | What it owns | Inspect it |
 | --- | --- | --- |
-| Contract | The public REST surface and machine-readable Assurance Graph | [heyrafiki/contract](https://github.com/heyrafiki/contract) |
+| API definition | The public REST interface and machine-readable Assurance Graph | [heyrafiki/contract](https://github.com/heyrafiki/contract) |
 | Proving Ground | Deterministic conformance suites, fixtures and expected results | [heyrafiki/proving-ground](https://github.com/heyrafiki/proving-ground) |
 | Docs | Integration guidance and the meaning of released public behavior | [heyrafiki/docs](https://github.com/heyrafiki/docs) |
-| SDK repositories | Language-specific source maintained against the public contract | [SDK guide](/sdks) |
+| SDK repositories | Language-specific source maintained against the public API definition | [SDK guide](/sdks) |
 
-The Platform implementation remains the authority for runtime behavior. Public repositories make contracts and selected evidence independently inspectable without becoming a second runtime authority.
+The Platform implementation remains the authority for runtime behavior. Public repositories make API definitions and selected evidence independently inspectable without becoming a second runtime authority.
 
 ## First Light v2
 
@@ -56,7 +56,7 @@ npm test
 
 ## What the current evidence supports
 
-The public suites support claims about contract coverage, deterministic scoring, bitemporal replay, Consent-aware access boundaries, audit completeness and rejection of declared adversarial mutations.
+The public suites support claims about API coverage, deterministic scoring, bitemporal replay, Consent-aware access boundaries, audit completeness and rejection of declared adversarial mutations.
 
 Separate clinical and population studies are required for:
 
@@ -64,7 +64,7 @@ Separate clinical and population studies are required for:
 - effectiveness for a Kenyan or other real population;
 - actuarial savings or health outcomes;
 - safety under every production condition;
-- scientific priority or patentability.
+- claims beyond the declared protocol and evidence.
 
 Those conclusions require a separate protocol, appropriate approvals, licensed instruments, representative data, baseline methods, uncertainty estimates and expert review.
 
@@ -72,18 +72,18 @@ Those conclusions require a separate protocol, appropriate approvals, licensed i
 
 A research candidate is ready for formal evaluation only when its problem, assumptions, prior art, baseline, protocol, measures, data rights, failure implications and review owner are written down before outcome claims are made.
 
-The [Assurance Graph](/institutions/assurance-graph) provides the traceability layer. It connects public operations and controls to executable evidence. Scientific priority is evaluated separately through the comparative protocol and independent review.
+The [Assurance Graph](/institutions/assurance-graph) provides the traceability layer. It connects public operations and controls to executable evidence. Comparative research follows its declared protocol and independent review.
 
-### Candidate under comparative review
+### Comparative evaluation
 
-The current candidate tests a two-cutoff, Consent-conditional assurance-path query with fail-closed completeness. The protocol is in Stage 1 independent review. Results follow protocol freeze, comparative evaluation and independent reproduction.
+The public protocol tests a two-cutoff, Consent-conditional assurance-path query with fail-closed completeness. It declares the comparators, measures, stopping rules and independent review path before evaluation.
 
 <CardGroup cols={2}>
   <Card title="Read the evaluation protocol" icon="list-check" href="https://github.com/heyrafiki/proving-ground/blob/main/research/consent-aware-bitemporal-assurance-graph/protocol.md">
     Review the formal query, five baselines, fixed measures and stopping rules.
   </Card>
-  <Card title="Read the Stage 1 manuscript" icon="file-lines" href="https://github.com/heyrafiki/proving-ground/blob/main/research/consent-aware-bitemporal-assurance-graph/manuscript.md">
-    Inspect the article structure before any result is collected.
+  <Card title="Read the manuscript" icon="file-lines" href="https://github.com/heyrafiki/proving-ground/blob/main/research/consent-aware-bitemporal-assurance-graph/manuscript.md">
+    Inspect the article structure and declared evidence boundary.
   </Card>
   <Card title="Inspect the prior-art search" icon="magnifying-glass-chart" href="https://github.com/heyrafiki/proving-ground/blob/main/research/consent-aware-bitemporal-assurance-graph/prior-art-search.md">
     See the closest standards, papers and patent families found by the author search.
@@ -95,4 +95,4 @@ The current candidate tests a two-cutoff, Consent-conditional assurance-path que
 
 ## Reporting a mismatch
 
-If a public statement, contract, fixture or result disagrees with another authority, open an issue in the repository that owns the mismatched artifact. Security and privacy findings should follow the private process in the [Security overview](/security/overview).
+If a public statement, API definition, fixture or result disagrees with another authority, open an issue in the repository that owns the mismatched artifact. Security and privacy findings should follow the private process in the [Security overview](/security/overview).
