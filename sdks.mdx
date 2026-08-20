@@ -8,9 +8,9 @@ Every SDK follows the same OpenAPI definition, authentication rules, idempotency
 requirements, error envelope and request identifiers.
 
 <Note>
-  Install the current SDKs and CLI from the reviewed source repositories using
-  the build commands below. Registry releases will be linked here after each
-  clean consumer installation passes.
+  JavaScript, Python, Go, .NET and Rust public betas are available from their
+  standard package registries. The source repositories remain available for
+  review and reproducible builds.
 </Note>
 
 ## Choose a client
@@ -82,13 +82,52 @@ cargo test --all-features
   </Tab>
 </Tabs>
 
-## Install the .NET SDK
+## Install a published beta
 
-The [`heyrafiki` NuGet package](https://www.nuget.org/packages/heyrafiki/0.1.0-beta.1) is available as `0.1.0-beta.1`.
+<Tabs>
+  <Tab title="JavaScript">
+
+```bash
+npm install @heyrafiki/rafiki-js@0.1.0-beta.1
+```
+
+  </Tab>
+  <Tab title="Python">
+
+```bash
+python -m pip install --pre heyrafiki==0.1.0b1
+```
+
+  </Tab>
+  <Tab title="Go">
+
+```bash
+go get github.com/heyrafiki/rafiki-go@v0.1.0-beta.1
+```
+
+  </Tab>
+  <Tab title=".NET">
 
 ```bash
 dotnet add package heyrafiki --version 0.1.0-beta.1
 ```
+
+  </Tab>
+  <Tab title="Rust">
+
+```bash
+cargo add heyrafiki@0.1.0-beta.1
+```
+
+  </Tab>
+</Tabs>
+
+The published packages are available on
+[npm](https://www.npmjs.com/package/@heyrafiki/rafiki-js),
+[PyPI](https://pypi.org/project/heyrafiki/0.1.0b1/),
+[pkg.go.dev](https://pkg.go.dev/github.com/heyrafiki/rafiki-go),
+[NuGet](https://www.nuget.org/packages/heyrafiki/0.1.0-beta.1) and
+[crates.io](https://crates.io/crates/heyrafiki/0.1.0-beta.1).
 
 ## Make the first request
 
