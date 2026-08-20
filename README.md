@@ -16,9 +16,9 @@ mint dev --no-open --port 3333
 
 The live site deploys from this repository.
 
-Keep the site concise. Generated reference, SDK, Webhook and MCP pages follow reviewed versioned contracts.
+Keep the site concise. Generated reference, SDK, Webhook and MCP pages follow reviewed versioned definitions and compatibility policies.
 
-`openapi/heyrafiki.openapi.yaml` is the published API contract. Narrative pages explain it and never redefine it.
+`openapi/heyrafiki.openapi.yaml` is the published API definition. Narrative pages explain it and never redefine it.
 
 ## License
 

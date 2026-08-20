@@ -4,7 +4,7 @@ description: "Build integrations against deterministic sandbox data."
 keywords: ["API testing", "Sandbox fixtures", "integration conformance"]
 ---
 
-Use sandbox keys for development, CI and acceptance tests. Sandbox responses contain synthetic data and use the same identifiers, scopes, errors and rate-limit headers as the API contract.
+Use sandbox keys for development, CI and acceptance tests. Sandbox responses contain synthetic data and use the same identifiers, scopes, errors and rate-limit headers as the API definition.
 
 ## Test safely
 
@@ -14,8 +14,14 @@ Use sandbox keys for development, CI and acceptance tests. Sandbox responses con
 - Exercise `400`, `401`, `403`, `404`, `429` and `503` handling.
 - Retry only when the response permits it.
 
-## Contract changes
+## API compatibility
 
 Additive fields may appear without a new API version. Ignore fields your integration does not use and keep a default branch for enum values.
 
-The [Changelog](/changelog) records contract changes. The [Versioning guide](/versioning) defines compatibility.
+The [Changelog](/changelog) records API changes. The [Versioning guide](/versioning) defines compatibility.
+
+## Public research tools
+
+Use the [Heyrafiki Lab](https://heyrafiki.space/resources/lab) for browser-based
+examples. The [Affective Dynamics guide](/research/affective-dynamics) connects
+the interactive example to its public protocol and synthetic failure cases.
