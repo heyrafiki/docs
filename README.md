@@ -2,15 +2,14 @@
 
 This directory is the repository-owned source for the Heyrafiki Mintlify site.
 
-## Where this fits
+## What this repository is for
 
-Heyrafiki is building the Intelligence and Infrastructure for Continuous Mental
-Healthcare. These Docs explain the released, versioned contracts through which
-Developers and institutions can participate without inventing another
-representation of the same governed objects.
+This is the source for the Heyrafiki developer site. It helps Developers and
+institutional teams use the published API, SDKs, Webhooks and MCP access with
+clear examples and versioned guidance.
 
-The Docs present behavior. OpenAPI, event catalogues, released SDKs and the
-source repositories remain authoritative.
+The Docs explain each release. The OpenAPI definition and source repositories
+remain the technical source of truth.
 
 ## Local preview
 
