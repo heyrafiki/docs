@@ -1,6 +1,6 @@
 ---
 title: "Insurance integration guide"
-description: "Connect payer Coverage, Benefits, Claims and remittance through one governed contract."
+description: "Connect payer Coverage, Benefits, Claims and remittance through one governed interface."
 keywords: ["health insurance API", "payer integration", "claims API", "benefits API", "Kenya insurance"]
 ---
 
@@ -40,7 +40,7 @@ sequenceDiagram
     H-->>P: Reconciliation state and audit references
 ```
 
-The payer controls membership, Benefit design and adjudication policy. Heyrafiki controls the workflow contract, authorization boundary, retry behavior and audit evidence. The Practitioner controls the clinical record. A payment source supplies settlement evidence independently from payer advice.
+The payer controls membership, Benefit design and adjudication policy. Heyrafiki controls the workflow definition, authorization boundary, retry behavior and audit evidence. The Practitioner controls the clinical record. A payment source supplies settlement evidence independently from payer advice.
 
 ## End-to-end flow
 
@@ -61,7 +61,7 @@ flowchart LR
     Map one payer tenant to one Heyrafiki Organization and issue a separate project for each environment. Grant only the scopes required by the integration.
   </Step>
   <Step title="Load Coverage">
-    Send individual observations through `POST /coverages`, or batches of up to 500 records through `POST /coverage_batches`. Each observation carries its source contract, source version, effective period and evidence references.
+    Send individual observations through `POST /coverages`, or batches of up to 500 records through `POST /coverage_batches`. Each observation carries its source policy reference, source version, effective period and evidence references.
   </Step>
   <Step title="Check the Benefit">
     Call `POST /eligibility_checks` for the service date and requested amount. Treat `ineligible` as a decision with reason codes, not as a transport failure.
@@ -70,7 +70,7 @@ flowchart LR
     Create a pre-authorization from the eligibility decision and covered Booking. The payer records the decision through `POST /preauthorizations/{preauthorization_id}/decisions`.
   </Step>
   <Step title="Submit delivered Care">
-    Create the Claim only after the covered Session is delivered. Send service codes, units, amounts and evidence references. Clinical Notes and private Conversation content do not enter this contract.
+    Create the Claim only after the covered Session is delivered. Send service codes, units, amounts and evidence references. Clinical Notes and private Conversation content do not enter this API request.
   </Step>
   <Step title="Adjudicate every line">
     Request bounded evidence when necessary, then record a versioned policy reference, line amounts and coded reasons through `POST /claims/{claim_id}/adjudications`.
@@ -212,7 +212,7 @@ print(response.json())
   </Accordion>
 </AccordionGroup>
 
-## Source data contract
+## Source data mapping
 
 | Payer field | Heyrafiki field | Rule |
 | --- | --- | --- |
@@ -251,4 +251,4 @@ Payer APIs use opaque Member and evidence references. They exclude names, contac
 
 ## Integration entry point
 
-Use the [OpenAPI 3.1 contract](https://github.com/heyrafiki/contract), [Proving Ground](https://github.com/heyrafiki/proving-ground), [Sandbox](/sandbox) and [acceptance test plan](/insurance/acceptance-testing) for technical due diligence. [Request Sandbox access](https://heyrafiki.space/waitlist) when your integration team is ready to test.
+Use the [OpenAPI 3.1 definition](https://github.com/heyrafiki/contract), [Proving Ground](https://github.com/heyrafiki/proving-ground), [Sandbox](/sandbox) and [acceptance test plan](/insurance/acceptance-testing) for technical due diligence. [Request Sandbox access](https://heyrafiki.space/waitlist) when your integration team is ready to test.

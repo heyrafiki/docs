@@ -10,7 +10,7 @@ keywords: ["Heyrafiki MCP", "Model Context Protocol", "MCP 2026-07-28"]
 </Note>
 
 Heyrafiki MCP exposes read-only Practitioner, Booking, Session, Benefits,
-Claims and remittance tools over the same contracts as the REST API.
+Claims and remittance tools over the same resource definitions as the REST API.
 
 ## Endpoint
 
@@ -46,7 +46,7 @@ Access tokens are bound to the MCP resource, a Heyrafiki Organization and an
 approved grant. A token cannot use a tool outside the intersection of its token
 scopes and grant scopes.
 
-## Wire contract
+## Message format
 
 Every POST includes these HTTP headers:
 

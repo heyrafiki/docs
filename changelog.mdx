@@ -29,9 +29,9 @@ public [Heyrafiki Lab](https://heyrafiki.space/resources/lab).
 </Update>
 
 <Update label="9 August 2026" description="MCP 2026-07-28" tags={["Changed", "Sandbox"]}>
-**Changed** the remote MCP server to the `2026-07-28` protocol contract, including stateless discovery, per-request capability metadata, transport header validation and structured completion results.
+**Changed** the remote MCP server to the `2026-07-28` protocol version, including stateless discovery, per-request capability metadata, transport header validation and structured completion results.
 
-**Added** private cache hints for `server/discover` and `tools/list`. See [MCP server](/mcp-server) for the connection contract.
+**Added** private cache hints for `server/discover` and `tools/list`. See [MCP server](/mcp-server) for the connection requirements.
 </Update>
 
 <Update label="31 July 2026" description="Pre-authorization decisions" tags={["Added", "Changed"]}>
@@ -79,5 +79,5 @@ The MCP server validates OAuth resource indicators and project scopes on every r
 
 **Added** environment-scoped secret keys, stable error envelopes and per-key rate-limit headers.
 
-**Published** the OpenAPI contract used by the generated endpoint reference.
+**Published** the OpenAPI definition used by the generated endpoint reference.
 </Update>
