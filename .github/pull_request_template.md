@@ -1,6 +1,6 @@
 ## Change
 
-Describe the reader task or contract surface changed.
+Describe the reader task or API surface changed.
 
 ## Public boundary
 

@@ -1,10 +1,51 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { extname, join, relative } from "node:path";
+import { runInNewContext } from "node:vm";
 
 const root = process.cwd();
 const failures = [];
 const config = JSON.parse(readFileSync(join(root, "docs.json"), "utf8"));
 const ignoredDirectories = new Set([".git", ".mintlify", "node_modules"]);
+
+const legacyRedirect = readFileSync(join(root, "legacy-domain-redirect.js"), "utf8");
+function redirectFor(location) {
+  let redirectedTo = null;
+  runInNewContext(legacyRedirect, {
+    URL,
+    window: {
+      location: {
+        ...location,
+        replace(url) {
+          redirectedTo = url;
+        },
+      },
+    },
+  });
+  return redirectedTo;
+}
+
+const legacyDestination = redirectFor({
+  hostname: "heyrafiki.mintlify.app",
+  pathname: "/concepts/capabilities",
+  search: "?source=search",
+  hash: "#sandbox-resources",
+});
+if (
+  legacyDestination !==
+  "https://docs.heyrafiki.space/concepts/capabilities?source=search#sandbox-resources"
+) {
+  failures.push("legacy domain redirect: path, query or fragment was not preserved");
+}
+if (
+  redirectFor({
+    hostname: "docs.heyrafiki.space",
+    pathname: "/concepts/capabilities",
+    search: "",
+    hash: "",
+  }) !== null
+) {
+  failures.push("legacy domain redirect: canonical host must not redirect");
+}
 
 function walk(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -35,8 +76,16 @@ const hypePatterns = [
 for (const path of publicFiles) {
   const content = readFileSync(path, "utf8");
   const label = relative(root, path);
+  const plainLanguageCopy = content
+    .replaceAll("https://github.com/heyrafiki/contract", "")
+    .replaceAll("source_contract_reference", "")
+    .replace(/\bProduct contract\b/giu, "")
+    .replace(/\bBenefit contract\b/giu, "");
   if (content.includes("\u2014")) failures.push(`${label}: em dash`);
   if (/\b(?:TODO|FIXME)\b|\[VERIFY\]/i.test(content)) failures.push(`${label}: internal marker`);
+  if (/\bcontracts?\b/iu.test(plainLanguageCopy)) {
+    failures.push(`${label}: vague contract wording`);
+  }
   if (credibilityPatterns.some((pattern) => pattern.test(content))) {
     failures.push(`${label}: credibility-seeking copy`);
   }

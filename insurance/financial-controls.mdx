@@ -11,7 +11,7 @@ Heyrafiki uses integer minor units, balanced Claim lines and distinct evidence f
 - Every amount is an integer in the currency's minor unit.
 - Every resource carries its ISO 4217 currency.
 - Arithmetic does not use binary floating point.
-- Cross-currency allocation is rejected. Currency conversion remains outside the Claim contract.
+- Cross-currency allocation is rejected. Currency conversion remains outside the Claim workflow.
 - Limits are applied to the service and effective period carried by the payer observation.
 
 ## Claim line identities
@@ -77,7 +77,7 @@ Over-allocation, payer mismatch, currency mismatch and allocation to a Claim wit
 
 ## Actuarial use
 
-The operational contract preserves the service date, Coverage version, Benefit decision, submitted amount, allowed amount, payer amount, status history and remittance timing needed for governed payer analysis.
+The operating model preserves the service date, Coverage version, Benefit decision, submitted amount, allowed amount, payer amount, status history and remittance timing needed for governed payer analysis.
 
 Actuarial measures require explicit exposure and valuation assumptions. A payer analysis should define at least:
 
@@ -103,4 +103,4 @@ The payer remains the authority for premium, exposure, reserving assumptions, IB
 | Payment separation | Distinct remittance advice, settlement observation and reconciliation records |
 | Privacy boundary | Opaque references and schemas that exclude clinical content |
 
-Review the [Claims guide](/claims), [Security boundary](/security/data-boundaries) and [acceptance test plan](/insurance/acceptance-testing) alongside the API contract.
+Review the [Claims guide](/claims), [Security boundary](/security/data-boundaries) and [acceptance test plan](/insurance/acceptance-testing) alongside the API definition.

@@ -200,7 +200,7 @@ func main() {
   </Accordion>
 </AccordionGroup>
 
-The response includes the ordered Claim events with `effective_at`, `recorded_at`, status transitions, reason codes and bounded evidence references. The `GET /claims/{claim_id}/valuation` API reference contains the complete schema and error contract.
+The response includes the ordered Claim events with `effective_at`, `recorded_at`, status transitions, reason codes and bounded evidence references. The `GET /claims/{claim_id}/valuation` API reference contains the complete schema and error format.
 
 ## Inspect the public evidence
 
@@ -220,7 +220,7 @@ The check rejects future knowledge, invalid sequence, non-integer money, unbalan
 This timeline supports analysis of reported Claims and reproducible outstanding observations. Portfolio reserve selection, IBNR, premium liability, capital, solvency, reinsurance and actuarial opinions remain with the insurer and its appointed actuarial authority.
 
 <Info>
-  The open fixture uses synthetic data. An approved Organization can test the same contract in the [Sandbox](/sandbox), then define its production data mapping, valuation policy and control owners through the institutional review.
+  The open fixture uses synthetic data. An approved Organization can test the same workflow in the [Sandbox](/sandbox), then define its production data mapping, valuation policy and control owners through the institutional review.
 </Info>
 
 Continue with [financial controls](/insurance/financial-controls), the [Assurance Graph](/institutions/assurance-graph) and the [acceptance test plan](/insurance/acceptance-testing).

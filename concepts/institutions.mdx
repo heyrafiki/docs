@@ -1,6 +1,6 @@
 ---
 title: "Institutional integrations"
-description: "Connect Care, Cover, Claims and audit through governed contracts."
+description: "Connect Care, Cover, Claims and audit through governed interfaces."
 keywords: ["institutional healthcare integration", "payer API", "health data governance", "research integration"]
 ---
 
@@ -17,7 +17,7 @@ Institutional integrations use versioned resources for Practitioner discovery, B
     Coordinate Care through purpose-bound Practitioner, Booking and Session capabilities.
   </Card>
   <Card title="Research and open ecosystems" icon="diagram-project" href="#research">
-    Use approved protocols, synthetic environments and versioned public contracts.
+    Use approved protocols, synthetic environments and versioned public API definitions.
   </Card>
 </Columns>
 
@@ -39,7 +39,7 @@ Identity, clinical records, Benefit decisions and payment evidence keep separate
 
 ## Integration boundaries
 
-| Boundary | Contract |
+| Boundary | Documented behavior |
 | --- | --- |
 | Access | Organization-scoped credentials, project isolation and least-privilege scopes |
 | Cover and Claims | Idempotent eligibility, pre-authorization, Claim and remittance workflows |
@@ -52,25 +52,25 @@ Credential issuers remain authoritative for professional status. Payers remain a
 
 <Tabs>
   <Tab title="Engineering" icon="terminal">
-    Verify Coverage ingestion, eligibility, pre-authorization, Claim adjudication, remittance, Webhooks, retries and cross-tenant denial against the versioned contract.
+    Verify Coverage ingestion, eligibility, pre-authorization, Claim adjudication, remittance, Webhooks, retries and cross-tenant denial against the published API definition.
   </Tab>
   <Tab title="Finance" icon="chart-line">
     Recompute line and Claim identities, reconcile advice to independent settlement evidence, and preserve service, submission, adjudication and payment dates for governed analysis.
   </Tab>
   <Tab title="Care" icon="clipboard-check">
-    Confirm that service evidence connects delivered Care to the covered workflow while Clinical Notes, Messages and private Session content remain outside the payer contract.
+    Confirm that service evidence connects delivered Care to the covered workflow while Clinical Notes, Messages and private Session content remain outside the payer interface.
   </Tab>
   <Tab title="Privacy" icon="fingerprint">
     Exercise Organization isolation, least-privilege scopes, synthetic-only test data, signature validation, stale-event rejection and minimum-necessary response fields.
   </Tab>
   <Tab title="Governance" icon="file-shield">
-    Retain the contract commit, owner map, request identifiers, idempotency evidence, negative-test results, policy versions, reconciliation evidence and activation decision.
+    Retain the API definition commit, owner map, request identifiers, same-request retry evidence, negative-test results, policy versions, reconciliation evidence and activation decision.
   </Tab>
 </Tabs>
 
 The [insurance acceptance plan](/insurance/acceptance-testing) turns these roles into one reproducible evidence pack. Sandbox access is issued to an approved Organization and stays isolated from production.
 
-## Available contract
+## Available interfaces
 
 The sandbox provides:
 
@@ -88,7 +88,7 @@ Use separate projects and keys for each environment. Sandbox data is synthetic.
 
 Check eligibility before committing Cover. Where authorization is required, bind the eligibility decision to a covered Booking. Submit Claims from delivered Care, record line decisions, then allocate remittance against the approved amount.
 
-Clinical Notes, message content and unrelated identity data are outside the payer contract.
+Clinical Notes, message content and unrelated identity data are outside the payer interface.
 
 Start with the [insurance integration guide](/insurance/integration-guide), then review the [financial controls](/insurance/financial-controls) and [acceptance test plan](/insurance/acceptance-testing).
 
@@ -104,7 +104,7 @@ Use the sandbox to test identity, Consent, terminology and exchange mappings wit
 
 | Review area | Evidence available now | Production decision owner |
 | --- | --- | --- |
-| Contract and interoperability | OpenAPI 3.1, stable identifiers, typed errors, versioning and public SDK source | Joint architecture review |
+| API definition and interoperability | OpenAPI 3.1, stable identifiers, typed errors, versioning and public SDK source | Joint architecture review |
 | Identity and authority | Organization, project, scope, role and purpose boundaries | Institution identity and security owners |
 | Privacy | Opaque payer references, separated clinical content and minimum-necessary schemas | Institution privacy owner and Heyrafiki privacy owner |
 | Financial control | Integer minor units, balanced adjudication lines, idempotency and independent settlement matching | Payer finance and operations owners |
@@ -113,7 +113,7 @@ Use the sandbox to test identity, Consent, terminology and exchange mappings wit
 | Pilot safety | Synthetic data, environment isolation, negative tests and activation gates | Named pilot steering group |
 
 <Info>
-  A production integration activates only after the institution approves its authority mapping, data purpose, security controls and operating owners. The system contract and synthetic pilot remain available for technical due diligence before that decision.
+  A production integration activates only after the institution approves its authority mapping, data purpose, security controls and operating owners. The published API definition and synthetic pilot remain available for technical due diligence before that decision.
 </Info>
 
 ## Research

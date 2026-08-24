@@ -1,10 +1,10 @@
 ---
 title: "Assurance Graph"
-description: "Trace every API capability to its contract, control owner, public source and executable evidence."
+description: "Trace every API capability to its definition, control owner, public source and executable evidence."
 keywords: ["regulatory assurance", "insurance API controls", "government integration", "digital health conformance"]
 ---
 
-The Assurance Graph connects each public API operation to an accountable capability, control owner, governing source and executable evidence artifact. It gives insurer, government, regulator, security and engineering reviewers one path from a public statement to the contract and test that support it.
+The Assurance Graph connects each public API operation to an accountable capability, control owner, governing source and executable evidence artifact. It gives insurer, government, regulator, security and engineering reviewers one path from a public statement to the API definition and test that support it.
 
 The graph describes verified Heyrafiki behavior and keeps each institutional
 authority, operating decision and control owner explicit.
@@ -26,7 +26,7 @@ flowchart LR
 | Which public source informs the control? | Control to IRA, DHA, CPB, government integration boundary or Heyrafiki domain authority |
 | Which API operations implement it? | Capability to unique OpenAPI operation identifiers |
 | How can a reviewer test it? | Control to fixture, schema and deterministic verification command |
-| What happens when the contract grows? | CI fails when an operation has no accountable capability or references missing evidence |
+| What happens when the API grows? | CI fails when an operation has no accountable capability or references missing evidence |
 
 ## Kenyan authority boundaries
 
@@ -68,7 +68,7 @@ npm ci
 npm test
 ```
 
-The suite validates the OpenAPI contract, financial invariants, the bitemporal Claim valuation timeline and graph referential integrity.
+The suite validates the OpenAPI definition, financial invariants, the Claim valuation timeline and graph referential integrity.
 
 ## Capability and access
 

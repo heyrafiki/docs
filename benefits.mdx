@@ -74,6 +74,6 @@ An approved pre-authorization reserves one Session atomically. Retrying the same
 
 ## Data boundary
 
-Responses omit the Member reference, payer identifier and internal coverage record. Clinical Notes, Diagnoses and Session content are never part of this contract.
+Responses omit the Member reference, payer identifier and internal coverage record. Clinical Notes, Diagnoses and Session content are never part of this API response.
 
 Use `benefits:write` for decisions and `benefits:read` for retrieval.

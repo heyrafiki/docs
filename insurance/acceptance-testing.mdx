@@ -14,7 +14,7 @@ Use one isolated Sandbox project and synthetic records for the full payer pilot.
 
 <Tabs>
   <Tab title="Engineering" icon="terminal">
-    Own the contract commit, environment mapping, retry policy, idempotency keys, Webhook consumer and integration logs.
+    Own the API definition commit, environment mapping, retry policy, idempotency keys, Webhook consumer and integration logs.
   </Tab>
   <Tab title="Finance" icon="chart-line">
     Own independent amount recomputation, Benefit interpretation, valuation assumptions, remittance allocation and settlement variance review.
@@ -32,13 +32,13 @@ Use one isolated Sandbox project and synthetic records for the full payer pilot.
 
 ```mermaid
 flowchart LR
-    Contract["Freeze contract commit"] --> Positive["Run positive workflow"]
+    Definition["Freeze API definition commit"] --> Positive["Run positive workflow"]
     Positive --> Negative["Run authorization and failure cases"]
     Negative --> Reconcile["Recompute financial evidence"]
     Reconcile --> Retrieve["Retrieve audit pack"]
     Retrieve --> Decide{"Named owners approve"}
     Decide -->|Approved| Gate["Open production activation gate"]
-    Decide -->|Changes required| Contract
+    Decide -->|Changes required| Definition
 ```
 
 ## Acceptance sequence
@@ -104,7 +104,7 @@ Reject the pilot if the API accepts an unbalanced amount, changes the result of 
 
 The pilot evidence pack should contain:
 
-- the OpenAPI contract commit used by both teams;
+- the OpenAPI definition commit used by both teams;
 - the payer-to-service-code mapping and its version;
 - environment, Organization and scope mapping;
 - synthetic request and response fixtures;
@@ -120,7 +120,7 @@ Do not place keys, personal data, clinical records or payment credentials in the
 <AccordionGroup>
   <Accordion title="Minimum evidence pack structure" icon="folder-tree" defaultOpen>
     <Tree>
-      <Tree.Folder name="01-contract" defaultOpen>
+      <Tree.Folder name="01-api-definition" defaultOpen>
         <Tree.File name="openapi-commit.txt" />
         <Tree.File name="service-code-map.csv" />
         <Tree.File name="scope-map.md" />
